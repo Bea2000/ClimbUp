@@ -11,4 +11,95 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Organizer {
+  id      Int      @id @default(autoincrement())
+  name    String
+  admins   Admin[]
+  competitions Competition[]
+  judges   Judge[]
+}
+
+model Competition {
+  id                 Int       @id @default(autoincrement())
+  code               String
+  name               String
+  location           String
+  date               DateTime
+  organizerId        Int
+  organizer          Organizer @relation(fields: [organizerId], references: [id])
+  duration           Int // in minutes
+  startTime          DateTime
+  problems           Problem[]
+  participants       Participant[]
+  judges             Judge[]
+}
+
+model Problem {
+  id             Int         @id @default(autoincrement())
+  level          Int
+  name           String?
+  maxPoints         Int
+  attempts           Int
+  discountPerAttempt Int
+  competitionId  Int
+  competition    Competition  @relation(fields: [competitionId], references: [id])
+  problems       ParticipantProblem[]
+}
+
+model Admin {
+  id            Int         @id @default(autoincrement())
+  userId        Int         @unique
+  user          User        @relation(fields: [userId], references: [id])
+  isSuperAdmin  Boolean
+  password      String
+  organizerId   Int
+  organizer     Organizer   @relation(fields: [organizerId], references: [id])
+}
+
+model Judge {
+  id            Int         @id @default(autoincrement())
+  userId        Int         @unique
+  user          User        @relation(fields: [userId], references: [id])
+  organizerId   Int
+  organizer     Organizer   @relation(fields: [organizerId], references: [id])
+  competitionId Int
+  competition   Competition @relation(fields: [competitionId], references: [id])
+}
+
+model Participant {
+  id            Int         @id @default(autoincrement())
+  userId        Int         @unique
+  user          User        @relation(fields: [userId], references: [id])
+  competitionId Int
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  problems      ParticipantProblem[]
+}
+
+model User {
+  id           Int         @id @default(autoincrement())
+  name         String
+  email        String
+  rut          String
+  role         Role
+  judge        Judge?
+  participant  Participant?
+  admin        Admin?
+}
+
+enum Role {
+  PARTICIPANT
+  JUDGE
+  ADMIN
+}
+
+model ParticipantProblem {
+  id            Int             @id @default(autoincrement())
+  currentPoints Int
+  problemId     Int
+  problem       Problem         @relation(fields: [problemId], references: [id])
+  participantId Int
+  participant   Participant     @relation(fields: [participantId], references: [id])
 }
