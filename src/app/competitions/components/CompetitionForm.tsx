@@ -1,15 +1,10 @@
 'use client';
 
+import React from 'react';
 import { useState } from 'react';
-
-interface CompetitionFormData {
-  code: string;
-  name: string;
-  location: string;
-  date: string;
-  duration: number;
-  startTime: string;
-}
+import { toast } from 'react-hot-toast';
+import { CompetitionSchema, type CompetitionFormData } from '../schemas/competition';
+import { z } from 'zod';
 
 export default function CompetitionForm() {
   const [formData, setFormData] = useState<CompetitionFormData>({
@@ -17,12 +12,11 @@ export default function CompetitionForm() {
     name: '',
     location: '',
     date: '',
-    duration: 90,
+    duration: 0,
     startTime: '',
   });
 
-  const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Partial<Record<keyof CompetitionFormData, string>>>({});
 
   const generateRandomCode = () => {
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -30,28 +24,46 @@ export default function CompetitionForm() {
       ...prev,
       code: newCode
     }));
+    // Limpiar error del código si existe
+    setErrors(prev => ({ ...prev, code: undefined }));
+  };
+
+  const validateField = (name: keyof CompetitionFormData, value: string | number) => {
+    try {
+      CompetitionSchema.shape[name].parse(value);
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setErrors(prev => ({ ...prev, [name]: error.errors[0].message }));
+      }
+      return false;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setSuccess(false);
+    setErrors({});
 
     try {
+      // Validar todos los campos
+      const validatedData = CompetitionSchema.parse(formData);
+
       const response = await fetch('/api/competitions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(validatedData),
       });
 
       if (!response.ok) {
         throw new Error('Error al crear la competencia');
       }
 
-      const data = await response.json();
-      setSuccess(true);
+      await response.json();
+      toast.success('Competencia creada exitosamente');
+      
       setFormData({
         code: '',
         name: '',
@@ -61,16 +73,33 @@ export default function CompetitionForm() {
         startTime: '',
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la competencia');
+      if (err instanceof z.ZodError) {
+        // Error de validación de Zod
+        const fieldErrors: { [key: string]: string } = {};
+        err.errors.forEach(error => {
+          const field = error.path[0];
+          fieldErrors[field] = error.message;
+        });
+        setErrors(fieldErrors);
+        toast.error('Por favor, corrige los errores en el formulario');
+      } else {
+        // Error de la API
+        toast.error(err instanceof Error ? err.message : 'Error al crear la competencia');
+      }
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const newValue = name === 'duration' ? parseInt(value) || 0 : value;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'duration' ? parseInt(value) || 0 : value
+      [name]: newValue
     }));
+
+    // Validar el campo cuando cambia
+    validateField(name as keyof CompetitionFormData, newValue);
   };
 
   return (
@@ -80,24 +109,6 @@ export default function CompetitionForm() {
           <h2 className="card-title text-2xl mb-6">Crear Nueva Competencia</h2>
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="alert alert-error">
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{error}</span>
-              </div>
-            )}
-            
-            {success && (
-              <div className="alert alert-success">
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Competencia creada exitosamente</span>
-              </div>
-            )}
-
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Nombre</span>
@@ -108,10 +119,15 @@ export default function CompetitionForm() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="input input-bordered w-full"
+                className={`input input-bordered w-full ${errors.name ? 'input-error' : ''}`}
                 placeholder="Ej: Iron Fest 2024"
                 required
               />
+              {errors.name && (
+                <label className="label">
+                  <span className="label-text-alt text-error">{errors.name}</span>
+                </label>
+              )}
             </div>
 
             <div className="form-control">
@@ -124,10 +140,15 @@ export default function CompetitionForm() {
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                className="input input-bordered w-full"
-                placeholder="Ej: Pdte. Riesco 5330, 7560996 Las Condes, Región Metropolitana"
+                className={`input input-bordered w-full ${errors.location ? 'input-error' : ''}`}
+                placeholder="Ej: Pdte. Riesco 5330, Las Condes"
                 required
               />
+              {errors.location && (
+                <label className="label">
+                  <span className="label-text-alt text-error">{errors.location}</span>
+                </label>
+              )}
             </div>
 
             <div className="form-control">
@@ -140,9 +161,14 @@ export default function CompetitionForm() {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                className="input input-bordered w-full"
+                className={`input input-bordered w-full ${errors.date ? 'input-error' : ''}`}
                 required
               />
+              {errors.date && (
+                <label className="label">
+                  <span className="label-text-alt text-error">{errors.date}</span>
+                </label>
+              )}
             </div>
 
             <div className="form-control">
@@ -155,12 +181,17 @@ export default function CompetitionForm() {
                 name="duration"
                 value={formData.duration || ''}
                 onChange={handleChange}
-                min="0"
+                min="30"
                 step="30"
-                className="input input-bordered w-full placeholder:opacity-100"
+                className={`input input-bordered w-full ${errors.duration ? 'input-error' : ''}`}
                 placeholder="Ej: 90"
                 required
               />
+              {errors.duration && (
+                <label className="label">
+                  <span className="label-text-alt text-error">{errors.duration}</span>
+                </label>
+              )}
             </div>
 
             <div className="form-control">
@@ -173,9 +204,14 @@ export default function CompetitionForm() {
                 name="startTime"
                 value={formData.startTime}
                 onChange={handleChange}
-                className="input input-bordered w-full"
+                className={`input input-bordered w-full ${errors.startTime ? 'input-error' : ''}`}
                 required
               />
+              {errors.startTime && (
+                <label className="label">
+                  <span className="label-text-alt text-error">{errors.startTime}</span>
+                </label>
+              )}
             </div>
 
             <div className="form-control">
@@ -189,8 +225,8 @@ export default function CompetitionForm() {
                   name="code"
                   value={formData.code}
                   onChange={handleChange}
-                  className="input input-bordered join-item w-full"
-                  placeholder="Código autogenerado"
+                  className={`input input-bordered join-item w-full ${errors.code ? 'input-error' : ''}`}
+                  placeholder="Código para que jueces ingresen a la competencia"
                   required
                 />
                 <button 
@@ -203,6 +239,11 @@ export default function CompetitionForm() {
                   </svg>
                 </button>
               </div>
+              {errors.code && (
+                <label className="label">
+                  <span className="label-text-alt text-error">{errors.code}</span>
+                </label>
+              )}
             </div>
 
             <div className="form-control mt-6">
