@@ -1,11 +1,7 @@
 import './globals.css';
-import { Metadata } from 'next';
 import { Toaster } from 'react-hot-toast';
 
-export const metadata: Metadata = {
-  title: 'ClimbUp',
-  description: 'ClimbUp',
-};
+import Provider from '@/app/components/SessionProvider';
 
 export default function RootLayout({
   children,
@@ -14,17 +10,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='es'>
-      <head>
-        <link rel='manifest' id='manifest' />
-      </head>
-      <body>
-        <Toaster
-          position='top-right'
-          reverseOrder={false}
-        />
-        <div id='modal-root'></div>
-        {children}
-      </body>
+      <Provider>
+        <head>
+          <link
+            rel='manifest'
+            id='manifest'
+          />
+        </head>
+        <body>
+          <Toaster
+            position='top-right'
+            reverseOrder={false}
+          />
+          <div id='modal-root'></div>
+          {children}
+        </body>
+      </Provider>
     </html>
   );
 }
