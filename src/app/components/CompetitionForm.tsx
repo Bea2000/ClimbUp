@@ -17,12 +17,20 @@ export default function CompetitionForm() {
     name: '',
     location: '',
     date: '',
-    duration: 0,
+    duration: 90,
     startTime: '',
   });
 
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<boolean>(false);
+
+  const generateRandomCode = () => {
+    const newCode = Math.floor(100000 + Math.random() * 900000).toString();
+    setFormData(prev => ({
+      ...prev,
+      code: newCode
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +69,7 @@ export default function CompetitionForm() {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'duration' ? parseInt(value) || 0 : value
     }));
   };
 
@@ -92,21 +100,6 @@ export default function CompetitionForm() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Código</span>
-              </label>
-              <input
-                type="text"
-                id="code"
-                name="code"
-                value={formData.code}
-                onChange={handleChange}
-                className="input input-bordered w-full"
-                required
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
                 <span className="label-text">Nombre</span>
               </label>
               <input
@@ -116,6 +109,7 @@ export default function CompetitionForm() {
                 value={formData.name}
                 onChange={handleChange}
                 className="input input-bordered w-full"
+                placeholder="Ej: Iron Fest 2024"
                 required
               />
             </div>
@@ -131,6 +125,7 @@ export default function CompetitionForm() {
                 value={formData.location}
                 onChange={handleChange}
                 className="input input-bordered w-full"
+                placeholder="Ej: Pdte. Riesco 5330, 7560996 Las Condes, Región Metropolitana"
                 required
               />
             </div>
@@ -158,10 +153,12 @@ export default function CompetitionForm() {
                 type="number"
                 id="duration"
                 name="duration"
-                value={formData.duration}
+                value={formData.duration || ''}
                 onChange={handleChange}
                 min="0"
-                className="input input-bordered w-full"
+                step="30"
+                className="input input-bordered w-full placeholder:opacity-100"
+                placeholder="Ej: 90"
                 required
               />
             </div>
@@ -179,6 +176,33 @@ export default function CompetitionForm() {
                 className="input input-bordered w-full"
                 required
               />
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Código</span>
+              </label>
+              <div className="join w-full">
+                <input
+                  type="text"
+                  id="code"
+                  name="code"
+                  value={formData.code}
+                  onChange={handleChange}
+                  className="input input-bordered join-item w-full"
+                  placeholder="Código autogenerado"
+                  required
+                />
+                <button 
+                  type="button"
+                  className="btn join-item"
+                  onClick={generateRandomCode}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <div className="form-control mt-6">
