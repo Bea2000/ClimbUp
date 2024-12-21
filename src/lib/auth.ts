@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!existingUser) {
-          throw new Error('Email no registrado');
+          throw new Error('Email o contraseña incorrecta');
         }
 
         if (!existingUser.admin) {
@@ -60,7 +60,7 @@ export const authOptions: NextAuthOptions = {
         const passwordMatch = await compare(credentials.password, existingUser.admin.password);
 
         if (!passwordMatch) {
-          throw new Error('Contraseña incorrecta');
+          throw new Error('Email o contraseña incorrecta');
         }
 
         return {
