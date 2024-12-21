@@ -66,119 +66,132 @@ export default function CompetitionForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Crear Nueva Competencia</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">{error}</span>
-          </div>
-        )}
-        {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">Competencia creada exitosamente</span>
-          </div>
-        )}
-        <div>
-          <label htmlFor="code" className="block text-sm font-medium text-gray-700">
-            Código
-          </label>
-          <input
-            type="text"
-            id="code"
-            name="code"
-            value={formData.code}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            required
-          />
-        </div>
+    <div className="container mx-auto p-6">
+      <div className="card bg-base-100 shadow-xl">
+        <div className="card-body">
+          <h2 className="card-title text-2xl mb-6">Crear Nueva Competencia</h2>
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="alert alert-error">
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+            
+            {success && (
+              <div className="alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Competencia creada exitosamente</span>
+              </div>
+            )}
 
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-            Nombre
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            required
-          />
-        </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Código</span>
+              </label>
+              <input
+                type="text"
+                id="code"
+                name="code"
+                value={formData.code}
+                onChange={handleChange}
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-            Ubicación
-          </label>
-          <input
-            type="text"
-            id="location"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            required
-          />
-        </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Nombre</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="date" className="block text-sm font-medium text-gray-700">
-            Fecha
-          </label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            required
-          />
-        </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Ubicación</span>
+              </label>
+              <input
+                type="text"
+                id="location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-            Duración (minutos)
-          </label>
-          <input
-            type="number"
-            id="duration"
-            name="duration"
-            value={formData.duration}
-            onChange={handleChange}
-            min="0"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            required
-          />
-        </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Fecha</span>
+              </label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">
-            Hora de Inicio
-          </label>
-          <input
-            type="time"
-            id="startTime"
-            name="startTime"
-            value={formData.startTime}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            required
-          />
-        </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Duración (minutos)</span>
+              </label>
+              <input
+                type="number"
+                id="duration"
+                name="duration"
+                value={formData.duration}
+                onChange={handleChange}
+                min="0"
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
 
-        <div className="pt-4">
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            Crear Competencia
-          </button>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Hora de Inicio</span>
+              </label>
+              <input
+                type="time"
+                id="startTime"
+                name="startTime"
+                value={formData.startTime}
+                onChange={handleChange}
+                className="input input-bordered w-full"
+                required
+              />
+            </div>
+
+            <div className="form-control mt-6">
+              <button
+                type="submit"
+                className="btn btn-primary w-full"
+              >
+                Crear Competencia
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
