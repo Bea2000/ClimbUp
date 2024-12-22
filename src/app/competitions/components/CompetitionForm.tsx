@@ -3,7 +3,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { CompetitionSchema, type CompetitionFormData } from '../schemas/competition';
+import { CompetitionSchema, type Competition } from '../schemas/competition';
 import { z } from 'zod';
 
 export default function CompetitionForm() {

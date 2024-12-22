@@ -23,4 +23,4 @@ export const CompetitionSchema = z.object({
   startTime: z.string().nullable().optional()
 });
 
-export type CompetitionFormData = z.infer<typeof CompetitionSchema>;
+export type Competition = z.infer<typeof CompetitionSchema>;
