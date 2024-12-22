@@ -35,3 +35,28 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    // Por ahora, hardcodeamos el organizerId como 1
+    // TODO: Implementar autenticación y obtener el organizerId del usuario actual
+    const organizerId = 1;
+
+    const competitions = await prisma.competition.findMany({
+      where: {
+        organizerId: organizerId,
+      },
+      orderBy: {
+        date: 'asc',
+      },
+    });
+
+    return NextResponse.json(competitions);
+  } catch (error) {
+    console.error('Error al obtener las competencias:', error);
+    return NextResponse.json(
+      { error: 'Error al obtener las competencias' },
+      { status: 500 }
+    );
+  }
+}

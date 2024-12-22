@@ -3,11 +3,11 @@
 import React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { CompetitionSchema, type CompetitionFormData } from '../schemas/competition';
+import { CompetitionSchema, type Competition } from '../schemas/competition';
 import { z } from 'zod';
 
 export default function CompetitionForm() {
-  const [formData, setFormData] = useState<CompetitionFormData>({
+  const [formData, setFormData] = useState<Competition>({
     code: '',
     name: '',
     location: '',
@@ -16,7 +16,7 @@ export default function CompetitionForm() {
     startTime: '',
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof CompetitionFormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof Competition, string>>>({});
 
   const generateRandomCode = () => {
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -28,7 +28,7 @@ export default function CompetitionForm() {
     setErrors(prev => ({ ...prev, code: undefined }));
   };
 
-  const validateField = (name: keyof CompetitionFormData, value: string | number) => {
+  const validateField = (name: keyof Competition, value: string | number) => {
     try {
       CompetitionSchema.shape[name].parse(value);
       setErrors(prev => ({ ...prev, [name]: undefined }));
@@ -99,7 +99,7 @@ export default function CompetitionForm() {
     }));
 
     // Validar el campo cuando cambia
-    validateField(name as keyof CompetitionFormData, newValue);
+    validateField(name as keyof Competition, newValue);
   };
 
   return (

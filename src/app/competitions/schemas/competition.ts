@@ -21,4 +21,4 @@ export const CompetitionSchema = z.object({
     .min(1, "La hora de inicio es requerida")
 });
 
-export type CompetitionFormData = z.infer<typeof CompetitionSchema>;
+export type Competition = z.infer<typeof CompetitionSchema>;
