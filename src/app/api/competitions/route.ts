@@ -7,11 +7,6 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     
-    // Convertir los strings de fecha y hora a un objeto Date
-    const dateStr = body.date;
-    const timeStr = body.startTime;
-    const startTime = new Date(`${dateStr}T${timeStr}`);
-
     const competition = await prisma.competition.create({
       data: {
         code: body.code,
@@ -19,9 +14,9 @@ export async function POST(request: Request) {
         location: body.location,
         date: new Date(body.date),
         duration: parseInt(body.duration),
-        startTime: startTime,
-        // Por ahora, hardcodeamos el organizerId como 1
-        // TODO: Implementar autenticación y obtener el organizerId del usuario actual
+        startTime: null, // startTime will be set later
+        // For now, we are hardcoding the organizerId as 1
+        // TODO: Implement authentication and get the organizerId of the current user
         organizerId: 1,
       },
     });

@@ -7,16 +7,15 @@ import { CompetitionSchema, type CompetitionFormData } from '../schemas/competit
 import { z } from 'zod';
 
 export default function CompetitionForm() {
-  const [formData, setFormData] = useState<CompetitionFormData>({
+  const [formData, setFormData] = useState<Omit<CompetitionFormData, 'startTime'>>({
     code: '',
     name: '',
     location: '',
     date: '',
     duration: 0,
-    startTime: '',
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof CompetitionFormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof Omit<CompetitionFormData, 'startTime'>, string>>>({});
 
   const generateRandomCode = () => {
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -28,9 +27,9 @@ export default function CompetitionForm() {
     setErrors(prev => ({ ...prev, code: undefined }));
   };
 
-  const validateField = (name: keyof CompetitionFormData, value: string | number) => {
+  const validateField = (name: keyof Omit<CompetitionFormData, 'startTime'>, value: string | number) => {
     try {
-      CompetitionSchema.shape[name].parse(value);
+      CompetitionSchema.omit({ startTime: true }).shape[name].parse(value);
       setErrors(prev => ({ ...prev, [name]: undefined }));
       return true;
     } catch (error) {
@@ -47,14 +46,14 @@ export default function CompetitionForm() {
 
     try {
       // Validar todos los campos
-      const validatedData = CompetitionSchema.parse(formData);
+      const validatedData = CompetitionSchema.omit({ startTime: true }).parse(formData);
 
       const response = await fetch('/api/competitions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(validatedData),
+        body: JSON.stringify({ ...validatedData, startTime: null }),
       });
 
       if (!response.ok) {
@@ -70,7 +69,6 @@ export default function CompetitionForm() {
         location: '',
         date: '',
         duration: 0,
-        startTime: '',
       });
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -99,7 +97,7 @@ export default function CompetitionForm() {
     }));
 
     // Validar el campo cuando cambia
-    validateField(name as keyof CompetitionFormData, newValue);
+    validateField(name as keyof Omit<CompetitionFormData, 'startTime'>, newValue);
   };
 
   return (
@@ -153,10 +151,10 @@ export default function CompetitionForm() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Fecha</span>
+                <span className="label-text">Fecha y Hora</span>
               </label>
               <input
-                type="date"
+                type="datetime-local"
                 id="date"
                 name="date"
                 value={formData.date}
@@ -190,26 +188,6 @@ export default function CompetitionForm() {
               {errors.duration && (
                 <label className="label">
                   <span className="label-text-alt text-error">{errors.duration}</span>
-                </label>
-              )}
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Hora de Inicio</span>
-              </label>
-              <input
-                type="time"
-                id="startTime"
-                name="startTime"
-                value={formData.startTime}
-                onChange={handleChange}
-                className={`input input-bordered w-full ${errors.startTime ? 'input-error' : ''}`}
-                required
-              />
-              {errors.startTime && (
-                <label className="label">
-                  <span className="label-text-alt text-error">{errors.startTime}</span>
                 </label>
               )}
             </div>

@@ -11,14 +11,16 @@ export const CompetitionSchema = z.object({
     .min(5, "La ubicación debe tener al menos 5 caracteres")
     .max(200, "La ubicación no puede exceder 200 caracteres"),
   date: z.string()
-    .refine(date => new Date(date) > new Date(), {
-      message: "La fecha debe ser futura"
+    .refine(date => {
+      const eventDate = new Date(date);
+      return !isNaN(eventDate.getTime()) && eventDate > new Date();
+    }, {
+      message: "La fecha y hora deben ser futuras"
     }),
   duration: z.number()
     .min(30, "La duración mínima es 30 minutos")
     .max(480, "La duración máxima es 8 horas"),
-  startTime: z.string()
-    .min(1, "La hora de inicio es requerida")
+  startTime: z.string().nullable().optional()
 });
 
 export type CompetitionFormData = z.infer<typeof CompetitionSchema>;
