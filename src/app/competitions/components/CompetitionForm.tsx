@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { CompetitionSchema, type Competition } from '../schemas/competition';
 import { z } from 'zod';
@@ -16,6 +15,12 @@ export default function CompetitionForm() {
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof Omit<CompetitionFormData, 'startTime'>, string>>>({});
+
+  useEffect(() => {
+    if (formData.code === '') {
+      generateRandomCode();
+    }
+  }, []); // Se ejecuta solo una vez al montar el componente
 
   const generateRandomCode = () => {
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
