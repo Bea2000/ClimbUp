@@ -31,7 +31,7 @@ model Competition {
   organizerId        Int
   organizer          Organizer @relation(fields: [organizerId], references: [id])
   duration           Int // in minutes
-  startTime          DateTime
+  startTime          DateTime?
   problems           Problem[]
   participants       Participant[]
   judges             Judge[]
