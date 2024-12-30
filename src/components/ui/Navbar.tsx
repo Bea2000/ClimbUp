@@ -8,10 +8,10 @@ import bellIcon from "@/assets/icons/bell.svg";
 import logoutIcon from "@/assets/icons/logOut.svg";
 
 interface NavbarProps {
-  orgName: string;
+  organizerName: string;
 }
 
-export default function Navbar({ orgName }: NavbarProps) {
+export default function Navbar({ organizerName }: NavbarProps) {
   return (
     <div className="navbar bg-base-200">
       <div className="flex-1">
@@ -23,7 +23,7 @@ export default function Navbar({ orgName }: NavbarProps) {
             height={40} 
             className="mr-2 invert"
           />
-          <span className="text-xl font-bold">{orgName}</span>
+          <span className="text-xl font-bold">{organizerName}</span>
         </Link>
       </div>
       <div className="flex-none gap-2">

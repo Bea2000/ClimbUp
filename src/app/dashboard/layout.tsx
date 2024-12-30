@@ -11,11 +11,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
     redirect('/login');
   }
 
-  const orgName = await getOrganizerName(user.organizerId);
+  const organizerName = await getOrganizerName(user.organizerId);
+
+  if (!organizerName) {
+    throw new Error("No se pudo obtener el nombre del organizador");
+  }
 
   return (
     <div>
-      <Navbar orgName={orgName ?? 'Sin nombre'} />
+      <Navbar organizerName={organizerName} />
       <main>{children}</main>
     </div>
   );
