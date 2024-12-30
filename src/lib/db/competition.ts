@@ -1,6 +1,6 @@
 import { CompetitionData } from "@/types/competition";
+  
 import { getParticipantsForCompetition } from "./participant";
-
 import prisma from "./prisma";
 
 export async function createNewCompetition(competition: CompetitionData) {
