@@ -28,7 +28,7 @@ export function useCompetitionForm() {
     name: '',
     location: '',
     date: '',
-    duration: 0,
+    duration: 30,
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof Omit<CompetitionFormData, 'startTime'>, string>>>({});
@@ -94,7 +94,7 @@ export function useCompetitionForm() {
         name: '',
         location: '',
         date: '',
-        duration: 0,
+        duration: 30,
       });
     } catch (err) {
       if (err instanceof z.ZodError) {
