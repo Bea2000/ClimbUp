@@ -74,6 +74,7 @@ model Participant {
   userId        Int         @unique
   user          User        @relation(fields: [userId], references: [id])
   competitionId Int
+  finalScore    Int?
   competition   Competition @relation(fields: [competitionId], references: [id])
   problems      ParticipantProblem[]
 }

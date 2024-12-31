@@ -100,7 +100,7 @@ export const authOptions: NextAuthOptions = {
 export async function getUserFromSession() {
   const session = await getServerSession(authOptions);
   if (!session || !session.user || !session.user.id || !session.user.role || !session.user.organizerId) {
-    redirect('/sign-in');
+    redirect('/login');
   }
   return session.user;
 }
