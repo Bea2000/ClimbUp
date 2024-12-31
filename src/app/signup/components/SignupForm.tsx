@@ -70,47 +70,49 @@ export function SignupForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto mt-8 max-w-md space-y-4"
+      className="mx-auto space-y-4"
       noValidate
     >
-      <FormInput
-        name="name"
-        type="text"
-        placeholder="Nombre"
-        error={errors.name}
-      />
+      <div className="flex flex-col gap-4">
+        <FormInput
+          name="name"
+          type="text"
+          placeholder="Nombre"
+          error={errors.name}
+        />
 
-      <FormInput
-        name="organizerName"
-        type="text"
-        placeholder="Nombre del organizador / organización"
-        error={errors.organizerName}
-      />
+        <FormInput
+          name="organizerName"
+          type="text"
+          placeholder="Nombre del organizador / organización"
+          error={errors.organizerName}
+        />
 
-      <FormInput
-        name="email"
-        type="email"
-        placeholder="Email"
-        error={errors.email}
-      />
+        <FormInput
+          name="email"
+          type="email"
+          placeholder="Email"
+          error={errors.email}
+        />
 
-      <RutInput
-        error={errors.rut}
-      />
+        <RutInput
+          error={errors.rut}
+        />
 
-      <FormInput
-        name="password"
-        type="password"
-        placeholder="Contraseña"
-        error={errors.password}
-      />
+        <FormInput
+          name="password"
+          type="password"
+          placeholder="Contraseña"
+          error={errors.password}
+        />
 
-      <FormInput
-        name="confirmPassword"
-        type="password"
-        placeholder="Confirmar Contraseña"
-        error={errors.confirmPassword}
-      />
+        <FormInput
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirmar Contraseña"
+          error={errors.confirmPassword}
+        />
+      </div>
 
       <button type="submit" className="btn btn-primary w-full" disabled={loading}>
         Registrarse

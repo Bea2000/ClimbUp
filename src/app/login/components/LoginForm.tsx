@@ -6,13 +6,19 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { FormInput } from '@/components/FormInput';
+
+import { EmailIcon } from '@/assets/icons/EmailIcon';
+import { EyeIcon } from '@/assets/icons/EyeIcon';
+import { EyeSlashIcon } from '@/assets/icons/EyeSlashIcon';
+import { LockIcon } from '@/assets/icons/LockIcon';
+import FormInput from '@/components/ui/FormInput';
 
 import { loginSchema } from '../schemas/loginSchema';
 
 export function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -58,30 +64,38 @@ export function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto mt-8 max-w-md space-y-4"
+      className="mx-auto mt-8 max-w-lg space-y-4"
       noValidate
     >
       <FormInput
         name="email"
         type="email"
         placeholder="Email"
-        error={errors.email}
+        errors={errors.email ? [errors.email] : undefined}
+        leftIcon={<EmailIcon />}
       />
 
       <FormInput
         name="password"
-        type="password"
+        type={showPassword ? "text" : "password"}
         placeholder="Contraseña"
-        error={errors.password}
+        errors={errors.password ? [errors.password] : undefined}
+        leftIcon={<LockIcon />}
+        rightIcon={showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+        onRightIconClick={() => setShowPassword(!showPassword)}
       />
 
       <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-        Iniciar sesión
+        {loading ? (
+          <span className="loading loading-spinner"></span>
+        ) : 'Iniciar sesión'}
       </button>
 
-      <h2>
-        <Link href="/signup">¿No tienes una cuenta? Regístrate</Link>
-      </h2>
+      <p className="text-center">
+        <Link href="/signup" className="text-primary hover:underline">
+          ¿No tienes una cuenta? Regístrate
+        </Link>
+      </p>
     </form>
   );
 }
