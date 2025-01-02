@@ -66,3 +66,10 @@ export async function getLastNCompetitionsForOrganizer(organizerId: number, n: n
     take: n,
   });
 }
+
+export async function getCompetitionsByOrganizerName(organizerName: string) {
+  return await prisma.competition.findMany({
+    where: { organizer: { name: { contains: organizerName, mode: 'insensitive' } } },
+    include: { organizer: true },
+  });
+}
