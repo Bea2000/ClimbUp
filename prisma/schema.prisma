@@ -47,6 +47,8 @@ model Problem {
   competitionId  Int
   competition    Competition  @relation(fields: [competitionId], references: [id])
   problems       ParticipantProblem[]
+  judgeId        Int
+  judge          Judge @relation(fields: [judgeId], references: [id])
 }
 
 model Admin {
@@ -67,6 +69,7 @@ model Judge {
   organizer     Organizer   @relation(fields: [organizerId], references: [id])
   competitionId Int
   competition   Competition @relation(fields: [competitionId], references: [id])
+  problems      Problem[]
 }
 
 model Participant {
@@ -85,8 +88,8 @@ model User {
   email        String      @unique
   rut          String      @unique
   role         Role
-  judge        Judge?
-  participant  Participant?
+  judge        Judge[]
+  participant  Participant[]
   admin        Admin?
 }
 
