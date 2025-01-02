@@ -1,6 +1,58 @@
 import { SubmissionResult } from '@conform-to/react';
+import { hash } from 'bcrypt';
 
 import prisma from '@/lib/db/prisma';
+import { CreateAdminData } from '@/types/admin';
+
+export async function checkExistingUser(email: string, rut: string) {
+  return await prisma.user.findFirst({
+    where: {
+      OR: [
+        { email },
+        { rut },
+      ],
+    },
+  });
+}
+
+export async function createNewAdmin({
+  name,
+  email,
+  password,
+  rut,
+  isSuperAdmin,
+  organizerId,
+}: CreateAdminData) {
+  const hashedPassword = await hash(password, 10);
+
+  return await prisma.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: {
+        name,
+        email,
+        rut,
+        role: 'ADMIN',
+      },
+    });
+
+    const admin = await tx.admin.create({
+      data: {
+        userId: user.id,
+        password: hashedPassword,
+        isSuperAdmin,
+        organizerId,
+      },
+    });
+
+    return { user, admin };
+  });
+}
+
+export async function getAdminByUserId(userId: number) {
+  return await prisma.admin.findUnique({
+    where: { userId },
+  });
+}
 
 export async function getAdminsByOrganizerForUserId(organizerId: number, userId: number) {
   return prisma.admin.findMany({
