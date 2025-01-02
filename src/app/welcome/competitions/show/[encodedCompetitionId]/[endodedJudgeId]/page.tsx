@@ -2,18 +2,10 @@ import { decodeIdInBloat } from "@/lib/encoder";
 
 import ParticipantSearchForm from "./components/ParticipantSearchForm";
 
-type ShowCompetitionPageProps = {
-  params: {
-    encodedCompetitionId: string;
-    endodedJudgeId: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+type ShowCompetitionPageProps = Promise<{ encodedCompetitionId: string, endodedJudgeId: string }>;
 
-export default async function ShowCompetitionPage({
-  params,
-}: ShowCompetitionPageProps) {
-  const { encodedCompetitionId, endodedJudgeId } = await params;
+export default async function ShowCompetitionPage(props: { params: ShowCompetitionPageProps }) {
+  const { encodedCompetitionId, endodedJudgeId } = await props.params;
   const competitionId = decodeIdInBloat(encodedCompetitionId);
   const judgeId = decodeIdInBloat(endodedJudgeId);
   return (

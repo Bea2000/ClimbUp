@@ -2,15 +2,10 @@ import { decodeIdInBloat } from '@/lib/encoder';
 
 import JudgeValidationForm from './components/JudgeValidationForm';
 
-type ShowCompetitionPageProps = {
-  params: {
-    encodedCompetitionId: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+type ShowCompetitionPageProps = Promise<{ encodedCompetitionId: string }>;
 
-export default async function ShowCompetitionPage({ params }: ShowCompetitionPageProps) {
-  const { encodedCompetitionId } = await params;
+export default async function ShowCompetitionPage(props: { params: ShowCompetitionPageProps }) {
+  const { encodedCompetitionId } = await props.params;
   const competitionId = decodeIdInBloat(encodedCompetitionId);
   
   return (
