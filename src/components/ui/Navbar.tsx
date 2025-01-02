@@ -1,14 +1,11 @@
 'use client';
 
+import { List, SignOut } from "@phosphor-icons/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
-
-import bellIcon from "@/assets/icons/bell.svg";
-import hamburgerIcon from "@/assets/icons/hamburger.svg";
-import logoutIcon from "@/assets/icons/logOut.svg";
 
 interface NavbarProps {
   organizerName: string;
@@ -28,7 +25,7 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
             onClick={() => setIsOpen(!isOpen)} 
             className="btn btn-ghost"
           >
-            <Image src={hamburgerIcon} alt="Menu" width={24} height={24} className="invert" />
+            <List size={24} color="#f0eaea" />
           </button>
           {isOpen && (
             <ul className="menu dropdown-content z-50 mt-3 w-64 rounded-box bg-base-200 p-2 shadow">
@@ -41,8 +38,8 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
         </div>
         <button className="flex items-center" onClick={() => router.push("/dashboard")}>
           <Image 
-            src="/logo.svg" 
-            alt="ClimbApp Logo" 
+            src="/logo.png" 
+            alt="ClimbUp Logo" 
             width={40}
             height={40} 
             className="mr-2 invert"
@@ -51,19 +48,8 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
         </button>
       </div>
       <div className="flex-none gap-2">
-        <button className="btn btn-circle btn-ghost">
-          <div className="indicator">
-            <Image src={bellIcon} alt="Bell" width={24} height={24} className="invert" />
-          </div>
-        </button>
         <button onClick={() => signOut()} className="btn btn-ghost">
-          <Image 
-            src={logoutIcon} 
-            alt="Logout" 
-            width={24}
-            height={24} 
-            className="mr-2 invert"
-          />
+          <SignOut size={24} color="#a3aab8" />
           Cerrar Sesión
         </button>
       </div>

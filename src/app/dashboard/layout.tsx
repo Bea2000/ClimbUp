@@ -6,12 +6,11 @@ import { getOrganizerName } from "@/lib/db/organizer";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await getUserFromSession();
-  const superAdmin = await isSuperAdmin(user);
-
   if (!user) {
     redirect('/login');
   }
 
+  const superAdmin = await isSuperAdmin(user)
   const organizerName = await getOrganizerName(user.organizerId);
 
   if (!organizerName) {

@@ -104,8 +104,5 @@ export async function getUserFromSession() {
 }
 
 export async function isSuperAdmin(user: SessionUser): Promise<boolean> {
-  if (!user) {
-    redirect('/login');
-  }
   return user.role === 'superadmin';
 }
