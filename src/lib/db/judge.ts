@@ -35,3 +35,17 @@ export async function isJudgeValidForCompetition(rut: string, competitionCode: s
 
   return judge;
 }
+
+export async function isJudgeOfParticipant(judgeId: number, participantId: number, competitionId: number) {
+  const competition = await prisma.competition.findFirst({
+    where: {
+      AND: [
+        { id: competitionId },
+        { judges: { some: { id: judgeId } } },
+        { participants: { some: { id: participantId } } },
+      ],
+    },
+  });
+
+  return !!competition;
+}

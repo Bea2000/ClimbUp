@@ -29,3 +29,17 @@ export async function getParticipantsForCompetition(competitionId: number) {
     },
   });
 }
+
+export async function findParticipantById(id: number) {
+  const participant = await prisma.participant.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      competition: true,
+      problems: true,
+    },
+  });
+
+  return participant;
+}
