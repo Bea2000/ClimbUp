@@ -7,10 +7,13 @@ type ShowCompetitionPageProps = {
     encodedCompetitionId: string;
     endodedJudgeId: string;
   };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export default async function ShowCompetitionPage({ params }: ShowCompetitionPageProps) {
-  const { encodedCompetitionId, endodedJudgeId } = params;
+export default async function ShowCompetitionPage({
+  params,
+}: ShowCompetitionPageProps) {
+  const { encodedCompetitionId, endodedJudgeId } = await params;
   const competitionId = decodeIdInBloat(encodedCompetitionId);
   const judgeId = decodeIdInBloat(endodedJudgeId);
   return (
