@@ -4,15 +4,13 @@ import { redirect } from 'next/navigation';
 import { DefaultSession, NextAuthOptions, getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+import { SessionUser } from '@/types/session';
+
 import prisma from './db/prisma';
 
 declare module 'next-auth' {
   interface Session {
-    user: {
-      id: number;
-      role: string;
-      organizerId: number;
-    } & DefaultSession['user'];
+    user: SessionUser & DefaultSession['user'];
   }
 }
 
@@ -88,7 +86,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as number;
+        session.user.id = token.id as string;
         session.user.role = token.role as string;
         session.user.organizerId = token.organizerId as number;
       }
@@ -103,4 +101,11 @@ export async function getUserFromSession() {
     redirect('/login');
   }
   return session.user;
+}
+
+export async function isSuperAdmin(user: SessionUser): Promise<boolean> {
+  if (!user) {
+    redirect('/login');
+  }
+  return user.role === 'superadmin';
 }
