@@ -1,8 +1,10 @@
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+
 import { authOptions } from "@/lib/auth";
-import CompetitionsList from "./components/CompetitionsList";
 import { getCompetitionsForOrganizer } from "@/lib/db/competition";
+
+import CompetitionsList from "./components/CompetitionsList";
 
 export default async function CompetitionsPage() {
   const session = await getServerSession(authOptions);

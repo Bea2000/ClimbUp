@@ -7,7 +7,7 @@ interface CompetitionsListProps {
 
 export default function CompetitionsList({ competitions }: CompetitionsListProps) {
   return (
-    <div className="overflow-x-auto">
+    <div className="w-full overflow-x-auto">
       <table className="table w-full">
         <thead>
           <tr>
@@ -31,7 +31,7 @@ export default function CompetitionsList({ competitions }: CompetitionsListProps
                 <div className="flex gap-2">
                   <Link
                     href={`/dashboard/competitions/${competition.id}`}
-                    className="btn btn-sm btn-primary"
+                    className="btn btn-primary btn-sm"
                   >
                     Ver detalles
                   </Link>
@@ -41,7 +41,7 @@ export default function CompetitionsList({ competitions }: CompetitionsListProps
           ))}
           {competitions.length === 0 && (
             <tr>
-              <td colSpan={6} className="text-center">
+              <td className="text-center" colSpan={6}>
                 No hay competencias registradas
               </td>
             </tr>
