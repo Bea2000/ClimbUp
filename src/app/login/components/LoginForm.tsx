@@ -7,17 +7,16 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { FormInput } from '@/components/FormInput';
+import SubmitButton from '@/components/ui/SubmitButton';
 
 import { loginSchema } from '../schemas/loginSchema';
 
 export function LoginForm() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoading(true);
     setErrors({});
   
     const formData = new FormData(event.currentTarget);
@@ -36,7 +35,6 @@ export function LoginForm() {
         }
       });
       setErrors(formErrors);
-      setLoading(false);
       return;
     }
   
@@ -45,7 +43,6 @@ export function LoginForm() {
       email,
       password,
     });
-    setLoading(false);
     if (signInData?.error) {
       toast.error(signInData.error);
       return;
@@ -75,9 +72,10 @@ export function LoginForm() {
         error={errors.password}
       />
 
-      <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-        Iniciar sesión
-      </button>
+      <SubmitButton
+        label="Iniciar sesión"
+        loadingLabel="Iniciando sesión..."
+      />
 
       <h2>
         <Link href="/signup">¿No tienes una cuenta? Regístrate</Link>
