@@ -21,11 +21,3 @@ export async function getLastCompetitionParticipantsCountForOrganizer(organizerI
     },
   });
 }
-
-export async function getParticipantsForCompetition(competitionId: number) {
-  return await prisma.participant.findMany({
-    where: {
-      competitionId,
-    },
-  });
-}
