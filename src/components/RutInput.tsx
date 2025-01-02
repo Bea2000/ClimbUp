@@ -29,7 +29,7 @@ export function RutInput({ errors }: RutInputProps) {
     <FormInput
       name="rut"
       type="text"
-      placeholder="RUT (ej: 12.345.678-9)"
+      placeholder="ej: 12.345.678-9"
       errors={errors}
       onChange={handleRutChange}
       maxLength={12}

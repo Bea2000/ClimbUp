@@ -51,3 +51,29 @@ export async function removeJudgeFromProblem(problemId: number, judgeId: number)
     },
   });
 }
+
+export async function getJudgeByRut(rut: string) {
+  const users = await prisma.user.findMany({
+    where: {
+      rut,
+    },
+  });
+
+  if (users.length === 0) {
+    return null;
+  }
+
+  for (const user of users) {
+    const judge = await prisma.judge.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    if (judge) {
+      return judge;
+    }
+  }
+
+  return null;
+}
