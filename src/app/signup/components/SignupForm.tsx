@@ -7,17 +7,16 @@ import toast from 'react-hot-toast';
 
 import { FormInput } from '@/components/FormInput';
 import { RutInput } from '@/components/RutInput';
+import SubmitButton from '@/components/ui/SubmitButton';
 
 import { signupSchema, type SignupFormData } from '../schemas/signupSchema';
 
 export function SignupForm() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<SignupFormData>>({});
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoading(true);
     setErrors({});
 
     const formData = new FormData(event.currentTarget);
@@ -38,7 +37,6 @@ export function SignupForm() {
         [issue.path[0]]: issue.message,
       }), {});
       setErrors(formErrors);
-      setLoading(false);
       return;
     }
 
@@ -54,7 +52,6 @@ export function SignupForm() {
       if (!response.ok) {
         const error = await response.json();
         toast.error(error.message || 'Error al registrar usuario');
-        setLoading(false);
         return;
       }
 
@@ -62,8 +59,6 @@ export function SignupForm() {
       router.push('/login');
     } catch (error) {
       toast.error(`Error al conectar con el servidor: ${error}`);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -114,9 +109,10 @@ export function SignupForm() {
         />
       </div>
 
-      <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-        Registrarse
-      </button>
+      <SubmitButton
+        label="Registrarse"
+        loadingLabel="Registrando..."
+      />
 
       <div className="text-center">
         <Link href="/login" className="text-sm hover:underline">

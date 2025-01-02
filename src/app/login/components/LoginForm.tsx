@@ -12,18 +12,17 @@ import { EyeIcon } from '@/assets/icons/EyeIcon';
 import { EyeSlashIcon } from '@/assets/icons/EyeSlashIcon';
 import { LockIcon } from '@/assets/icons/LockIcon';
 import FormInput from '@/components/ui/FormInput';
+import SubmitButton from '@/components/ui/SubmitButton';
 
 import { loginSchema } from '../schemas/loginSchema';
 
 export function LoginForm() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoading(true);
     setErrors({});
   
     const formData = new FormData(event.currentTarget);
@@ -42,7 +41,6 @@ export function LoginForm() {
         }
       });
       setErrors(formErrors);
-      setLoading(false);
       return;
     }
   
@@ -51,7 +49,6 @@ export function LoginForm() {
       email,
       password,
     });
-    setLoading(false);
     if (signInData?.error) {
       toast.error(signInData.error);
       return;
@@ -85,11 +82,10 @@ export function LoginForm() {
         onRightIconClick={() => setShowPassword(!showPassword)}
       />
 
-      <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-        {loading ? (
-          <span className="loading loading-spinner"></span>
-        ) : 'Iniciar sesión'}
-      </button>
+      <SubmitButton
+        label="Iniciar sesión"
+        loadingLabel="Iniciando sesión..."
+      />
 
       <p className="text-center">
         <Link href="/signup" className="text-primary hover:underline">
