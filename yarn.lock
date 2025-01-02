@@ -588,6 +588,7 @@
     tslib "^2.6.2"
 
 "@babel/runtime@^7.20.13":
+"@babel/runtime@^7.20.13":
   version "7.26.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.26.0.tgz#8600c2f595f277c60815256418b85356a65173c1"
   integrity sha512-FDSOghenHTiToteC/QRlv2q3DhPZ/oOXTBoirfWNx1Cx3TMVcGWQtMMmQcSvb/JjpNeGzx8Pq/b4fKEJuWm1sw==
@@ -596,19 +597,19 @@
 
 "@conform-to/dom@1.2.2":
   version "1.2.2"
-  resolved "https://registry.npmjs.org/@conform-to/dom/-/dom-1.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/@conform-to/dom/-/dom-1.2.2.tgz#2c5d5b24d0275ef220075c6ec479f65d1a00ffbe"
   integrity sha512-f05EClpNP31o6lX4LYmmLqgsiTOHdGfY7z2XXK6U6rRp+EtxrkUBdrFlIGsfkf7e9AFO19h3/Cb/cXHVd1k1FA==
 
 "@conform-to/react@^1.2.2":
   version "1.2.2"
-  resolved "https://registry.npmjs.org/@conform-to/react/-/react-1.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/@conform-to/react/-/react-1.2.2.tgz#f7db3a73670fdefac1ff20203c63272377e33cf6"
   integrity sha512-1JBECb3NKi5/IlexaYLgnAxGJ55MRuO2sEQ10cJfUK2bfltNbTIQnYUDG6pU886A4lda/q6UH/adPsjiB/4Gkg==
   dependencies:
     "@conform-to/dom" "1.2.2"
 
 "@conform-to/zod@^1.2.2":
   version "1.2.2"
-  resolved "https://registry.npmjs.org/@conform-to/zod/-/zod-1.2.2.tgz"
+  resolved "https://registry.yarnpkg.com/@conform-to/zod/-/zod-1.2.2.tgz#ca33c705d19dded4e92cd7c15a7b5e2ed09fcdc9"
   integrity sha512-mNCzh0XsF2vhCtD8bfHYMYayEJ9dP6/KsGjmq8DFcO1ykDTNQZwfi1MIm4evGYVempSS3poYr4xZjd7cXEbtaw==
   dependencies:
     "@conform-to/dom" "1.2.2"
@@ -2905,6 +2906,11 @@ hasown@^2.0.0, hasown@^2.0.1, hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
+html5-qrcode@^2.3.8:
+  version "2.3.8"
+  resolved "https://registry.yarnpkg.com/html5-qrcode/-/html5-qrcode-2.3.8.tgz#0b0cdf7a9926cfd4be530e13a51db47592adfa0d"
+  integrity sha512-jsr4vafJhwoLVEDW3n1KvPnCCXWaQfRng0/EEYk1vNcQGcG/htAdhJX0be8YyqMoSz7+hZvOZSTAepsabiuhiQ==
+
 https-proxy-agent@^5.0.0:
   version "5.0.1"
   resolved "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-5.0.1.tgz"
@@ -4085,6 +4091,11 @@ source-map-js@^1.0.2, source-map-js@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz"
   integrity sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==
+
+sqids@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/sqids/-/sqids-0.3.0.tgz#969eabe54a362682e44cb73fce2bfea84e504dec"
+  integrity sha512-lOQK1ucVg+W6n3FhRwwSeUijxe93b51Bfz5PMRMihVf1iVkl82ePQG7V5vwrhzB11v0NtsR25PSZRGiSomJaJw==
 
 stable-hash@^0.0.4:
   version "0.0.4"
