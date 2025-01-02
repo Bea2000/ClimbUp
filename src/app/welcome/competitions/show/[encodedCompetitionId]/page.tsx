@@ -9,7 +9,7 @@ type ShowCompetitionPageProps = {
 };
 
 export default async function ShowCompetitionPage({ params }: ShowCompetitionPageProps) {
-  const { encodedCompetitionId } = await params;
+  const { encodedCompetitionId } = params;
   const competitionId = decodeIdInBloat(encodedCompetitionId);
   
   return (
