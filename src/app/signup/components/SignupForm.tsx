@@ -7,17 +7,16 @@ import toast from 'react-hot-toast';
 
 import { FormInput } from '@/components/FormInput';
 import { RutInput } from '@/components/RutInput';
+import SubmitButton from '@/components/ui/SubmitButton';
 
 import { signupSchema, type SignupFormData } from '../schemas/signupSchema';
 
 export function SignupForm() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<SignupFormData>>({});
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoading(true);
     setErrors({});
 
     const formData = new FormData(event.currentTarget);
@@ -38,7 +37,6 @@ export function SignupForm() {
         [issue.path[0]]: issue.message,
       }), {});
       setErrors(formErrors);
-      setLoading(false);
       return;
     }
 
@@ -54,7 +52,6 @@ export function SignupForm() {
       if (!response.ok) {
         const error = await response.json();
         toast.error(error.message || 'Error al registrar usuario');
-        setLoading(false);
         return;
       }
 
@@ -62,59 +59,60 @@ export function SignupForm() {
       router.push('/login');
     } catch (error) {
       toast.error(`Error al conectar con el servidor: ${error}`);
-    } finally {
-      setLoading(false);
     }
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto mt-8 max-w-md space-y-4"
+      className="mx-auto space-y-4"
       noValidate
     >
-      <FormInput
-        name="name"
-        type="text"
-        placeholder="Nombre"
-        error={errors.name}
-      />
+      <div className="flex flex-col gap-4">
+        <FormInput
+          name="name"
+          type="text"
+          placeholder="Nombre"
+          error={errors.name}
+        />
 
-      <FormInput
-        name="organizerName"
-        type="text"
-        placeholder="Nombre del organizador / organización"
-        error={errors.organizerName}
-      />
+        <FormInput
+          name="organizerName"
+          type="text"
+          placeholder="Nombre del organizador / organización"
+          error={errors.organizerName}
+        />
 
-      <FormInput
-        name="email"
-        type="email"
-        placeholder="Email"
-        error={errors.email}
-      />
+        <FormInput
+          name="email"
+          type="email"
+          placeholder="Email"
+          error={errors.email}
+        />
 
-      <RutInput
-        error={errors.rut}
-      />
+        <RutInput
+          error={errors.rut}
+        />
 
-      <FormInput
-        name="password"
-        type="password"
-        placeholder="Contraseña"
-        error={errors.password}
-      />
+        <FormInput
+          name="password"
+          type="password"
+          placeholder="Contraseña"
+          error={errors.password}
+        />
 
-      <FormInput
-        name="confirmPassword"
-        type="password"
-        placeholder="Confirmar Contraseña"
-        error={errors.confirmPassword}
-      />
+        <FormInput
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirmar Contraseña"
+          error={errors.confirmPassword}
+        />
+      </div>
 
-      <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-        Registrarse
-      </button>
+      <SubmitButton
+        label="Registrarse"
+        loadingLabel="Registrando..."
+      />
 
       <div className="text-center">
         <Link href="/login" className="text-sm hover:underline">

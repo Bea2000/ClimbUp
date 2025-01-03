@@ -114,7 +114,10 @@ export default function CreateCompetitionForm() {
               extraElement={generateCodeButton}
             />
 
-            <SubmitButton label="Crear Competencia" />
+            <SubmitButton
+              label="Crear Competencia"
+              loadingLabel="Creando..."
+            />
           </form>
         </div>
       </div>
