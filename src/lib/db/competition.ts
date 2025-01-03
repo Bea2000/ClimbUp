@@ -1,6 +1,5 @@
 import { CompetitionData } from "@/types/competition";
   
-import { getParticipantsForCompetition } from "./participant";
 import prisma from "./prisma";
 
 export async function createNewCompetition(competition: CompetitionData) {
@@ -38,6 +37,9 @@ export async function getLastCompetitionForOrganizer(organizerId: number) {
   const lastCompetition = await prisma.competition.findFirst({
     where: {
       organizerId,
+      date: {
+        lt: new Date(),
+      },
     },
     orderBy: {
       date: "desc",
@@ -46,13 +48,15 @@ export async function getLastCompetitionForOrganizer(organizerId: number) {
   return lastCompetition?.id;
 }
 
-export async function getLastCompetitionAverageScoreForOrganizer(organizerId: number) {
-  const lastCompetitionId = await getLastCompetitionForOrganizer(organizerId);
-  if (lastCompetitionId) {
-    const participants = await getParticipantsForCompetition(lastCompetitionId);
-    return participants.reduce((acc, participant) => acc + (participant.finalScore ?? 0), 0) / participants.length;
-  }
-  return 0;
+export async function getScheduledCompetitionsCountForOrganizer(organizerId: number) {
+  return await prisma.competition.count({
+    where: {
+      organizerId,
+      date: {
+        gte: new Date(),
+      },
+    },
+  });
 }
 
 export async function getLastNCompetitionsForOrganizer(organizerId: number, n: number) {

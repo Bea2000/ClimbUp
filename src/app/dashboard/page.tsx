@@ -1,5 +1,5 @@
 import { getUserFromSession } from "@/lib/auth";
-import { getLastCompetitionAverageScoreForOrganizer, getLastNCompetitionsForOrganizer, getThisYearCompetitionsCountForOrganizer } from "@/lib/db/competition";
+import { getScheduledCompetitionsCountForOrganizer, getLastNCompetitionsForOrganizer, getThisYearCompetitionsCountForOrganizer } from "@/lib/db/competition";
 import { getLastCompetitionParticipantsCountForOrganizer, getParticipantsCountForOrganizer } from "@/lib/db/participant";
 
 import Dashboard from "./components/Dashboard";
@@ -10,7 +10,7 @@ export default async function DashboardPage() {
   const yearlyCompetitions = await getThisYearCompetitionsCountForOrganizer(user?.organizerId);
   const participants = await getParticipantsCountForOrganizer(user?.organizerId);
   const lastCompetitionParticipants = await getLastCompetitionParticipantsCountForOrganizer(user?.organizerId);
-  const averageScore = await getLastCompetitionAverageScoreForOrganizer(user?.organizerId);
+  const scheduledCompetitions = await getScheduledCompetitionsCountForOrganizer(user?.organizerId);
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -19,7 +19,7 @@ export default async function DashboardPage() {
         yearlyCompetitions={yearlyCompetitions}
         totalParticipants={participants}
         lastCompetitionParticipants={lastCompetitionParticipants}
-        averageScore={averageScore} />
+        scheduledCompetitions={scheduledCompetitions} />
     </div>
   );
 } 

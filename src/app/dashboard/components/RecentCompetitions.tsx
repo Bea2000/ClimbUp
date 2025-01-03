@@ -1,4 +1,5 @@
 import { Competition } from "@prisma/client";
+import Link from "next/link";
 
 export default function RecentCompetitions({ competitions }: { competitions: Competition[] }) {
   return (
@@ -8,25 +9,36 @@ export default function RecentCompetitions({ competitions }: { competitions: Com
         Competencias Recientes
       </div>
       <div className="collapse-content">
-        <div className="overflow-x-auto">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Fecha</th>
-                <th>Ubicación</th>
-              </tr>
-            </thead>
-            <tbody>
-              {competitions.map((comp) => (
-                <tr key={comp.id}>
-                  <td>{comp.name}</td>
-                  <td>{new Date(comp.date).toLocaleDateString()}</td>
-                  <td>{comp.location}</td>
+        <div className="w-full">
+          <div className="w-screen overflow-x-auto">
+            <table className="table min-w-[800px]">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Fecha</th>
+                  <th>Ubicación</th>
+                  <th>Acción</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {competitions.map((comp) => (
+                  <tr key={comp.id}>
+                    <td>{comp.name}</td>
+                    <td>{new Date(comp.date).toLocaleDateString()}</td>
+                    <td>{comp.location}</td>
+                    <td>
+                      <Link 
+                        href={`/competitions/${comp.id}`}
+                        className="btn btn-primary btn-sm"
+                      >
+                        Ver competencia
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
