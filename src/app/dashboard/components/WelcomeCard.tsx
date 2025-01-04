@@ -14,8 +14,8 @@ export default function WelcomeCard() {
         />
       </figure>
       <div className="card-body flex items-center justify-center">
-        <h2 className="card-title mb-4 text-3xl">¡Bienvenido a ClimbApp!</h2>
-        <Link href="/competitions/create" className="btn btn-primary">
+        <h2 className="card-title mb-4 text-3xl">¡Bienvenido a ClimbUp!</h2>
+        <Link href="/dashboard/competitions/create" className="btn btn-primary">
           Crear Nueva Competencia
         </Link>
       </div>
