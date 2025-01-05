@@ -23,7 +23,11 @@ export default function CompetitionsList({ competitions }: CompetitionsListProps
           {competitions.map((competition) => (
             <tr key={competition.id}>
               <td>{competition.name}</td>
-              <td>{new Date(competition.date).toLocaleDateString()}</td>
+              <td>{new Date(competition.date).toLocaleDateString('es-CL', { 
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+              })}</td>
               <td>{competition.location}</td>
               <td>{competition.duration}</td>
               <td>{competition.code}</td>
