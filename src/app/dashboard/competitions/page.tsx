@@ -8,9 +8,6 @@ import CompetitionsList from "./components/CompetitionsList";
 
 export default async function CompetitionsPage() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.organizerId) {
-    redirect("/login");
-  }
 
   const competitions = await getCompetitionsForOrganizerId(session.user.organizerId);
 
