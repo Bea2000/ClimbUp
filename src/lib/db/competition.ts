@@ -71,7 +71,7 @@ export async function getLastNCompetitionsForOrganizer(organizerId: number, n: n
   });
 }
 
-export async function getCompetitionsForOrganizer(organizerId: number) {
+export async function getCompetitionsForOrganizerId(organizerId: number) {
   return await prisma.competition.findMany({
     where: {
       organizerId,

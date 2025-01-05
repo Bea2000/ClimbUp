@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
-import { getCompetitionsForOrganizer } from "@/lib/db/competition";
+import { getCompetitionsForOrganizerId } from "@/lib/db/competition";
 
 import CompetitionsList from "./components/CompetitionsList";
 
@@ -12,7 +12,7 @@ export default async function CompetitionsPage() {
     redirect("/login");
   }
 
-  const competitions = await getCompetitionsForOrganizer(session.user.organizerId);
+  const competitions = await getCompetitionsForOrganizerId(session.user.organizerId);
 
   return (
     <div className="container mx-auto p-4">
