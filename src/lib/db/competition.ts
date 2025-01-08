@@ -81,3 +81,25 @@ export async function getCompetitionsForOrganizerId(organizerId: number) {
     },
   });
 }
+
+export async function getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges(competitionId: number) {
+  return await prisma.competition.findUnique({
+    where: {
+      id: competitionId,
+    },
+    include: {
+      organizer: true,
+      problems: true,
+      participants: {
+        include: {
+          user: true,
+        },
+      },
+      judges: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+}
