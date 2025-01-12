@@ -36,9 +36,9 @@ export default function CreateCompetitionForm() {
   const [showSuggestions, setShowSuggestions] = React.useState(false);
 
   React.useEffect(() => {
-    if (lastResult?.status === 'success') {
+    if (lastResult?.status === 'success' && 'competitionId' in lastResult) {
       toast.success('Competencia creada correctamente');
-      router.push('/dashboard/competitions');
+      router.push(`/dashboard/competitions/manage/${lastResult.competitionId.toString()}/judges`);
     } else if (lastResult?.status === 'error') {
       const errorMessage = lastResult.error?.message?.[0] || 'Error al crear la competencia';
       toast.error(errorMessage);
