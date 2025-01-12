@@ -56,9 +56,10 @@ model Problem {
   maxPoints          Int
   attempts           Int
   discountPerAttempt Int
-  competitionId      Int
-  competition        Competition          @relation(fields: [competitionId], references: [id])
-  problems           ParticipantProblem[]
+  competitionId  Int
+  competition    Competition  @relation(fields: [competitionId], references: [id])
+  problems       ParticipantProblem[]
+  judges         Judge[]
 }
 
 model Admin {
@@ -73,12 +74,13 @@ model Admin {
 
 model Judge {
   id            Int         @id @default(autoincrement())
-  userId        Int         @unique
+  userId        Int
   user          User        @relation(fields: [userId], references: [id])
   organizerId   Int
   organizer     Organizer   @relation(fields: [organizerId], references: [id])
   competitionId Int
   competition   Competition @relation(fields: [competitionId], references: [id])
+  problems      Problem[]
 }
 
 model Participant {
@@ -93,14 +95,14 @@ model Participant {
 }
 
 model User {
-  id          Int          @id @default(autoincrement())
-  name        String
-  email       String       @unique
-  rut         String       @unique
-  role        Role
-  judge       Judge?
-  participant Participant?
-  admin       Admin?
+  id           Int         @id @default(autoincrement())
+  name         String
+  email        String      @unique
+  rut          String      @unique
+  role         Role
+  judge        Judge[]
+  participant  Participant?
+  admin        Admin?
 }
 
 enum Role {
