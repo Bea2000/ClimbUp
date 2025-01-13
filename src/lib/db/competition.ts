@@ -2,7 +2,6 @@ import { ClimbingGrade } from "@prisma/client";
 
 import { CompetitionData, RegisterFormSettings } from "@/types/competition";
 
-  
 import prisma from "./prisma";
 
 export async function createNewCompetition(competition: CompetitionData) {
@@ -127,7 +126,6 @@ export async function getLevelTypeFromCompetitionByCompetitionId(competitionId: 
     where: { id: competitionId },
     select: { levelType: true },
   });
-
   if (!result) {
     throw new Error(`Competition with ID ${competitionId} not found.`);
   }

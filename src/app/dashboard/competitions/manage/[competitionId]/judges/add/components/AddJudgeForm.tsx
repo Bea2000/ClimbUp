@@ -64,7 +64,7 @@ export default function AddJudgeForm({ competitionId }: AddJudgeFormProps) {
               />
 
               <RutInput
-                error={fields.rut?.errors?.[0]}
+                errors={fields.rut?.errors}
               />
             </div>
 
