@@ -1,4 +1,15 @@
+import { CreateProblem } from "@/types/problem";
+
 import prisma from "./prisma";
+
+export async function addProblemToCompetition(competitionId: number, problem: CreateProblem) {
+  return await prisma.problem.create({
+    data: {
+      ...problem,
+      competitionId,
+    },
+  });
+}
 
 export async function removeProblemFromCompetition(competitionId: number, problemId: number) {
   return await prisma.problem.delete({

@@ -1,3 +1,5 @@
+import { ClimbingGrade } from "@prisma/client";
+
 import { CompetitionData } from "@/types/competition";
 
   
@@ -110,4 +112,17 @@ export async function isCompetitionOfOrganizer(competitionId: number, organizerI
   return await prisma.competition.findFirst({
     where: { id: competitionId, organizerId },
   });
+}
+
+export async function getLevelTypeFromCompetitionByCompetitionId(competitionId: number): Promise<ClimbingGrade> {
+  const result = await prisma.competition.findUnique({
+    where: { id: competitionId },
+    select: { levelType: true },
+  });
+
+  if (!result) {
+    throw new Error(`Competition with ID ${competitionId} not found.`);
+  }
+
+  return result.levelType;
 }
