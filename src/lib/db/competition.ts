@@ -105,3 +105,9 @@ export async function getCompetitionByIdWithOrganizerProblemsParticipantsAndJudg
     },
   });
 }
+
+export async function isCompetitionOfOrganizer(competitionId: number, organizerId: number) {
+  return await prisma.competition.findFirst({
+    where: { id: competitionId, organizerId },
+  });
+}

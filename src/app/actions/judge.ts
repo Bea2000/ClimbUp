@@ -6,8 +6,15 @@ import { revalidatePath } from 'next/cache';
 
 import { ManageJudgeSchema } from '@/app/dashboard/competitions/manage/[competitionId]/judges/schemas/manageJudgesSchema';
 import { getUserFromSession } from '@/lib/auth';
-import { findJudgeByUserIdAndCompetitionId, linkJudgeWithUser, removeJudgeFromCompetitionById } from '@/lib/db/judge';
+import { findJudgeByUserIdAndCompetitionId, linkJudgeWithUser, removeJudgeFromCompetitionById, removeJudgeFromProblem } from '@/lib/db/judge';
+import { updateProblemJudge } from '@/lib/db/problem';
 import { createJudgeUser, findUserByEmailOrRut } from '@/lib/db/user';
+
+interface AssignJudgeResult {
+  status: 'success' | 'error';
+  error?: { message: string[] }
+  action?: 'remove' | 'assign';
+}
 
 export async function deleteJudge(_prevState: unknown, formData: FormData): Promise<SubmissionResult> {
   try {
@@ -42,7 +49,7 @@ export async function addJudgeToCompetition(_prevState: unknown, formData: FormD
       rut: formData.get('rut'),
     });
 
-    let user: User | undefined;
+    let user: User | null = null;
 
     user = await findUserByEmailOrRut(parsed.email, parsed.rut);
 
@@ -83,6 +90,43 @@ export async function addJudgeToCompetition(_prevState: unknown, formData: FormD
       error: {
         message: ['Error al agregar el juez'],
       },
+    };
+  }
+}
+
+export async function assignJudgeToProblem(_prevState: unknown, formData: FormData): Promise<AssignJudgeResult> {
+  try {
+    const judgeId = Number(formData.get('judgeId'));
+    const problemId = Number(formData.get('problemId'));
+    const action = formData.get('action');
+
+    if (!problemId) {
+      return {
+        status: 'error',
+        error: { message: ['Datos inválidos'] },
+      };
+    }
+
+    if (action === 'remove') {
+      await removeJudgeFromProblem(problemId, judgeId);
+      revalidatePath('/dashboard/competitions');
+      return { status: 'success', action: 'remove' };
+    } 
+    if (!judgeId) {
+      return {
+        status: 'error',
+        error: { message: ['Datos inválidos'] },
+      };
+    }
+
+    await updateProblemJudge(problemId, judgeId);
+
+    revalidatePath('/dashboard/competitions');
+    return { status: 'success', action: 'assign' };
+  } catch {
+    return {
+      status: 'error',
+      error: { message: ['Error al gestionar juez del problema'] },
     };
   }
 }
