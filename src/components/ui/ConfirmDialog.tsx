@@ -1,16 +1,42 @@
+'use client';
+
 import React from 'react';
 
-export default function ConfirmDialog({ title, message, onConfirm, onCancel }: { title: string; message: string; onConfirm: () => void; onCancel: () => void }) {
+interface ConfirmDialogProps {
+  id: string;
+  title: string;
+  message: string;
+  onConfirm: (e: React.FormEvent) => void;
+}
+
+export default function ConfirmDialog({
+  id,
+  title,
+  message,
+  onConfirm,
+}: ConfirmDialogProps) {
   return (
-    <div className="modal modal-open">
+    <dialog id={id} className="modal modal-bottom sm:modal-middle">
       <div className="modal-box">
-        <h2 className="text-lg font-bold">{title}</h2>
+        <h3 className="text-lg font-bold">{title}</h3>
         <p className="py-4">{message}</p>
         <div className="modal-action">
-          <button className="btn btn-primary" onClick={onConfirm}>Confirmar</button>
-          <button className="btn" onClick={onCancel}>Cancelar</button>
+          <form onSubmit={onConfirm} className="flex gap-2">
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={() => {
+                (document.getElementById(id) as HTMLDialogElement)?.close();
+              }}
+            >
+              Cancelar
+            </button>
+            <button type="submit" className="btn btn-error">
+              Eliminar
+            </button>
+          </form>
         </div>
       </div>
-    </div>
+    </dialog>
   );
-}
+} 

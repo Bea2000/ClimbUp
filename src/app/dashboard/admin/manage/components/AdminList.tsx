@@ -14,7 +14,6 @@ interface AdminListProps {
 
 export default function AdminList({ admins }: AdminListProps) {
   const router = useRouter();
-  const [showConfirmDialog, setShowConfirmDialog] = React.useState(false);
   const [selectedAdminId, setSelectedAdminId] = React.useState<number | null>(null);
 
   async function deleteAdminConfirmed(adminId: number) {
@@ -29,18 +28,13 @@ export default function AdminList({ admins }: AdminListProps) {
 
   function handleDelete(adminId: number) {
     setSelectedAdminId(adminId);
-    setShowConfirmDialog(true);
+    (document.getElementById('delete_admin_modal') as HTMLDialogElement)?.showModal();
   }
 
   function handleConfirmDelete() {
     if (selectedAdminId !== null) {
       deleteAdminConfirmed(selectedAdminId);
     }
-    setShowConfirmDialog(false);
-  }
-
-  function handleCancelDelete() {
-    setShowConfirmDialog(false);
   }
 
   return (
@@ -87,14 +81,12 @@ export default function AdminList({ admins }: AdminListProps) {
           )}
         </tbody>
       </table>
-      {showConfirmDialog && (
-        <ConfirmDialog
-          title="Confirmar eliminación"
-          message="¿Estás seguro de que deseas eliminar este administrador?"
-          onConfirm={handleConfirmDelete}
-          onCancel={handleCancelDelete}
-        />
-      )}
+      <ConfirmDialog
+        id="delete_admin_modal"
+        title="Confirmar eliminación"
+        message="¿Estás seguro de que deseas eliminar este administrador?"
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 } 
