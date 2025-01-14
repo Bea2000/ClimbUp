@@ -3,16 +3,17 @@ import { getJudgesUsersByCompetitionId } from '@/lib/db/judge';
 import ManageJudges from './components/ManageJudges';
 
 interface ManageJudgesPageProps {
-  params: {
+  params: Promise<{
     competitionId: string;
-  };
+  }>;
 }
 
-export default async function ManageJudgesPage({ params }: ManageJudgesPageProps) {
+export default async function ManageJudgesPage(props: ManageJudgesPageProps) {
+  const params = await props.params;
   const judges = await getJudgesUsersByCompetitionId(parseInt(params.competitionId));
   return (
     <ManageJudges
-      competitionId={parseInt(params.competitionId)}
+      competitionId={Number(params.competitionId)}
       judges={judges}
     />
   );

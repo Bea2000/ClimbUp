@@ -3,9 +3,9 @@ import { getLevelTypeFromCompetitionByCompetitionId } from "@/lib/db/competition
 import AddProblemForm from "./components/AddProblemForm";
 
 interface AddProblemPageProps {
-  params: {
+  params: Promise<{
     competitionId: string;
-  };
+  }>;
 }
 
 export default async function AddProblemPage(props: AddProblemPageProps) {

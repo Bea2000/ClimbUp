@@ -6,9 +6,9 @@ import { getProblemsWithJudgesByCompetitionId } from '@/lib/db/problem';
 import ManageProblems from './components/ManageProblems';
 
 interface ManageProblemsPageProps {
-  params: {
+  params: Promise<{
     competitionId: string;
-  };
+  }>;
 }
 
 export default async function ManageProblemsPage(props: ManageProblemsPageProps) {
