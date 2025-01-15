@@ -12,6 +12,7 @@ export const CreateCompetitionSchema = z.object({
       message: "Fecha debe ser mayor a la fecha actual",
     }),
   duration: z.number({ message: "Duración requerida" }).min(1, { message: "Duración debe ser mayor a 0" }),
+  levelType: z.string({ message: "Tipo de graduación requerido" }),
 });
 
 export type CreateCompetitionFormData = z.infer<typeof CreateCompetitionSchema>;

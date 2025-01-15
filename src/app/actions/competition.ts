@@ -1,9 +1,11 @@
 'use server';
 
 import { SubmissionResult } from "@conform-to/react";
+import { ClimbingGrade } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
+import { REVERSE_GRADE_TYPES } from "@/lib/constant/problem.conf";
 import { createNewCompetition } from "@/lib/db/competition";
 
 export async function createCompetition(_prevState: unknown, formData: FormData) : Promise<SubmissionResult> {
@@ -19,8 +21,19 @@ export async function createCompetition(_prevState: unknown, formData: FormData)
   const duration = parseInt(formData.get('duration') as string);
   const code = formData.get('code') as string;
   const organizerId = session?.user.organizerId;
+  const levelType = formData.get('levelType') as string;
 
-  const competitionData = { name, location, date, duration, code, organizerId };
+  const levelTypeEnum = REVERSE_GRADE_TYPES[levelType as keyof typeof REVERSE_GRADE_TYPES] as ClimbingGrade;
+
+  const competitionData = { 
+    name, 
+    location, 
+    date, 
+    duration, 
+    code, 
+    organizerId, 
+    levelType: levelTypeEnum,
+  };
   
   try {
     await createNewCompetition(competitionData);

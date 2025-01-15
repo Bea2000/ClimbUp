@@ -1,4 +1,4 @@
-import { Competition, Organizer, Problem, User } from "@prisma/client";
+import { Competition, Organizer, Problem, User, ClimbingGrade } from "@prisma/client";
 
 export type CompetitionData = {
     name: string;
@@ -7,6 +7,7 @@ export type CompetitionData = {
     duration: number;
     code: string;
     organizerId: number;
+    levelType: ClimbingGrade;
 }
 
 export type CompetitionWithOrganizer = Competition & { organizer: Organizer }; 
