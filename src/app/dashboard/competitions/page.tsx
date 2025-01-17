@@ -1,15 +1,12 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-
-import { authOptions } from "@/lib/auth";
+import { getUserFromSession } from "@/lib/auth";
 import { getCompetitionsForOrganizerId } from "@/lib/db/competition";
 
 import CompetitionsList from "./components/CompetitionsList";
 
 export default async function CompetitionsPage() {
-  const session = await getServerSession(authOptions);
+  const user = await getUserFromSession();
 
-  const competitions = await getCompetitionsForOrganizerId(session.user.organizerId);
+  const competitions = await getCompetitionsForOrganizerId(user.organizerId);
 
   return (
     <div className="container mx-auto p-4">
