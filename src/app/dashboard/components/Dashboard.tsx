@@ -2,8 +2,9 @@
 
 import { Competition } from "@prisma/client";
 
+import Stat from "@/components/ui/Stat";
+
 import RecentCompetitions from "./RecentCompetitions";
-import StatsCards from "./StatsCards";
 import WelcomeCard from "./WelcomeCard";
 
 
@@ -12,16 +13,21 @@ interface DashboardProps {
   yearlyCompetitions: number;
   totalParticipants: number;
   lastCompetitionParticipants: number;
-  averageScore: number;
+  scheduledCompetitions: number;
 }
 
-export default function Dashboard({ competitions, yearlyCompetitions, totalParticipants, lastCompetitionParticipants, averageScore }: DashboardProps) {
+export default function Dashboard({ competitions, yearlyCompetitions, totalParticipants, lastCompetitionParticipants, scheduledCompetitions }: DashboardProps) {
   return (
     <div>
       <div className="mx-auto flex flex-col space-y-6 p-4">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-6 lg:flex-row">
           <WelcomeCard />
-          <StatsCards stats={{ yearlyCompetitions, lastCompetitionParticipants, averageScore, totalParticipants }} />
+          <div className="flex flex-row flex-wrap gap-4 sm:flex-col">
+            <Stat title="Competencias este año" value={yearlyCompetitions} />
+            <Stat title="Participantes última competencia" value={lastCompetitionParticipants} />
+            <Stat title="Competencias agendadas" value={scheduledCompetitions} />
+            <Stat title="Total participantes" value={totalParticipants} />
+          </div>
         </div>
         <RecentCompetitions competitions={competitions} />
       </div>
