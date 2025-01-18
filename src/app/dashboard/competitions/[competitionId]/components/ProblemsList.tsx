@@ -1,6 +1,5 @@
 import { NotePencil } from "@phosphor-icons/react";
-
-import { Problem } from "@/types/problem";
+import { Problem } from "@prisma/client";
 
 interface ProblemsListProps {
   problems: Problem[];

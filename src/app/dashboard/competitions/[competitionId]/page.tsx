@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 
+import Stat from "@/components/ui/Stat";
 import { getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges } from "@/lib/db/competition";
 
 import { CompetitionDetails } from "./components/CompetitionDetails";
-import { CompetitionStats } from "./components/CompetitionStats";
 import { ParticipantsList } from "./components/ParticipantsList";
 import { ProblemsList } from "./components/ProblemsList";
+
 
 interface CompetitionPageProps {
   params: Promise<{
@@ -31,11 +32,9 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
             <CompetitionDetails
               competition={competition}
             />
-            <CompetitionStats
-              problemsCount={competition.problems.length}
-              participantsCount={competition.participants.length}
-              judgesCount={competition.judges.length}
-            />
+            <Stat title="Problemas" value={competition.problems.length} />
+            <Stat title="Participantes" value={competition.participants.length} />
+            <Stat title="Jueces" value={competition.judges.length} />
           </div>
 
           <div className="divider"></div>
