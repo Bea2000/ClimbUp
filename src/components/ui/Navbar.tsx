@@ -38,7 +38,7 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
         </div>
         <button className="flex items-center" onClick={() => router.push("/dashboard")}>
           <Image 
-            src="/logo.png" 
+            src="/logo.svg" 
             alt="ClimbUp Logo" 
             width={40}
             height={40} 
