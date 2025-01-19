@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { getUserFromSession } from "@/lib/auth";
 import { getCompetitionsForOrganizerId } from "@/lib/db/competition";
 
@@ -12,12 +14,12 @@ export default async function CompetitionsPage() {
     <div className="container mx-auto p-4">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Mis Competencias</h1>
-        <a
+        <Link
           href="/dashboard/competitions/create"
           className="btn btn-primary"
         >
           Crear Competencia
-        </a>
+        </Link>
       </div>
       <CompetitionsList competitions={competitions} />
     </div>
