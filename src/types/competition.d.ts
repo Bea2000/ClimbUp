@@ -11,8 +11,7 @@ export type CompetitionData = {
 
 export type CompetitionWithOrganizer = Competition & { organizer: Organizer }; 
 
-export type CompetitionWithOrganizerProblemsParticipantsAndJudges = Competition & {
-    organizer: Organizer;
+export type CompetitionWithProblemsParticipantsAndJudges = Competition & {
     problems: Problem[];
     participants: { user: User }[];
     judges: { user: User }[];
