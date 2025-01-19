@@ -2,13 +2,12 @@
 
 import { notFound } from "next/navigation";
 
-import Stat from "@/components/ui/Stat";
 import { getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges } from "@/lib/db/competition";
 
 import { CompetitionDetails } from "./components/CompetitionDetails";
+import { CompetitionStats } from "./components/CompetitionStats";
 import { ParticipantsList } from "./components/ParticipantsList";
 import { ProblemsList } from "./components/ProblemsList";
-
 
 interface CompetitionPageProps {
   params: Promise<{
@@ -31,12 +30,8 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
           <h1 className="card-title mb-6 text-3xl">{competition.name}</h1>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <CompetitionDetails
-              competition={competition}
-            />
-            <Stat title="Problemas" value={competition.problems.length} />
-            <Stat title="Participantes" value={competition.participants.length} />
-            <Stat title="Jueces" value={competition.judges.length} />
+            <CompetitionDetails competition={competition} />
+            <CompetitionStats competition={competition} />
           </div>
 
           <div className="divider"></div>
