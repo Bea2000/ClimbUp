@@ -1,3 +1,5 @@
+'use client';
+
 import { CompetitionWithOrganizer } from '@/types/competition';
 
 interface CompetitionDetailsProps {

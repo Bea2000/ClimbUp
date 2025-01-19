@@ -1,3 +1,5 @@
+'use server';
+
 import { notFound } from "next/navigation";
 
 import Stat from "@/components/ui/Stat";

@@ -1,3 +1,5 @@
+'use client';
+
 import { ParticipantWithUser } from "@/types/participant";
 
 export function ParticipantsList({ participants }: { participants: ParticipantWithUser[] }) {

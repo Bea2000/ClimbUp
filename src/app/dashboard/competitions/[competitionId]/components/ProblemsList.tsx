@@ -1,3 +1,5 @@
+'use client';
+
 import { NotePencil } from "@phosphor-icons/react";
 import { Problem } from "@prisma/client";
 
