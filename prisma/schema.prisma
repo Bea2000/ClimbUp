@@ -9,54 +9,55 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Organizer {
-  id      Int      @id @default(autoincrement())
-  name    String
-  admins   Admin[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  admins       Admin[]
   competitions Competition[]
-  judges   Judge[]
+  judges       Judge[]
 }
 
 model Competition {
-  id                 Int       @id @default(autoincrement())
-  code               String
-  name               String
-  location           String
-  date               DateTime
-  organizerId        Int
-  organizer          Organizer @relation(fields: [organizerId], references: [id])
-  duration           Int // in minutes
-  startTime          DateTime?
-  problems           Problem[]
-  participants       Participant[]
-  judges             Judge[]
+  id           Int           @id @default(autoincrement())
+  code         String
+  name         String
+  location     String
+  date         DateTime
+  organizerId  Int
+  organizer    Organizer     @relation(fields: [organizerId], references: [id])
+  duration     Int // in minutes
+  startTime    DateTime?
+  problems     Problem[]
+  participants Participant[]
+  judges       Judge[]
+  basesPath    String?
 }
 
 model Problem {
-  id             Int         @id @default(autoincrement())
-  level          String
-  name           String?
-  maxPoints         Int
+  id                 Int                  @id @default(autoincrement())
+  level              String
+  name               String?
+  maxPoints          Int
   attempts           Int
   discountPerAttempt Int
-  competitionId  Int
-  competition    Competition  @relation(fields: [competitionId], references: [id])
-  problems       ParticipantProblem[]
+  competitionId      Int
+  competition        Competition          @relation(fields: [competitionId], references: [id])
+  problems           ParticipantProblem[]
 }
 
 model Admin {
-  id            Int         @id @default(autoincrement())
-  userId        Int         @unique
-  user          User        @relation(fields: [userId], references: [id])
-  isSuperAdmin  Boolean
-  password      String
-  organizerId   Int
-  organizer     Organizer   @relation(fields: [organizerId], references: [id])
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  user         User      @relation(fields: [userId], references: [id])
+  isSuperAdmin Boolean
+  password     String
+  organizerId  Int
+  organizer    Organizer @relation(fields: [organizerId], references: [id])
 }
 
 model Judge {
@@ -70,24 +71,25 @@ model Judge {
 }
 
 model Participant {
-  id            Int         @id @default(autoincrement())
-  userId        Int         @unique
-  user          User        @relation(fields: [userId], references: [id])
-  competitionId Int
-  finalScore    Int?
-  competition   Competition @relation(fields: [competitionId], references: [id])
-  problems      ParticipantProblem[]
+  id                 Int                  @id @default(autoincrement())
+  userId             Int                  @unique
+  user               User                 @relation(fields: [userId], references: [id])
+  competitionId      Int
+  finalScore         Int?
+  competition        Competition          @relation(fields: [competitionId], references: [id])
+  problems           ParticipantProblem[]
+  paymentReceiptPath String?
 }
 
 model User {
-  id           Int         @id @default(autoincrement())
-  name         String
-  email        String      @unique
-  rut          String      @unique
-  role         Role
-  judge        Judge?
-  participant  Participant?
-  admin        Admin?
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  rut         String       @unique
+  role        Role
+  judge       Judge?
+  participant Participant?
+  admin       Admin?
 }
 
 enum Role {
@@ -97,10 +99,10 @@ enum Role {
 }
 
 model ParticipantProblem {
-  id            Int             @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   currentPoints Int
   problemId     Int
-  problem       Problem         @relation(fields: [problemId], references: [id])
+  problem       Problem     @relation(fields: [problemId], references: [id])
   participantId Int
-  participant   Participant     @relation(fields: [participantId], references: [id])
+  participant   Participant @relation(fields: [participantId], references: [id])
 }
