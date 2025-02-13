@@ -28,7 +28,7 @@ export default function RecentCompetitions({ competitions }: { competitions: Com
                     <td>{comp.location}</td>
                     <td>
                       <Link 
-                        href={`/competitions/${comp.id}`}
+                        href={`dashboard/competitions/${comp.id}`}
                         className="btn btn-primary btn-sm"
                       >
                         Ver competencia

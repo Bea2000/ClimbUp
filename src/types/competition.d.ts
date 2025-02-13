@@ -1,3 +1,5 @@
+import { Competition, Organizer, Problem, User } from "@prisma/client";
+
 export type CompetitionData = {
     name: string;
     location: string;
@@ -6,3 +8,11 @@ export type CompetitionData = {
     code: string;
     organizerId: number;
 }
+
+export type CompetitionWithOrganizer = Competition & { organizer: Organizer }; 
+
+export type CompetitionWithProblemsParticipantsAndJudges = Competition & {
+    problems: Problem[];
+    participants: { user: User }[];
+    judges: { user: User }[];
+};
