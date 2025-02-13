@@ -11,8 +11,10 @@ import { createCompetition } from '@/app/actions/competition';
 import randomIcon from '@/assets/icons/random.svg';
 import FormInput from '@/components/ui/FormInput';
 import SubmitButton from '@/components/ui/SubmitButton';
+import { usePlacesSearch } from '@/hooks/usePlacesSearch';
 import { generateRandomCode } from '@/lib/utils';
 
+import ShowAddressOptions from './ShowAddressOptions';
 import { CreateCompetitionSchema } from '../schemas/createCompetitionSchema';
 
 export default function CreateCompetitionForm() {
@@ -27,6 +29,9 @@ export default function CreateCompetitionForm() {
     shouldValidate: 'onBlur',
     shouldRevalidate: 'onInput',
   });
+  const [locationInput, setLocationInput] = React.useState('');
+  const { suggestions, loading, searchPlaces } = usePlacesSearch();
+  const [showSuggestions, setShowSuggestions] = React.useState(false);
 
   React.useEffect(() => {
     if (lastResult?.status === 'success') {
@@ -58,6 +63,19 @@ export default function CreateCompetitionForm() {
     </button>
   );
 
+  function handleLocationChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setLocationInput(value);
+    searchPlaces(value);
+    setShowSuggestions(true);
+  }
+
+  function handleSuggestionClick(address: string) {
+    setLocationInput(address);
+    fields.location.value = address;
+    setShowSuggestions(false);
+  }
+
   return (
     <div className="container mx-auto p-6">
       <div className="card bg-base-100 shadow-xl">
@@ -74,14 +92,25 @@ export default function CreateCompetitionForm() {
               errors={fields.name.errors}
             />
 
-            <FormInput
-              label="Ubicación"
-              name={fields.location.name}
-              type="text"
-              placeholder="Ej: Pdte. Riesco 5330, Las Condes"
-              required
-              errors={fields.location.errors}
-            />
+            <div className="relative">
+              <FormInput
+                label="Ubicación"
+                name={fields.location.name}
+                type="text"
+                placeholder="Ej: Pdte. Riesco 5330, Las Condes"
+                required
+                errors={fields.location.errors}
+                value={locationInput}
+                onChange={handleLocationChange}
+              />
+              
+              <ShowAddressOptions
+                loading={loading}
+                suggestions={suggestions}
+                showSuggestions={showSuggestions}
+                handleSuggestionClick={handleSuggestionClick}
+              />
+            </div>
 
             <FormInput
               label="Fecha y Hora"
