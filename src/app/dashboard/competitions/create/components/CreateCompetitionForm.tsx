@@ -10,8 +10,10 @@ import { toast } from 'react-hot-toast';
 import { createCompetition } from '@/app/actions/competition';
 import randomIcon from '@/assets/icons/random.svg';
 import FormInput from '@/components/ui/FormInput';
+import { FormSelect } from '@/components/ui/FormSelect';
 import SubmitButton from '@/components/ui/SubmitButton';
 import { usePlacesSearch } from '@/hooks/usePlacesSearch';
+import { CLIMBING_GRADE_TYPES_OPTIONS } from '@/lib/constant/problem.conf';
 import { generateRandomCode } from '@/lib/utils';
 
 import ShowAddressOptions from './ShowAddressOptions';
@@ -118,6 +120,15 @@ export default function CreateCompetitionForm() {
               type="datetime-local"
               required
               errors={fields.date.errors}
+            />
+
+            <FormSelect
+              label="Tipo de Graduación"
+              name={fields.levelType.name}
+              placeholder="Selecciona un tipo de graduación"
+              options={Object.values(CLIMBING_GRADE_TYPES_OPTIONS)}
+              required
+              errors={fields.levelType.errors}
             />
 
             <FormInput

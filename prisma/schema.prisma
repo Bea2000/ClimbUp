@@ -36,6 +36,17 @@ model Competition {
   participants Participant[]
   judges       Judge[]
   basesPath    String?
+  levelType    ClimbingGrade
+}
+
+enum ClimbingGrade {
+  FRENCH
+  YOSEMITE
+  V
+  ENGLISH
+  UIAA
+  ICE
+  AUSTRALIAN
 }
 
 model Problem {
