@@ -138,7 +138,7 @@ export default function CreateCompetitionForm() {
               placeholder="Ej: 90"
               required
               min="30"
-              step="30"
+              step="5"
               errors={fields.duration.errors}
             />
 
