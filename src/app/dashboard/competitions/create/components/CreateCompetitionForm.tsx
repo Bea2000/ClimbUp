@@ -146,7 +146,7 @@ export default function CreateCompetitionForm() {
               label="Código"
               name={fields.code.name}
               type="text"
-              placeholder="Ej: Clave123"
+              placeholder="Ej: Escalada123"
               required
               errors={fields.code.errors}
               value={code}
