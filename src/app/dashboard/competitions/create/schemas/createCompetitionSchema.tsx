@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const CreateCompetitionSchema = z.object({
-  code: z.string({ message: "Código requerido" }).min(6, { message: "Código debe tener al menos 6 dígitos" }),
+  code: z.string({ message: "Código requerido" }).min(6, { message: "Código debe tener al menos 6 caracteres" }),
   name: z.string({ message: "Nombre requerido" }).min(3, { message: "Nombre debe tener al menos 3 caracteres" }),
   location: z.string({ message: "Ubicación requerida" }).min(3, { message: "Ubicación debe tener al menos 3 caracteres" }),
   date: z.string()
