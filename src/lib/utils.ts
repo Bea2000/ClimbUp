@@ -16,3 +16,8 @@ export function formatCurrency(value: string) {
 export function unformatCurrency(value: string) {
   return value.replace(/\D/g, '');
 }
+
+
+export function formatPrice(price: string) {
+  return parseInt(price.replace(/\./g, ''), 10);
+}
