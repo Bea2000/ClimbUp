@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { FormInput } from '@/components/FormInput';
 import { RutInput } from '@/components/RutInput';
+import FormInput from '@/components/ui/FormInput';
 import SubmitButton from '@/components/ui/SubmitButton';
 
 import { signupSchema, type SignupFormData } from '../schemas/signupSchema';
@@ -73,39 +73,39 @@ export function SignupForm() {
           name="name"
           type="text"
           placeholder="Nombre"
-          error={errors.name}
+          errors={errors.name ? [errors.name] : undefined}
         />
 
         <FormInput
           name="organizerName"
           type="text"
           placeholder="Nombre del organizador / organización"
-          error={errors.organizerName}
+          errors={errors.organizerName ? [errors.organizerName] : undefined}
         />
 
         <FormInput
           name="email"
           type="email"
           placeholder="Email"
-          error={errors.email}
+          errors={errors.email ? [errors.email] : undefined}
         />
 
         <RutInput
-          error={errors.rut}
+          errors={errors.rut ? [errors.rut] : undefined}
         />
 
         <FormInput
           name="password"
           type="password"
           placeholder="Contraseña"
-          error={errors.password}
+          errors={errors.password ? [errors.password] : undefined}
         />
 
         <FormInput
           name="confirmPassword"
           type="password"
           placeholder="Confirmar Contraseña"
-          error={errors.confirmPassword}
+          errors={errors.confirmPassword ? [errors.confirmPassword] : undefined}
         />
       </div>
 
