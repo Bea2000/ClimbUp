@@ -81,6 +81,12 @@ model Judge {
   competition   Competition @relation(fields: [competitionId], references: [id])
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
 model Participant {
   id                 Int                  @id @default(autoincrement())
   userId             Int                  @unique
@@ -90,6 +96,7 @@ model Participant {
   competition        Competition          @relation(fields: [competitionId], references: [id])
   problems           ParticipantProblem[]
   paymentReceiptPath String?
+  gender             Gender
 }
 
 model User {
