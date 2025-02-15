@@ -53,3 +53,20 @@ export async function getSignedUrlForReading(fileName: string) {
     throw new Error("Error al generar URL firmada");
   }
 }
+
+export async function uploadPaymentFile(file: Buffer, fileName: string, contentType: string, competitionId: number) {
+  const command = new PutObjectCommand({
+    Bucket: process.env.NEXT_AWS_BUCKET_NAME!,
+    Key: `payment-files/${competitionId}/${fileName}`,
+    Body: file,
+    ContentType: contentType,
+  });
+
+  try {
+    await s3Client.send(command);
+    return `payment-files/${competitionId}/${fileName}`;
+  } catch {
+    throw new Error("Error al subir archivo");
+  }
+}
+

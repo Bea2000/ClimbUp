@@ -7,3 +7,12 @@ export function generateRandomCode(numDigits: number) {
   }
   return result;
 }
+
+
+export function formatCurrency(value: string) {
+  return `$${parseInt(value.replace(/\D/g, '') || '0').toLocaleString('es-CL')}`;
+}
+
+export function unformatCurrency(value: string) {
+  return value.replace(/\D/g, '');
+}
