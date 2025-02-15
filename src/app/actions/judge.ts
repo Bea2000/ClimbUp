@@ -11,7 +11,7 @@ import { getJudgeByRut, findJudgeByUserIdAndCompetitionId, linkJudgeWithUser, re
 import { getOrganizerNameById } from "@/lib/db/organizer";
 import { updateProblemJudge } from '@/lib/db/problem';
 import { createJudgeUser, findUserByEmailOrRut } from '@/lib/db/user';
-
+import { normalizeRut } from "@/utils/rut";
 
 type JudgeValidationResult = SubmissionResult & {
   data?: { 
@@ -22,7 +22,7 @@ type JudgeValidationResult = SubmissionResult & {
 };
 
 export async function findJudge(_prevState: unknown, formData: FormData): Promise<JudgeValidationResult> {
-  const rut = formData.get('rut') as string;
+  const rut = normalizeRut(formData.get('rut') as string);
   const judge = await getJudgeByRut(rut);
 
   if (!judge) {

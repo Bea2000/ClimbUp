@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { cleanRut, validateRut, formatRut } from "@/utils/rutValidator";
+import { cleanRut, validateRut, formatRut } from "@/utils/rut";
 
 export const ManageJudgeSchema = z.object({
   competitionId: z.number(),

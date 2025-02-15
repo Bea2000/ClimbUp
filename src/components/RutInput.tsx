@@ -27,6 +27,7 @@ export function RutInput({ errors }: RutInputProps) {
 
   return (
     <FormInput
+      label="RUT"
       name="rut"
       type="text"
       placeholder="ej: 12.345.678-9"
