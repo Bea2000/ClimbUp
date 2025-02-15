@@ -64,7 +64,7 @@ export default function CreateAdminForm() {
               <span className="label-text">RUT</span>
             </label>
             <RutInput
-              error={fields.rut.errors?.[0]}
+              errors={fields.rut.errors}
             />
           </div>
 
