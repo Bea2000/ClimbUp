@@ -30,20 +30,21 @@ enum CompetitionStatus {
 }
 
 model Competition {
-  id           Int           @id @default(autoincrement())
-  code         String
-  name         String
-  location     String
-  date         DateTime
-  organizerId  Int
-  organizer    Organizer     @relation(fields: [organizerId], references: [id])
-  duration     Int // in minutes
-  startTime    DateTime?
-  problems     Problem[]
-  participants Participant[]
-  judges       Judge[]
-  basesPath    String?
-  levelType    ClimbingGrade
+  id                   Int           @id @default(autoincrement())
+  code                 String
+  name                 String
+  location             String
+  date                 DateTime
+  organizerId          Int
+  organizer            Organizer     @relation(fields: [organizerId], references: [id])
+  duration             Int // in minutes
+  startTime            DateTime?
+  problems             Problem[]
+  participants         Participant[]
+  judges               Judge[]
+  basesPath            String?
+  levelType            ClimbingGrade
+  registerFormSettings Json?
   status       CompetitionStatus @default(NOT_STARTED)
 }
 
