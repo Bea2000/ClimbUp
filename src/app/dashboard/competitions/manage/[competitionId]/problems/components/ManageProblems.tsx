@@ -48,20 +48,16 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
     }
   }, [lastAssignResult]);
 
-  function handleSkip() {
-    router.push(`/dashboard/competitions`);
+  function handleSkipOrFinalize() {
+    router.push(`/dashboard/competitions/${competitionId}`);
   }
 
   function goToAddProblemForm() {
     router.push(`/dashboard/competitions/manage/${competitionId}/problems/add`);
   }
 
-  function handleFinalize() {
-    router.push('/dashboard/competitions');
-  }
-
   function handleBack() {
-    router.push(`/dashboard/competitions/manage/${competitionId}/judges`);
+    router.back();
   }
 
   function handleDeleteClick(problemId: number) {
@@ -139,7 +135,7 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
                 <button
                   type="button"
                   className="btn btn-outline"
-                  onClick={handleSkip}
+                  onClick={handleSkipOrFinalize}
                 >
                   Gestionar Después
                 </button>
@@ -147,7 +143,7 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={handleFinalize}
+                  onClick={handleSkipOrFinalize}
                 >
                   Continuar
                 </button>
