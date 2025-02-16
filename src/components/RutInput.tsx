@@ -32,6 +32,7 @@ export function RutInput({ errors }: RutInputProps) {
       placeholder="RUT (ej: 12.345.678-9)"
       errors={errors}
       onChange={handleRutChange}
+      maxLength={12}
     />
   );
 } 
