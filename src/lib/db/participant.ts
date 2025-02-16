@@ -1,3 +1,5 @@
+import { ParticipantStatus } from "@prisma/client";
+
 import { getLastCompetitionForOrganizer } from "./competition";
 import prisma from "./prisma";
 
@@ -28,7 +30,26 @@ export async function getUnconfirmedParticipantsCountForOrganizer(organizerId: n
       competition: {
         organizerId,
       },
-      participantStatus: "PENDING",
+      status: "PENDING",
     },
   });
+}
+
+export async function getParticipantsWithUserByCompetitionId(competitionId: number) {
+  return await prisma.participant.findMany({
+    where: {
+      competitionId,
+    },
+    include: {
+      user: true,
+    },
+  });
+}
+
+export async function updateParticipantStatuses(updates: { id: number, status: ParticipantStatus }[]) {
+  const updatePromises = updates.map(update => prisma.participant.update({
+    where: { id: update.id },
+    data: { status: update.status },
+  }));
+  await Promise.all(updatePromises);
 }
