@@ -8,7 +8,9 @@ import { authOptions } from "@/lib/auth";
 import { REVERSE_GRADE_TYPES } from "@/lib/constant/problem.conf";
 import { createNewCompetition } from "@/lib/db/competition";
 
-export async function createCompetition(_prevState: unknown, formData: FormData) : Promise<SubmissionResult> {
+type CreateCompetitionResult = SubmissionResult | { status: 'success', competitionId: number };
+
+export async function createCompetition(_prevState: unknown, formData: FormData) : Promise<CreateCompetitionResult> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -36,8 +38,8 @@ export async function createCompetition(_prevState: unknown, formData: FormData)
   };
   
   try {
-    await createNewCompetition(competitionData);
-    return { status: 'success' };
+    const newCompetition = await createNewCompetition(competitionData);
+    return { status: 'success', competitionId: newCompetition.id };
   } catch (error) {
     return { status: 'error', error: { message: [`Error al crear la competencia: ${error as string}`] } };
   }

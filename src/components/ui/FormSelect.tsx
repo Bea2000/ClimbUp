@@ -18,7 +18,7 @@ export function FormSelect({ label, name, placeholder, options, required, errors
         name={name}
         required={required}
       >
-        <option disabled>{placeholder}</option>
+        <option>{placeholder}</option>
         {options.map((option) => (
           <option key={option} value={option}>{option}</option>
         ))}
