@@ -1,6 +1,7 @@
 'use client';
 
 import { ParticipantStatus } from "@prisma/client";
+import Link from "next/link";
 
 import { ParticipantWithUser } from "@/types/participant";
 
@@ -9,7 +10,10 @@ export function ParticipantsList({ participants, competitionId }: { participants
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-bold">Participantes</h2>
+      <div className="flex justify-between">
+        <h2 className="mb-4 text-xl font-bold">Participantes</h2>
+        <Link href={`/dashboard/competitions/${competitionId}/participants`} className="btn btn-primary mb-4">Gestionar participantes</Link>
+      </div>
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           <thead>

@@ -21,3 +21,14 @@ export async function getLastCompetitionParticipantsCountForOrganizer(organizerI
     },
   });
 }
+
+export async function getUnconfirmedParticipantsCountForOrganizer(organizerId: number) {
+  return await prisma.participant.count({
+    where: {
+      competition: {
+        organizerId,
+      },
+      participantStatus: "PENDING",
+    },
+  });
+}
