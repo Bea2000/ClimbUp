@@ -6,6 +6,7 @@ import { getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges } from "@/
 
 import { CompetitionDetails } from "./components/CompetitionDetails";
 import { CompetitionStats } from "./components/CompetitionStats";
+import { JudgesList } from "./components/JudgesList";
 import { ParticipantsList } from "./components/ParticipantsList";
 import { ProblemsList } from "./components/ProblemsList";
 
@@ -33,13 +34,11 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
             <CompetitionDetails competition={competition} />
             <CompetitionStats competition={competition} />
           </div>
-
           <div className="divider"></div>
-          
+          <JudgesList judges={competition.judges} />
+          <div className="divider"></div>
           <ProblemsList problems={competition.problems} />
-
           <div className="divider"></div>
-          
           <ParticipantsList participants={competition.participants} />
         </div>
       </div>
