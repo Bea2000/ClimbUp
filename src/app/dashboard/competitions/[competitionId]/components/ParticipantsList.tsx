@@ -1,8 +1,12 @@
 'use client';
 
+import { ParticipantStatus } from "@prisma/client";
+
 import { ParticipantWithUser } from "@/types/participant";
 
-export function ParticipantsList({ participants }: { participants: ParticipantWithUser[] }) {
+export function ParticipantsList({ participants, competitionId }: { participants: ParticipantWithUser[], competitionId: number }) {
+  const confirmedParticipants = participants.filter(participant => participant.status === ParticipantStatus.CONFIRMED);
+
   return (
     <div>
       <h2 className="mb-4 text-xl font-bold">Participantes</h2>
@@ -16,7 +20,7 @@ export function ParticipantsList({ participants }: { participants: ParticipantWi
             </tr>
           </thead>
           <tbody>
-            {participants.map((participant) => (
+            {confirmedParticipants.map((participant) => (
               <tr key={participant.id}>
                 <td>{participant.user.name}</td>
                 <td>{participant.user.email}</td>
