@@ -1,13 +1,13 @@
 'use client';
 
+import { Collapse } from "@/components/ui/Collapse";
 import { ParticipantWithUser } from "@/types/participant";
 
 export function ParticipantsList({ participants }: { participants: ParticipantWithUser[] }) {
   return (
-    <div>
-      <h2 className="mb-4 text-xl font-bold">Participantes</h2>
+    <Collapse title="Participantes">
       <div className="overflow-x-auto">
-        <table className="table table-zebra">
+        <table className="table table-zebra w-full">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -26,6 +26,6 @@ export function ParticipantsList({ participants }: { participants: ParticipantWi
           </tbody>
         </table>
       </div>
-    </div>
+    </Collapse>
   );
 }
