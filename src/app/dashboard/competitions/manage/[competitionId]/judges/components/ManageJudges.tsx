@@ -5,6 +5,7 @@ import React, { useActionState, startTransition } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { deleteJudge } from '@/app/actions/judge';
+import { CompetitionSteps } from '@/components/CompetitionSteps';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { JudgeWithUser } from '@/types/judge';
 
@@ -56,6 +57,7 @@ export default function ManageJudges({ competitionId, judges }: ManageJudgesForm
 
   return (
     <div className="container mx-auto p-6">
+      <CompetitionSteps currentStep="judges" />
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title mb-6 text-2xl">Gestionar Jueces</h2>
