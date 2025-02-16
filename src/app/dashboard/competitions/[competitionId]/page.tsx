@@ -35,9 +35,9 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
             <CompetitionStats competition={competition} />
           </div>
           <div className="divider"></div>
-          <JudgesList judges={competition.judges} />
+          <JudgesList judges={competition.judges} competitionId={competition.id} />
           <div className="divider"></div>
-          <ProblemsList problems={competition.problems} />
+          <ProblemsList problems={competition.problems} competitionId={competition.id} />
           <div className="divider"></div>
           <ParticipantsList participants={competition.participants} />
         </div>

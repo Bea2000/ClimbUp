@@ -1,15 +1,16 @@
 'use client';
 
-import { NotePencil } from "@phosphor-icons/react";
 import { Problem } from "@prisma/client";
+import Link from 'next/link';
 
 import { Collapse } from "@/components/ui/Collapse";
 
 interface ProblemsListProps {
   problems: Problem[];
+  competitionId: number;
 }
 
-export function ProblemsList({ problems }: ProblemsListProps) {
+export function ProblemsList({ problems, competitionId }: ProblemsListProps) {
   return (
     <Collapse title="Problemas">
       <div className="overflow-x-auto">
@@ -21,7 +22,14 @@ export function ProblemsList({ problems }: ProblemsListProps) {
               <th>Puntos Máximos</th>
               <th>Intentos</th>
               <th>Descuento por Intento</th>
-              <th>Acciones</th>
+              <th className="text-right">
+                <Link
+                  href={`/dashboard/competitions/manage/${competitionId}/problems`}
+                  className="btn btn-primary btn-sm"
+                >
+                  Gestionar problemas
+                </Link>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -35,11 +43,7 @@ export function ProblemsList({ problems }: ProblemsListProps) {
                   <td>{problem.maxPoints}</td>
                   <td>{problem.attempts}</td>
                   <td>{problem.discountPerAttempt}</td>
-                  <td>
-                    <button className="btn btn-ghost btn-xs">
-                      <NotePencil size={20} color="#a6adbb" weight="light" />
-                    </button>
-                  </td>
+                  <td></td>
                 </tr>
               ))}
           </tbody>

@@ -1,9 +1,16 @@
 'use client';
 
+import Link from 'next/link';
+
 import { Collapse } from "@/components/ui/Collapse";
 import { JudgeWithUser } from "@/types/judge";
 
-export function JudgesList({ judges }: { judges: JudgeWithUser[] }) {
+interface JudgesListProps {
+  judges: JudgeWithUser[];
+  competitionId: number;
+}
+
+export function JudgesList({ judges, competitionId }: JudgesListProps) {
   return (
     <Collapse title="Jueces">
       <div className="overflow-x-auto">
@@ -12,6 +19,14 @@ export function JudgesList({ judges }: { judges: JudgeWithUser[] }) {
             <tr>
               <th>Nombre</th>
               <th>Email</th>
+              <th className="text-right">
+                <Link
+                  href={`/dashboard/competitions/manage/${competitionId}/judges`}
+                  className="btn btn-primary btn-sm"
+                >
+                  Gestionar jueces
+                </Link>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -19,6 +34,7 @@ export function JudgesList({ judges }: { judges: JudgeWithUser[] }) {
               <tr key={judge.id}>
                 <td>{judge.user.name}</td>
                 <td>{judge.user.email}</td>
+                <td></td>
               </tr>
             ))}
           </tbody>
