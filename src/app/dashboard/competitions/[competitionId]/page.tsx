@@ -1,5 +1,6 @@
 'use server';
 
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges } from "@/lib/db/competition";
@@ -28,7 +29,15 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
     <div className="p-4">
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
-          <h1 className="card-title mb-6 text-3xl">{competition.name}</h1>
+          <div className="mb-6 flex items-center justify-between">
+            <h1 className="card-title text-3xl">{competition.name}</h1>
+            <Link
+              href={`/dashboard/competitions/${competition.id}/edit`}
+              className="btn btn-primary"
+            >
+              Editar competencia
+            </Link>
+          </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <CompetitionDetails competition={competition} />

@@ -1,4 +1,4 @@
-import { ClimbingGrade } from "@prisma/client";
+import { ClimbingGrade, Prisma } from "@prisma/client";
 
 import { CompetitionData } from "@/types/competition";
 
@@ -125,4 +125,11 @@ export async function getLevelTypeFromCompetitionByCompetitionId(competitionId: 
   }
 
   return result.levelType;
+}
+
+export async function updateCompetitionById(competitionId: number, competitionData: Prisma.CompetitionUpdateInput) {  
+  return await prisma.competition.update({  
+    where: { id: competitionId },  
+    data: competitionData,  
+  });  
 }
