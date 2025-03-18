@@ -138,7 +138,7 @@ export default function CreateCompetitionForm() {
               placeholder="Ej: 90"
               required
               min="30"
-              step="30"
+              step="5"
               errors={fields.duration.errors}
             />
 
@@ -146,7 +146,7 @@ export default function CreateCompetitionForm() {
               label="Código"
               name={fields.code.name}
               type="text"
-              placeholder="Ej: Clave123"
+              placeholder="Ej: Escalada123"
               required
               errors={fields.code.errors}
               value={code}
