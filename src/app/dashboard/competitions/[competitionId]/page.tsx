@@ -1,5 +1,6 @@
 'use server';
 
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import InfoAlert from "@/components/ui/InfoAlert";
@@ -25,6 +26,16 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
     notFound();
   }
 
+  function getRedirectToRegisterForm() {
+    if (competition){
+      if (competition.registerFormSettings) {
+        return `/dashboard/competitions/${competition.id}/register-form/edit`;
+      } 
+      return `/dashboard/competitions/${competition.id}/register-form/create`;
+    }
+    return notFound();
+  }
+  
   const unconfirmedParticipants = await getUnconfirmedParticipantsCountForOrganizer(competition.organizerId);
 
   return (
@@ -38,7 +49,13 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
             link={`/dashboard/competitions/${competition.id}/participants`} />
         )}
         <div className="card-body">
-          <h1 className="card-title mb-6 text-3xl">{competition.name}</h1>
+          <div className="flex justify-between">
+            <h1 className="card-title mb-6 text-3xl">{competition.name}</h1>
+            <div className="flex gap-2">
+              <Link href={getRedirectToRegisterForm()} className="btn btn-primary">{competition.registerFormSettings ? 'Editar formulario de registro' : 'Crear formulario de registro'}</Link>
+              <Link href={`/dashboard/competitions/${competition.id}/edit`} className="btn btn-primary">Editar</Link>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <CompetitionDetails competition={competition} />

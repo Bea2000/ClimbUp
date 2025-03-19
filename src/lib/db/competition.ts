@@ -1,8 +1,7 @@
 import { ClimbingGrade } from "@prisma/client";
 
-import { CompetitionData } from "@/types/competition";
+import { CompetitionData, RegisterFormSettings } from "@/types/competition";
 
-  
 import prisma from "./prisma";
 
 export async function createNewCompetition(competition: CompetitionData) {
@@ -86,6 +85,14 @@ export async function getCompetitionsForOrganizerId(organizerId: number) {
   });
 }
 
+export async function getCompetitionById(competitionId: number) {
+  return await prisma.competition.findUnique({
+    where: {
+      id: competitionId,
+    },
+  });
+}
+
 export async function getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges(competitionId: number) {
   return await prisma.competition.findUnique({
     where: {
@@ -119,10 +126,20 @@ export async function getLevelTypeFromCompetitionByCompetitionId(competitionId: 
     where: { id: competitionId },
     select: { levelType: true },
   });
-
   if (!result) {
     throw new Error(`Competition with ID ${competitionId} not found.`);
   }
 
   return result.levelType;
+}
+
+export async function addRegisterFormSettingsToCompetitionById(registerFormSettings: RegisterFormSettings, competitionId: number) {
+  return await prisma.competition.update({
+    where: {
+      id: competitionId,
+    },
+    data: {
+      registerFormSettings,
+    },
+  });
 }
