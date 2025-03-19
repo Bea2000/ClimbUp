@@ -101,6 +101,13 @@ model Participant {
   competition        Competition          @relation(fields: [competitionId], references: [id])
   problems           ParticipantProblem[]
   paymentReceiptPath String?
+  status  ParticipantStatus @default(PENDING)
+}
+
+enum ParticipantStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
 }
 
 model User {

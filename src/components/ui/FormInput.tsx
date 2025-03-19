@@ -14,6 +14,7 @@ interface FormInputProps {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   onRightIconClick?: () => void;
+  maxLength?: number;
 }
 
 export default function FormInput({ 
@@ -28,6 +29,7 @@ export default function FormInput({
   className = "w-full",
   extraElement,
   value,
+  maxLength,
   onChange,
   leftIcon,
   rightIcon,
@@ -64,6 +66,7 @@ export default function FormInput({
           step={step}
           value={value}
           onChange={onChange}
+          maxLength={maxLength}
         />
         {rightIcon && (
           <button 
