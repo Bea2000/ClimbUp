@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import Link from "next/link";
 
 import { Collapse } from "@/components/ui/Collapse";
-import { getCompetitionStatusLabel, getCompetitionStatusColor } from "@/lib/helpers/competition";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 
 export default function RecentCompetitions({ competitions }: { competitions: Competition[] }) {
   return (
@@ -26,7 +26,7 @@ export default function RecentCompetitions({ competitions }: { competitions: Com
                   <td>{comp.name}</td>
                   <td>{format(new Date(comp.date), 'dd/MM/yyyy, HH:mm')}</td>
                   <td>{comp.location}</td>
-                  <td><div className={`badge ${getCompetitionStatusColor(comp.status)}`}>{getCompetitionStatusLabel(comp.status)}</div></td>
+                  <td><StatusBadge status={comp.status} /></td>
                   <td>
                     <Link 
                       href={`dashboard/competitions/${comp.id}`}
