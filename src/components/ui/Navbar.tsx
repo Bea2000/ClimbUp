@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 
+import ThemeToggle from "./ThemeToggle";
+
 interface NavbarProps {
   organizerName: string;
   superAdmin: boolean;
@@ -49,6 +51,7 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
         </button>
       </div>
       <div className="flex-none gap-2">
+        <ThemeToggle />
         <button onClick={() => signOut({ callbackUrl: '/' })} className="btn btn-ghost">
           <SignOut size={24} color="#a3aab8" />
           Cerrar Sesión
