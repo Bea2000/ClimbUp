@@ -1,0 +1,22 @@
+enum CompetitionStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  FINISHED
+  CANCELLED
+}
+
+enum ClimbingGrade {
+  FRENCH
+  YOSEMITE
+  V
+  ENGLISH
+  UIAA
+  ICE
+  AUSTRALIAN
+}
+
+enum ParticipantStatus {
+  CONFIRMED
+  PENDING
+  REJECTED
+}
