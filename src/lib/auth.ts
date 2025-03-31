@@ -30,7 +30,6 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
-        rut: { label: 'Rut', type: 'text' },
       },
 
       async authorize(credentials) {
@@ -40,7 +39,6 @@ export const authOptions: NextAuthOptions = {
         const existingUser = await prisma.user.findFirst({
           where: {
             email: credentials.email.toLowerCase(),
-            rut: credentials.rut,
           },
           include: {
             admin: true,

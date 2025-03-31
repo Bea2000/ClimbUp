@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { RutInput } from '@/components/RutInput';
 import FormInput from '@/components/ui/FormInput';
 import SubmitButton from '@/components/ui/SubmitButton';
+import { normalizeRut } from '@/utils/rut';
 
 import { signupSchema, type SignupFormData } from '../schemas/signupSchema';
 
@@ -25,7 +26,7 @@ export function SignupForm() {
       email: formData.get('email') as string,
       password: formData.get('password') as string,
       confirmPassword: formData.get('confirmPassword') as string,
-      rut: formData.get('rut') as string,
+      rut: normalizeRut(formData.get('rut') as string),
       organizerName: formData.get('organizerName') as string,
     };
 

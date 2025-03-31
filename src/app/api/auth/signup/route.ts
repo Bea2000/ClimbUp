@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 
 import { signupSchema } from '@/app/signup/schemas/signupSchema';
 import prisma from '@/lib/db/prisma';
+import { normalizeRut } from '@/utils/rut';
 
 export async function POST(request: Request) {
   try {
@@ -17,12 +18,13 @@ export async function POST(request: Request) {
     }
 
     const { name, email, password, rut, organizerName } = signupSchema.parse(body);
+    const normalizedRut = normalizeRut(rut);
 
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [
           { email },
-          { rut },
+          { rut: normalizedRut },
         ],
       },
     });
@@ -60,7 +62,7 @@ export async function POST(request: Request) {
         name,
         email,
         role: Role.ADMIN,
-        rut,
+        rut: normalizedRut,
       },
     });
 

@@ -1,6 +1,6 @@
 import prisma from "./prisma";
 
-export async function getOrganizerName(organizerId: number) {
+export async function getOrganizerNameById(organizerId: number) {
   const organizer = await prisma.organizer.findUnique({
     where: { id: organizerId },
   });
