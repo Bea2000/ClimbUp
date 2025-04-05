@@ -1,11 +1,11 @@
 'use client';
 
 import Stat from "@/components/ui/Stat";
-import { CompetitionWithProblemsParticipantsAndJudges } from "@/types/competition";
+import { CompetitionWithProblemsJudgesAndParticipants } from "@/types/competition";
 
 
 interface CompetitionStatsProps {
-  competition: CompetitionWithProblemsParticipantsAndJudges;
+  competition: CompetitionWithProblemsJudgesAndParticipants;
 }
 
 export function CompetitionStats({ competition }: CompetitionStatsProps) {

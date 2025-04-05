@@ -10,17 +10,18 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    if (!body.name || !body.email || !body.password || !body.rut || !body.organizerName) {
+    if (!body.email || !body.password || !body.rut || !body.organizerName) {
       return NextResponse.json(
         { message: 'Faltan campos requeridos' },
         { status: 400 },
       );
     }
 
-    const { name, email, password, rut, organizerName } = signupSchema.parse(body);
+    const { email, password, rut, organizerName } = signupSchema.parse(body);
+
     const normalizedRut = normalizeRut(rut);
 
-    const existingUser = await getAdminByEmailOrRut(email, rut);
+    const existingUser = await getAdminByEmailOrRut(email, normalizedRut);
 
     if (existingUser) {
       return NextResponse.json(
@@ -43,7 +44,6 @@ export async function POST(request: Request) {
     const organizer = await createOrganizer({ name: organizerName });
     
     await createNewAdmin({
-      name,
       email,
       password: hashedPassword,
       rut: normalizedRut,

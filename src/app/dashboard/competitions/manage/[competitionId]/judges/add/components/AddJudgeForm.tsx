@@ -7,7 +7,6 @@ import React, { useActionState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { addJudgeToCompetition } from '@/app/actions/judge';
-import { RutInput } from '@/components/RutInput';
 import FormInput from '@/components/ui/FormInput';
 import SubmitButton from '@/components/ui/SubmitButton';
 
@@ -46,23 +45,11 @@ export default function AddJudgeForm({ competitionId }: AddJudgeFormProps) {
           <form id={form.id} onSubmit={form.onSubmit} action={formAction} className="space-y-4">            
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FormInput
-                label="Nombre"
-                name="name"
-                type="text"
-                required
-                errors={fields.name?.errors}
-              />
-
-              <FormInput
                 label="Email"
                 name="email"
                 type="email"
                 required
                 errors={fields.email?.errors}
-              />
-
-              <RutInput
-                errors={fields.rut?.errors}
               />
             </div>
 

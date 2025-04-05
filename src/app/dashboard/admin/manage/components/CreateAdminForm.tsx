@@ -42,15 +42,6 @@ export default function CreateAdminForm() {
         
         <form id={form.id} onSubmit={form.onSubmit} action={formAction} className="space-y-4">
           <FormInput
-            label="Nombre"
-            name={fields.name.name}
-            type="text"
-            placeholder="Nombre completo"
-            required
-            errors={fields.name.errors}
-          />
-
-          <FormInput
             label="Email"
             name={fields.email.name}
             type="email"

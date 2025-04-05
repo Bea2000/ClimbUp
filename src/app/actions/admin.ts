@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
 import { createNewAdmin, deleteAdminById, getAdminByEmailOrRut, getAdminById } from "@/lib/db/admin";
+import { CreateAdminData } from "@/types/admin";
 
 export async function createAdmin(_prevState: unknown, formData: FormData): Promise<SubmissionResult> {
   const session = await getServerSession(authOptions);
@@ -15,7 +16,6 @@ export async function createAdmin(_prevState: unknown, formData: FormData): Prom
     return { status: 'error', error: { message: ['No se ha iniciado sesión'] } };
   }
 
-  const name = formData.get('name') as string;
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
   const rut = formData.get('rut') as string;
@@ -38,14 +38,15 @@ export async function createAdmin(_prevState: unknown, formData: FormData): Prom
       };
     }
 
-    await createNewAdmin({
-      name,
+    const data: CreateAdminData = {
       email,
       password,
       rut,
       isSuperAdmin,
       organizerId,
-    });
+    };
+
+    await createNewAdmin(data);
 
     return { status: 'success' };
   } catch (error) {

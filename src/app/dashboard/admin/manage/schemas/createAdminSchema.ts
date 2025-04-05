@@ -3,8 +3,6 @@ import { z } from "zod";
 import { cleanRut, validateRut, formatRut } from '@/utils/rut';
 
 export const CreateAdminSchema = z.object({
-  name: z.string({ message: "Nombre requerido" })
-    .min(3, { message: "Nombre debe tener al menos 3 caracteres" }),
   email: z.string({ message: "Email requerido" })
     .email({ message: "Email inválido" }),
   rut: z.string({ message: "RUT requerido" })

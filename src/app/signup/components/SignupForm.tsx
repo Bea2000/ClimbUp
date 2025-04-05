@@ -22,7 +22,6 @@ export function SignupForm() {
 
     const formData = new FormData(event.currentTarget);
     const data = {
-      name: formData.get('name') as string,
       email: formData.get('email') as string,
       password: formData.get('password') as string,
       confirmPassword: formData.get('confirmPassword') as string,
@@ -70,13 +69,6 @@ export function SignupForm() {
       noValidate
     >
       <div className="flex flex-col gap-4">
-        <FormInput
-          name="name"
-          type="text"
-          placeholder="Nombre"
-          errors={errors.name ? [errors.name] : undefined}
-        />
-
         <FormInput
           name="organizerName"
           type="text"

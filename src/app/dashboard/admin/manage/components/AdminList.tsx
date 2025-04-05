@@ -42,7 +42,6 @@ export default function AdminList({ admins }: AdminListProps) {
       <table className="table table-zebra">
         <thead>
           <tr className="bg-base-200">
-            <th>Nombre</th>
             <th>Email</th>
             <th>RUT</th>
             <th>Tipo</th>
