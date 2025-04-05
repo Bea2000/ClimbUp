@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { isCompetitionOfOrganizer } from "@/lib/db/competition";
 import { addProblemToCompetition, removeProblemFromCompetition } from "@/lib/db/problem";
+import { CreateProblem } from "@/types/problem";
 
 export async function createProblem(_prevState: unknown, formData: FormData): Promise<SubmissionResult> {
   const session = await getServerSession(authOptions);
@@ -22,7 +23,7 @@ export async function createProblem(_prevState: unknown, formData: FormData): Pr
   const attempts = parseInt(formData.get('attempts') as string);
   const discountPerAttempt = parseInt(formData.get('discountPerAttempt') as string);
 
-  const problemData = {
+  const problemData: CreateProblem = {
     level,
     name,
     maxPoints,

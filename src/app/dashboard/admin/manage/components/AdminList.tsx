@@ -1,15 +1,15 @@
 'use client';
 
+import { Admin } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'react-hot-toast';
 
 import { deleteAdmin } from '@/app/actions/admin';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import { AdminWithUser } from '@/types/admin';
 
 interface AdminListProps {
-  admins: AdminWithUser[];
+  admins: Admin[];
 }
 
 export default function AdminList({ admins }: AdminListProps) {

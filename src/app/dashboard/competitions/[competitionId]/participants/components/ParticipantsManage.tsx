@@ -8,16 +8,16 @@ import { toast } from 'react-hot-toast';
 
 import { updateParticipants } from '@/app/actions/participants';
 import SubmitButton from '@/components/ui/SubmitButton';
-import { ParticipantWithUser } from "@/types/participant";
+import { ParticipantWithInformation } from '@/types/participant';
 
 import { UpdateParticipantsSchema } from '../schemas/UpdateParticipantsSchema';
 
 interface ParticipantsManageProps {
-  participants: ParticipantWithUser[];
+  participants: ParticipantWithInformation[];
 }
 
 export default function ParticipantsManage({ participants }: ParticipantsManageProps) {
-  const [selectedParticipants, setSelectedParticipants] = useState<ParticipantWithUser[]>(participants);
+  const [selectedParticipants, setSelectedParticipants] = useState<ParticipantWithInformation[]>(participants);
   const originalParticipants = React.useRef(participants);
   const [lastResult, formAction] = useActionState(updateParticipants, undefined);
   const [changedParticipants, setChangedParticipants] = useState<{ id: number; status: ParticipantStatus }[]>([]);
@@ -33,14 +33,14 @@ export default function ParticipantsManage({ participants }: ParticipantsManageP
   function toggleParticipantStatus(id: number | 'all', status: ParticipantStatus, currentStatus: ParticipantStatus) {
     if (id === 'all') {
       setSelectedParticipants(selectedParticipants.map(participant => (
-        participant.status === currentStatus
-          ? { ...participant, status }
+        participant.competitionsInformation.status === currentStatus
+          ? { ...participant, competitionsInformation: { ...participant.competitionsInformation, status } }
           : participant
       )));
     } else {
       setSelectedParticipants(selectedParticipants.map(participant =>
-        ((participant.id === id && participant.status === currentStatus)
-          ? { ...participant, status }
+        ((participant.id === id && participant.competitionsInformation.status === currentStatus)
+          ? { ...participant, competitionsInformation: { ...participant.competitionsInformation, status } }
           : participant),
       ));
     }
@@ -57,18 +57,18 @@ export default function ParticipantsManage({ participants }: ParticipantsManageP
   React.useEffect(() => {
     const newChangedParticipants = selectedParticipants.filter(participant => {
       const original = originalParticipants.current.find(p => p.id === participant.id);
-      return original && original.status !== participant.status;
+      return original && original.competitionsInformation.status !== participant.competitionsInformation.status;
     }).map(participant => ({
       id: participant.id,
-      status: participant.status,
+      status: participant.competitionsInformation.status,
     }));
 
     setChangedParticipants(newChangedParticipants);
   }, [selectedParticipants]);
 
-  const confirmedParticipants = selectedParticipants.filter(participant => participant.status === ParticipantStatus.CONFIRMED);
-  const pendingParticipants = selectedParticipants.filter(participant => participant.status === ParticipantStatus.PENDING);
-  const rejectedParticipants = selectedParticipants.filter(participant => participant.status === ParticipantStatus.REJECTED);
+  const confirmedParticipants = selectedParticipants.filter(participant => participant.competitionsInformation.status === ParticipantStatus.CONFIRMED);
+  const pendingParticipants = selectedParticipants.filter(participant => participant.competitionsInformation.status === ParticipantStatus.PENDING);
+  const rejectedParticipants = selectedParticipants.filter(participant => participant.competitionsInformation.status === ParticipantStatus.REJECTED);
 
   return (
     <div className="w-full p-16">
@@ -86,18 +86,22 @@ export default function ParticipantsManage({ participants }: ParticipantsManageP
         <table className="table mb-8 w-full">
           <thead>
             <tr>
-              <th className="w-1/4">Nombre</th>
-              <th className="w-1/4">Email</th>
-              <th className="w-1/4">RUT</th>
+              <th className="w-1/3">Identificación</th>
+              <th className="w-1/3">Categoría</th>
               <th className="w-1/3">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {pendingParticipants.map(participant => (
               <tr key={participant.id}>
-                <td>{participant.user.name}</td>
-                <td>{participant.user.email}</td>
-                <td>{participant.user.rut}</td>
+                <td>
+                  {Object.entries(participant.competitionsInformation.userInformation as Record<string, string>).map(([key, value]) => (
+                    <p key={key}>{key}: {value}</p>
+                  ))}
+                </td>
+                <td>
+                  <p>{participant.competitionsInformation.category}</p>
+                </td>
                 <td>
                   <button className="btn btn-info btn-sm mr-2">Ver datos de inscripción</button>
                   <button className="btn btn-success btn-sm mr-2" onClick={() => toggleParticipantStatus(participant.id, ParticipantStatus.CONFIRMED, ParticipantStatus.PENDING)}>Confirmar</button>
@@ -111,18 +115,22 @@ export default function ParticipantsManage({ participants }: ParticipantsManageP
         <table className="table mb-8 w-full">
           <thead>
             <tr>
-              <th className="w-1/4">Nombre</th>
-              <th className="w-1/4">Email</th>
-              <th className="w-1/4">RUT</th>
+              <th className="w-1/3">Identificación</th>
+              <th className="w-1/3">Categoría</th>
               <th className="w-1/3">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {confirmedParticipants.map(participant => (
               <tr key={participant.id}>
-                <td>{participant.user.name}</td>
-                <td>{participant.user.email}</td>
-                <td>{participant.user.rut}</td>
+                <td>
+                  {Object.entries(participant.competitionsInformation.userInformation as Record<string, string>).map(([key, value]) => (
+                    <p key={key}>{key}: {value}</p>
+                  ))}
+                </td>
+                <td>
+                  <p>{participant.competitionsInformation.category}</p>
+                </td>
                 <td>
                   <button className="btn btn-info btn-sm mr-2">Ver datos de inscripción</button>
                   <button className="btn btn-error btn-sm" onClick={() => toggleParticipantStatus(participant.id, ParticipantStatus.REJECTED, ParticipantStatus.CONFIRMED)}>Rechazar</button>
@@ -135,18 +143,22 @@ export default function ParticipantsManage({ participants }: ParticipantsManageP
         <table className="table mb-8 w-full">
           <thead>
             <tr>
-              <th className="w-1/4">Nombre</th>
-              <th className="w-1/4">Email</th>
-              <th className="w-1/4">RUT</th>
+              <th className="w-1/3">Identificación</th>
+              <th className="w-1/3">Categoría</th>
               <th className="w-1/3">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {rejectedParticipants.map(participant => (
               <tr key={participant.id}>
-                <td>{participant.user.name}</td>
-                <td>{participant.user.email}</td>
-                <td>{participant.user.rut}</td>
+                <td>
+                  {Object.entries(participant.competitionsInformation.userInformation as Record<string, string>).map(([key, value]) => (
+                    <p key={key}>{key}: {value}</p>
+                  ))}
+                </td>
+                <td>
+                  <p>{participant.competitionsInformation.category}</p>
+                </td>
                 <td>
                   <button className="btn btn-info btn-sm mr-2">Ver datos de inscripción</button>
                   <button className="btn btn-success btn-sm" onClick={() => toggleParticipantStatus(participant.id, ParticipantStatus.CONFIRMED, ParticipantStatus.REJECTED)}>Aceptar</button>

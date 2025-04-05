@@ -8,7 +8,7 @@ import React, { useActionState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { findJudge } from '@/app/actions/judge';
-import { RutInput } from '@/components/RutInput';
+import FormInput from '@/components/ui/FormInput';
 import SubmitButton from '@/components/ui/SubmitButton';
 import { encodeIdInBloat } from '@/lib/encoder';
 
@@ -76,8 +76,11 @@ export default function JudgeValidationForm() {
           
           <form id={form.id} onSubmit={form.onSubmit} action={formAction} className="space-y-4">
             <div className="form-control">
-              <RutInput
-                errors={fields.rut.errors}
+              <FormInput
+                label="Email"
+                name="email"
+                type="email"
+                errors={fields.email.errors}
               />
             </div>
 

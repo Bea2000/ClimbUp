@@ -7,11 +7,10 @@ import { revalidatePath } from 'next/cache';
 import { ManageJudgeSchema } from '@/app/dashboard/competitions/manage/[competitionId]/judges/schemas/manageJudgesSchema';
 import { getUserFromSession } from '@/lib/auth';
 import { getCompetitionsByJudgeId } from "@/lib/db/competition";
-import { getJudgeByRut, findJudgeByUserIdAndCompetitionId, linkJudgeWithUser, removeJudgeFromCompetitionById, removeJudgeFromProblem } from "@/lib/db/judge";
+import { findJudgeByUserIdAndCompetitionId, linkJudgeWithUser, removeJudgeFromCompetitionById, removeJudgeFromProblem, getJudgeByEmail } from "@/lib/db/judge";
 import { getOrganizerNameById } from "@/lib/db/organizer";
 import { updateProblemJudge } from '@/lib/db/problem';
 import { createJudgeUser, findUserByEmailOrRut } from '@/lib/db/user';
-import { normalizeRut } from "@/utils/rut";
 
 type JudgeValidationResult = SubmissionResult & {
   data?: { 
@@ -22,8 +21,8 @@ type JudgeValidationResult = SubmissionResult & {
 };
 
 export async function findJudge(_prevState: unknown, formData: FormData): Promise<JudgeValidationResult> {
-  const rut = normalizeRut(formData.get('rut') as string);
-  const judge = await getJudgeByRut(rut);
+  const email = formData.get('email') as string;
+  const judge = await getJudgeByEmail(email);
 
   if (!judge) {
     return {

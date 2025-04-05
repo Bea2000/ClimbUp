@@ -1,16 +1,16 @@
 'use client';
 
+import { Judge } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React, { useActionState, startTransition } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { deleteJudge } from '@/app/actions/judge';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import { JudgeWithUser } from '@/types/judge';
 
 interface ManageJudgesFormProps {
   competitionId: number;
-  judges: JudgeWithUser[];
+  judges: Judge[];
 }
 
 export default function ManageJudges({ competitionId, judges }: ManageJudgesFormProps) {

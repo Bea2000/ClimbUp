@@ -1,5 +1,6 @@
 'use client';
 
+import { Judge } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React, { useActionState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -7,7 +8,6 @@ import { toast } from 'react-hot-toast';
 import { assignJudgeToProblem } from '@/app/actions/judge';
 import { deleteProblem } from '@/app/actions/problem';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import { JudgeWithUser } from '@/types/judge';
 import { ProblemWithJudges } from '@/types/problem';
 
 import AssignJudgeDialog from './AssignJudgeDialog';
@@ -16,7 +16,7 @@ import ProblemsTable from './ProblemsTable';
 interface ManageProblemsProps {
   competitionId: number;
   problems: ProblemWithJudges[];
-  judges: JudgeWithUser[];
+  judges: Judge[];
 }
 
 export default function ManageProblems({ competitionId, problems, judges }: ManageProblemsProps) {

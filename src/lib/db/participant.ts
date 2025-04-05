@@ -59,10 +59,6 @@ export async function findParticipantById(id: number) {
     where: {
       id,
     },
-    include: {
-      competition: true,
-      problems: true,
-    },
   });
 
   return participant;

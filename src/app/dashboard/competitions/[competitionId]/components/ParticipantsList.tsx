@@ -3,11 +3,15 @@
 import { ParticipantStatus } from "@prisma/client";
 import Link from "next/link";
 
-import { ParticipantWithUser } from "@/types/participant";
+import { ParticipantWithInformation } from "@/types/participant";
 
-export function ParticipantsList({ participants, competitionId }: { participants: ParticipantWithUser[], competitionId: number }) {
-  const confirmedParticipants = participants.filter(participant => participant.status === ParticipantStatus.CONFIRMED);
+interface ParticipantsListProps {
+  participants: ParticipantWithInformation[];
+  competitionId: number;
+}
 
+export function ParticipantsList({ participants, competitionId }: ParticipantsListProps) {
+  const confirmedParticipants = participants.filter(participant => participant.competitionsInformation.status === ParticipantStatus.CONFIRMED);
   return (
     <div>
       <div className="flex justify-between">
@@ -18,17 +22,17 @@ export function ParticipantsList({ participants, competitionId }: { participants
         <table className="table table-zebra">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Email</th>
+              <th>Identificación</th>
               <th>Puntaje Final</th>
             </tr>
           </thead>
           <tbody>
             {confirmedParticipants.map((participant) => (
               <tr key={participant.id}>
-                <td>{participant.user.name}</td>
-                <td>{participant.user.email}</td>
-                <td>{participant.finalScore || 'Pendiente'}</td>
+                {Object.entries(participant.competitionsInformation.userInformation as Record<string, string>).map(([key, value]) => (
+                  <td key={key}>{key}: {value}</td>
+                ))}
+                <td>{participant.competitionsInformation.finalScore || 'Pendiente'}</td>
               </tr>
             ))}
           </tbody>
