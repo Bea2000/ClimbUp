@@ -20,7 +20,7 @@ interface AddJudgeFormProps {
 export default function AddJudgeForm({ competitionId }: AddJudgeFormProps) {
   const router = useRouter();
   
-  const [lastResult, formAction] = useActionState(addJudgeToCompetition, undefined);
+  const [lastResult, formAction] = useActionState((state: unknown, formData: FormData) => addJudgeToCompetition(state, formData, competitionId), undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
@@ -43,9 +43,7 @@ export default function AddJudgeForm({ competitionId }: AddJudgeFormProps) {
         <div className="card-body">
           <h2 className="card-title mb-6 text-2xl">Agregar Juez</h2>
           
-          <form id={form.id} onSubmit={form.onSubmit} action={formAction} className="space-y-4">
-            <input type="hidden" name="competitionId" value={competitionId} />
-            
+          <form id={form.id} onSubmit={form.onSubmit} action={formAction} className="space-y-4">            
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FormInput
                 label="Nombre"

@@ -64,8 +64,7 @@ export default function ManageJudges({ competitionId, judges }: ManageJudgesForm
             {judges.map((judge) => (
               <div key={judge.id} className="flex items-center justify-between rounded-lg border p-4">
                 <div>
-                  <h3 className="font-semibold">{judge.user.name}</h3>
-                  <p className="text-sm text-gray-600">{judge.user.email}</p>
+                  <h3 className="font-semibold">{judge.email}</h3>
                 </div>
                 <button
                   type="button"

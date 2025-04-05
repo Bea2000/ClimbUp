@@ -21,6 +21,7 @@ interface CompetitionPageProps {
 export default async function CompetitionPage(props: CompetitionPageProps) {
   const params = await props.params;
   const competition = await getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges(parseInt(params.competitionId));
+  const participants = await getParticipantsInformationByCompetitionId(parseInt(params.competitionId));
 
   if (!competition) {
     notFound();
@@ -68,7 +69,7 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
 
           <div className="divider"></div>
           
-          <ParticipantsList participants={competition.participants} competitionId={competition.id} />
+          <ParticipantsList participants={participants} competitionId={competition.id} />
         </div>
       </div>
     </div>

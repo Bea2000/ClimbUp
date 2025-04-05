@@ -1,14 +1,15 @@
-import { User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import prisma from "./prisma";
 
-export async function getJudgesUsersByCompetitionId(competitionId: number) {
+export async function getJudgesByCompetitionId(competitionId: number) {
   return await prisma.judge.findMany({
     where: {
-      competitionId,
-    },
-    include: {
-      user: true,
+      competitions: {
+        some: {
+          id: competitionId,
+        },
+      },
     },
   });
 }
@@ -22,21 +23,35 @@ export async function removeJudgeFromCompetitionById(judgeId: number, competitio
   });
 }
 
-export async function findJudgeByUserIdAndCompetitionId(userId: number, competitionId: number) {
+export async function getJudgeByEmail(email: string) {
   return await prisma.judge.findFirst({
     where: {
-      userId,
-      competitionId,
+      email,
     },
   });
 }
 
-export async function linkJudgeWithUser(competitionId: number, user: User, organizerId: number) {
+export async function createJudge(judge: Prisma.JudgeCreateInput) {
   return await prisma.judge.create({
+    data: judge,
+  });
+}
+
+export async function findJudgeById(judgeId: number) {
+  return await prisma.judge.findFirst({
+    where: {
+      id: judgeId,
+    },
+  });
+}
+
+export async function linkJudgeWithCompetition(competitionId: number, judgeId: number) {
+  return await prisma.judge.update({
+    where: { id: judgeId },
     data: {
-      userId: user.id,
-      competitionId,
-      organizerId,
+      competitions: {
+        connect: { id: competitionId },
+      },
     },
   });
 }

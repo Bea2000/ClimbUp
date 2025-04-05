@@ -35,15 +35,19 @@ export async function getUnconfirmedParticipantsCountForOrganizer(organizerId: n
   });
 }
 
-export async function getParticipantsWithUserByCompetitionId(competitionId: number) {
-  return await prisma.participant.findMany({
+export async function getParticipantsInformationByCompetitionId(competitionId: number): Promise<ParticipantWithInformation[]> {
+  const participants = await prisma.participantCompetition.findMany({
     where: {
       competitionId,
     },
     include: {
-      user: true,
+      participant: true,
     },
   });
+  return participants.map(participant => ({
+    ...participant.participant,
+    competitionsInformation: participant,
+  }));
 }
 
 export async function updateParticipantStatuses(updates: { id: number, status: ParticipantStatus }[]) {

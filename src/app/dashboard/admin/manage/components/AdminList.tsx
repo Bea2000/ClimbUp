@@ -59,9 +59,8 @@ export default function AdminList({ admins }: AdminListProps) {
           ) : (
             admins.map((admin) => (
               <tr key={admin.id}>
-                <td>{admin.user.name}</td>
-                <td>{admin.user.email}</td>
-                <td>{admin.user.rut}</td>
+                <td>{admin.email}</td>
+                <td>{admin.rut}</td>
                 <td>
                   <span className={`badge ${admin.isSuperAdmin ? 'badge-primary' : 'badge-secondary'}`}>
                     {admin.isSuperAdmin ? 'Super Admin' : 'Admin'}

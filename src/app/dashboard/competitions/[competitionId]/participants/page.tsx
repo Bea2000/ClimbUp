@@ -1,4 +1,4 @@
-import { getParticipantsWithUserByCompetitionId } from "@/lib/db/participant";
+import { getParticipantsInformationByCompetitionId } from "@/lib/db/participant";
 
 import ParticipantsManage from "./components/ParticipantsManage";
 
@@ -10,7 +10,7 @@ interface ParticipantsManagePageProps {
 
 export default async function ParticipantsManagePage(props: ParticipantsManagePageProps) {
   const params = await props.params;
-  const participants = await getParticipantsWithUserByCompetitionId(parseInt(params.competitionId));
+  const participants = await getParticipantsInformationByCompetitionId(parseInt(params.competitionId));
 
   return (
     <div className="w-full">

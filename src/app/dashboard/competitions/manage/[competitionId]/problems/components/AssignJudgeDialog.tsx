@@ -48,7 +48,7 @@ export default function AssignJudgeDialog({
                 <option value="">Seleccione un juez</option>
                 {availableJudges.map((judge) => (
                   <option key={judge.id} value={judge.id}>
-                    {judge.user.name}
+                    {judge.email}
                   </option>
                 ))}
               </select>

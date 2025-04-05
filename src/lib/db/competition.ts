@@ -106,7 +106,7 @@ export async function getCompetitionById(competitionId: number) {
   });
 }
 
-export async function getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges(competitionId: number) {
+export async function getCompetitionByIdWithOrganizerProblemsJudgesAndParticipants(competitionId: number) {
   return await prisma.competition.findUnique({
     where: {
       id: competitionId,
@@ -114,16 +114,8 @@ export async function getCompetitionByIdWithOrganizerProblemsParticipantsAndJudg
     include: {
       organizer: true,
       problems: true,
-      participants: {
-        include: {
-          user: true,
-        },
-      },
-      judges: {
-        include: {
-          user: true,
-        },
-      },
+      judges: true,
+      participants: true,
     },
   });
 }

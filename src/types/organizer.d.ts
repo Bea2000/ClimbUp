@@ -1,0 +1,3 @@
+interface CreateOrganizerData {
+  name: string;
+}

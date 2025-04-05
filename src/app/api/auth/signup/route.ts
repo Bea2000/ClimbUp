@@ -1,9 +1,9 @@
-import { Role } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
 
 import { signupSchema } from '@/app/signup/schemas/signupSchema';
-import prisma from '@/lib/db/prisma';
+import { getAdminByEmailOrRut, createNewAdmin } from '@/lib/db/admin';
+import { createOrganizer, getOrganizerByName } from '@/lib/db/organizer';
 import { normalizeRut } from '@/utils/rut';
 
 export async function POST(request: Request) {
@@ -20,14 +20,7 @@ export async function POST(request: Request) {
     const { name, email, password, rut, organizerName } = signupSchema.parse(body);
     const normalizedRut = normalizeRut(rut);
 
-    const existingUser = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { email },
-          { rut: normalizedRut },
-        ],
-      },
-    });
+    const existingUser = await getAdminByEmailOrRut(email, rut);
 
     if (existingUser) {
       return NextResponse.json(
@@ -38,11 +31,7 @@ export async function POST(request: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const existingOrganizer = await prisma.organizer.findFirst({
-      where: {
-        name: organizerName,
-      },
-    });
+    const existingOrganizer = await getOrganizerByName(organizerName);
 
     if (existingOrganizer) {
       return NextResponse.json(
@@ -51,32 +40,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const organizer = await prisma.organizer.create({
-      data: {
-        name: organizerName,
-      },
-    });
+    const organizer = await createOrganizer({ name: organizerName });
     
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        role: Role.ADMIN,
-        rut: normalizedRut,
-      },
-    });
-
-    await prisma.admin.create({
-      data: {
-        password: hashedPassword,
-        isSuperAdmin: true,
-        user: {
-          connect: { id: user.id },
-        },
-        organizer: {
-          connect: { id: organizer.id },
-        },
-      },
+    await createNewAdmin({
+      name,
+      email,
+      password: hashedPassword,
+      rut: normalizedRut,
+      organizerId: organizer.id,
+      isSuperAdmin: true,
     });
 
     return NextResponse.json(
