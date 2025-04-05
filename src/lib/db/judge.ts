@@ -15,10 +15,12 @@ export async function getJudgesByCompetitionId(competitionId: number) {
 }
 
 export async function removeJudgeFromCompetitionById(judgeId: number, competitionId: number) {
-  return await prisma.judge.delete({
-    where: {
-      id: judgeId,
-      competitionId,
+  return await prisma.judge.update({
+    where: { id: judgeId },
+    data: {
+      competitions: { 
+        disconnect: { id: competitionId },
+      },
     },
   });
 }

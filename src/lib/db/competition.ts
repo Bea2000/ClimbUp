@@ -2,6 +2,7 @@ import { ClimbingGrade } from "@prisma/client";
 
 import { CompetitionData, RegisterFormSettings } from "@/types/competition";
 
+import { getParticipantsByCompetitionId } from "./participant";
 import prisma from "./prisma";
 
 export async function createNewCompetition(competition: CompetitionData) {
@@ -147,4 +148,9 @@ export async function addRegisterFormSettingsToCompetitionById(registerFormSetti
       registerFormSettings,
     },
   });
+}
+
+export async function getParticipantsCountForCompetitionByCompetitionId(competitionId: number) {
+  const participants = await getParticipantsByCompetitionId(competitionId);
+  return participants.length;
 }
