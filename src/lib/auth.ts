@@ -6,6 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { SessionUser } from '@/types/session';
 
+import { getAdminByEmail } from './db/admin';
 import prisma from './db/prisma';
 
 declare module 'next-auth' {
@@ -36,24 +37,13 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Credenciales inválidas');
         }
-        const existingUser = await prisma.user.findFirst({
-          where: {
-            email: credentials.email.toLowerCase(),
-          },
-          include: {
-            admin: true,
-          },
-        });
+        const existingUser = await getAdminByEmail(credentials.email);
 
         if (!existingUser) {
           throw new Error('Email o contraseña incorrecta');
         }
 
-        if (!existingUser.admin) {
-          throw new Error('Usuario no es administrador');
-        }
-
-        const passwordMatch = await compare(credentials.password, existingUser.admin.password);
+        const passwordMatch = await compare(credentials.password, existingUser.password);
 
         if (!passwordMatch) {
           throw new Error('Email o contraseña incorrecta');
@@ -62,8 +52,8 @@ export const authOptions: NextAuthOptions = {
         return {
           id: existingUser.id.toString(),
           email: existingUser.email,
-          role: existingUser.admin.isSuperAdmin ? 'superadmin' : 'admin',
-          organizerId: existingUser.admin.organizerId,
+          role: existingUser.isSuperAdmin ? 'superadmin' : 'admin',
+          organizerId: existingUser.organizerId,
         };
       },
     }),
@@ -85,8 +75,8 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.role = token.role as string;
         session.user.organizerId = token.organizerId as number;
+        session.user.role = token.role as string;
       }
       return session;
     },
