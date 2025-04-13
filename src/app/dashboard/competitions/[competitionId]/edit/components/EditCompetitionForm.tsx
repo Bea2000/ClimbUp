@@ -16,7 +16,6 @@ import SubmitButton from '@/components/ui/SubmitButton';
 import { usePlacesSearch } from '@/hooks/usePlacesSearch';
 import { generateRandomCode } from '@/lib/utils';
 
-
 import ShowAddressOptions from '../../../create/components/ShowAddressOptions';
 import { editCompetitionSchema } from '../schemas/editCompetitionSchema';
 
@@ -35,7 +34,10 @@ export default function EditCompetitionForm({ competition }: EditCompetitionForm
   const { suggestions, loading, searchPlaces } = usePlacesSearch();
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
-  const [lastResult, formAction] = useActionState(updateCompetition, undefined);
+  const [lastResult, formAction] = useActionState(
+    (state: unknown, formData: FormData) => updateCompetition(state, formData, competition.id),
+    undefined,
+  );
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
@@ -98,8 +100,6 @@ export default function EditCompetitionForm({ competition }: EditCompetitionForm
         <h1 className="card-title mb-6 text-2xl">Editar Competencia {competition.name}</h1>
         
         <form id={form.id} onSubmit={form.onSubmit} action={formAction} className="space-y-4">
-          <input type="hidden" name="id" value={competition.id.toString()} />
-          
           <FormInput
             label="Nombre"
             name={fields.name.name}

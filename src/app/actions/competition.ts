@@ -8,11 +8,9 @@ import { authOptions } from "@/lib/auth";
 import { REVERSE_GRADE_TYPES } from "@/lib/constant/problem.conf";
 import { createNewCompetition, updateCompetitionById } from "@/lib/db/competition";
 
-type CreateCompetitionResult = SubmissionResult | { status: 'success', competitionId: number };
+type CompetitionResult = SubmissionResult | { status: 'success', competitionId: number };
 
-type UpdateCompetitionResult = SubmissionResult | { status: 'success', competitionId: number };
-
-export async function createCompetition(_prevState: unknown, formData: FormData) : Promise<CreateCompetitionResult> {
+export async function createCompetition(_prevState: unknown, formData: FormData) : Promise<CompetitionResult> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -42,19 +40,18 @@ export async function createCompetition(_prevState: unknown, formData: FormData)
   try {
     const newCompetition = await createNewCompetition(competitionData);
     return { status: 'success', competitionId: newCompetition.id };
-  } catch (error) {
-    return { status: 'error', error: { message: [`Error al crear la competencia: ${error as string}`] } };
+  } catch {
+    return { status: 'error', error: { message: ['Error al crear la competencia'] } };
   }
 }
 
-export async function updateCompetition(_prevState: unknown, formData: FormData): Promise<UpdateCompetitionResult> {
+export async function updateCompetition(_prevState: unknown, formData: FormData, competitionId: number): Promise<CompetitionResult> {
   const session = await getServerSession(authOptions);
 
   if (!session) {
     return { status: 'error', error: { message: ['No se ha iniciado sesión'] } };
   }
   
-  const id = parseInt(formData.get('id') as string);
   const name = formData.get('name') as string;
   const location = formData.get('location') as string;
   const date = new Date(formData.get('date') as string);
@@ -70,9 +67,9 @@ export async function updateCompetition(_prevState: unknown, formData: FormData)
   };
   
   try {
-    const updatedCompetition = await updateCompetitionById(id, competitionData);
+    const updatedCompetition = await updateCompetitionById(competitionId, competitionData);
     return { status: 'success', competitionId: updatedCompetition.id };
-  } catch (error) {
-    return { status: 'error', error: { message: [`Error al actualizar la competencia: ${error as string}`] } };
+  } catch {
+    return { status: 'error', error: { message: ['Error al actualizar la competencia'] } };
   }
 }
