@@ -40,8 +40,8 @@ export async function createProblem(_prevState: unknown, formData: FormData): Pr
   try {
     await addProblemToCompetition(competitionId, problemData);
     return { status: 'success' };
-  } catch (error) {
-    return { status: 'error', error: { message: [`Error al agregar problemas: ${error as string}`] } };
+  } catch {
+    return { status: 'error', error: { message: ['Error al agregar problemas'] } };
   }
 }
   
@@ -65,7 +65,7 @@ export async function deleteProblem(_prevState: unknown, formData: FormData): Pr
     await removeProblemFromCompetition(competitionId, problemId);
     revalidatePath(`/dashboard/competitions/manage/${competitionId}/problems`);
     return { status: 'success' };
-  } catch (error) {
-    return { status: 'error', error: { message: [`Error al eliminar el problema: ${error as string}`] } };
+  } catch {
+    return { status: 'error', error: { message: ['Error al eliminar el problema'] } };
   }
 }
