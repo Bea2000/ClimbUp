@@ -30,21 +30,22 @@ enum CompetitionStatus {
 }
 
 model Competition {
-  id           Int           @id @default(autoincrement())
-  code         String
-  name         String
-  location     String
-  date         DateTime
-  organizerId  Int
-  organizer    Organizer     @relation(fields: [organizerId], references: [id])
-  duration     Int // in minutes
-  startTime    DateTime?
-  problems     Problem[]
-  participants Participant[]
-  judges       Judge[]
-  basesPath    String?
-  levelType    ClimbingGrade
-  status       CompetitionStatus @default(NOT_STARTED)
+  id                   Int               @id @default(autoincrement())
+  code                 String
+  name                 String
+  location             String
+  date                 DateTime
+  organizerId          Int
+  organizer            Organizer         @relation(fields: [organizerId], references: [id])
+  duration             Int // in minutes
+  startTime            DateTime?
+  problems             Problem[]
+  participants         Participant[]
+  judges               Judge[]
+  basesPath            String?
+  levelType            ClimbingGrade
+  registerFormSettings Json?
+  status               CompetitionStatus @default(NOT_STARTED)
 }
 
 enum ClimbingGrade {
@@ -64,10 +65,10 @@ model Problem {
   maxPoints          Int
   attempts           Int
   discountPerAttempt Int
-  competitionId  Int
-  competition    Competition  @relation(fields: [competitionId], references: [id])
-  problems       ParticipantProblem[]
-  judges         Judge[]
+  competitionId      Int
+  competition        Competition          @relation(fields: [competitionId], references: [id])
+  problems           ParticipantProblem[]
+  judges             Judge[]
 }
 
 model Admin {
@@ -100,6 +101,13 @@ model Participant {
   competition        Competition          @relation(fields: [competitionId], references: [id])
   problems           ParticipantProblem[]
   paymentReceiptPath String?
+  status  ParticipantStatus @default(PENDING)
+}
+
+enum ParticipantStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
 }
 
 model User {
@@ -109,7 +117,7 @@ model User {
   rut          String      @unique
   role         Role
   judge        Judge[]
-  participant  Participant?
+  participant  Participant[]
   admin        Admin?
 }
 

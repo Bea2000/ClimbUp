@@ -1,11 +1,20 @@
 'use client';
 
 import { Collapse } from "@/components/ui/Collapse";
+import { ParticipantStatus } from "@prisma/client";
+import Link from "next/link";
 import { ParticipantWithUser } from "@/types/participant";
 
-export function ParticipantsList({ participants }: { participants: ParticipantWithUser[] }) {
+export function ParticipantsList({ participants, competitionId }: { participants: ParticipantWithUser[], competitionId: number }) {
+  const confirmedParticipants = participants.filter(participant => participant.status === ParticipantStatus.CONFIRMED);
+
   return (
     <Collapse title="Participantes">
+    <div>
+      <div className="flex justify-between">
+        <h2 className="mb-4 text-xl font-bold">Participantes</h2>
+        <Link href={`/dashboard/competitions/${competitionId}/participants`} className="btn btn-primary mb-4">Gestionar participantes</Link>
+      </div>
       <div className="overflow-x-auto">
         <table className="table table-zebra w-full">
           <thead>
@@ -16,7 +25,7 @@ export function ParticipantsList({ participants }: { participants: ParticipantWi
             </tr>
           </thead>
           <tbody>
-            {participants.map((participant) => (
+            {confirmedParticipants.map((participant) => (
               <tr key={participant.id}>
                 <td>{participant.user.name}</td>
                 <td>{participant.user.email}</td>

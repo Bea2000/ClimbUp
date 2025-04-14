@@ -32,3 +32,7 @@ export function validateRut(rut: string): boolean {
   
   return calculatedDv === dv.toLowerCase();
 }
+
+export function normalizeRut(rut: string): string {
+  return rut.replace(/\./g, '').toLowerCase();
+}

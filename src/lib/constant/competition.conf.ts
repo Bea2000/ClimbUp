@@ -13,3 +13,7 @@ export const COMPETITION_STATUS_COLORS: Record<CompetitionStatus, string> = {
   FINISHED: "badge-success",
   CANCELLED: "badge-error",
 };
+
+export const fieldTypeOptions = ['Texto', 'Número', 'Email', 'Teléfono', 'Fecha', 'Hora', 'Checkbox', 'RUT']
+
+export const participantIdentifierOptions = ['RUT', 'Email', 'Teléfono']

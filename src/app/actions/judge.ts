@@ -1,14 +1,52 @@
 'use server';
 
-import { SubmissionResult } from '@conform-to/react';
-import { User } from '@prisma/client';
+import { SubmissionResult } from "@conform-to/react";
+import { Competition, User } from "@prisma/client";
 import { revalidatePath } from 'next/cache';
 
 import { ManageJudgeSchema } from '@/app/dashboard/competitions/manage/[competitionId]/judges/schemas/manageJudgesSchema';
 import { getUserFromSession } from '@/lib/auth';
-import { findJudgeByUserIdAndCompetitionId, linkJudgeWithUser, removeJudgeFromCompetitionById, removeJudgeFromProblem } from '@/lib/db/judge';
+import { getCompetitionsByJudgeId } from "@/lib/db/competition";
+import { getJudgeByRut, findJudgeByUserIdAndCompetitionId, linkJudgeWithUser, removeJudgeFromCompetitionById, removeJudgeFromProblem } from "@/lib/db/judge";
+import { getOrganizerNameById } from "@/lib/db/organizer";
 import { updateProblemJudge } from '@/lib/db/problem';
 import { createJudgeUser, findUserByEmailOrRut } from '@/lib/db/user';
+import { normalizeRut } from "@/utils/rut";
+
+type JudgeValidationResult = SubmissionResult & {
+  data?: { 
+    competitions: Competition[];
+    organizerName: string;
+    judgeId: number;
+  };
+};
+
+export async function findJudge(_prevState: unknown, formData: FormData): Promise<JudgeValidationResult> {
+  const rut = normalizeRut(formData.get('rut') as string);
+  const judge = await getJudgeByRut(rut);
+
+  if (!judge) {
+    return {
+      status: 'error',
+      error: { message: ['No se encontró el juez'] },
+    };
+  }
+
+  const competitions = await getCompetitionsByJudgeId(judge.id, judge.organizerId);
+  const organizerName = await getOrganizerNameById(judge.organizerId);
+
+  if (!organizerName) {
+    return {
+      status: 'error',
+      error: { message: ['No se pudo obtener el nombre del organizador'] },
+    };
+  }
+  
+  return {
+    status: 'success',
+    data: { competitions, organizerName, judgeId: judge.id },
+  };
+}
 
 interface AssignJudgeResult {
   status: 'success' | 'error';
