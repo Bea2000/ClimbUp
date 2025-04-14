@@ -2,9 +2,10 @@ import FormInput from '@/components/ui/FormInput';
 
 interface RutInputProps {
   errors?: string[];
+  label?: boolean;
 }
 
-export function RutInput({ errors }: RutInputProps) {
+export function RutInput({ errors, label = true }: RutInputProps) {
   function formatRut(value: string) {
     let rut = value.replace(/\./g, '').replace(/-/g, '');
     rut = rut.replace(/[^0-9kK]/g, '');
@@ -27,10 +28,10 @@ export function RutInput({ errors }: RutInputProps) {
 
   return (
     <FormInput
-      label="RUT"
+      label={label ? "RUT" : undefined}
       name="rut"
       type="text"
-      placeholder="ej: 12.345.678-9"
+      placeholder={label ? "ej: 12.345.678-9" : "RUT (ej: 12.345.678-9)"}
       errors={errors}
       onChange={handleRutChange}
       maxLength={12}

@@ -49,15 +49,10 @@ export default function CreateAdminForm() {
             required
             errors={fields.email.errors}
           />
-
-          <div className="form-control">
-            <label htmlFor={fields.rut.name} className="label">
-              <span className="label-text">RUT</span>
-            </label>
-            <RutInput
-              errors={fields.rut.errors}
-            />
-          </div>
+          
+          <RutInput
+            errors={fields.rut.errors}
+          />
 
           <FormInput
             label="Contraseña"
