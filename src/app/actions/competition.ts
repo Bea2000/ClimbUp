@@ -6,8 +6,7 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
 import { REVERSE_GRADE_TYPES } from "@/lib/constant/problem.conf";
-import { createNewCompetition, updateCompetitionById } from "@/lib/db/competition";
-import { addRegisterFormSettingsToCompetitionById, createNewCompetition, getCompetitionById } from "@/lib/db/competition";
+import { createNewCompetition, updateCompetitionById, addRegisterFormSettingsToCompetitionById, getCompetitionById } from "@/lib/db/competition";
 import { uploadBases, uploadPaymentFile } from "@/lib/s3";
 import { unformatCurrency } from "@/lib/utils";
 import { RegisterFormField, RegisterFormSettings } from "@/types/competition";

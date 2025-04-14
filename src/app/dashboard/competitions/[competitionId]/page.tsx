@@ -67,7 +67,7 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
           <div className="divider"></div>
           <ProblemsList problems={competition.problems} competitionId={competition.id} />
           <div className="divider"></div>          
-          <ParticipantsList participants={competition.participants} competitionId={competition.id} />
+          <ParticipantsList participants={competition.participants} />
         </div>
       </div>
     </div>

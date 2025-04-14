@@ -151,6 +151,7 @@ export async function updateCompetitionById(competitionId: number, competitionDa
     where: { id: competitionId },  
     data: competitionData,  
   });  
+}
 
 export async function addRegisterFormSettingsToCompetitionById(registerFormSettings: RegisterFormSettings, competitionId: number) {
   return await prisma.competition.update({

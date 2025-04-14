@@ -6,7 +6,6 @@ import { toast } from 'react-hot-toast';
 
 import { assignJudgeToProblem } from '@/app/actions/judge';
 import { deleteProblem } from '@/app/actions/problem';
-import { CompetitionSteps } from '@/components/CompetitionSteps';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { JudgeWithUser } from '@/types/judge';
 import { ProblemWithJudges } from '@/types/problem';
@@ -101,7 +100,6 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
 
   return (
     <div className="container mx-auto p-6">
-      <CompetitionSteps currentStep="problems" />
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title mb-6 text-2xl">Gestionar Problemas</h2>

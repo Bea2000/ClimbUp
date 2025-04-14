@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const editCompetitionSchema = z.object({
-  id: z.string(),
   code: z.string({ message: "Código requerido" }).min(6, { message: "Código debe tener al menos 6 dígitos" }),
   name: z.string({ message: "Nombre requerido" }).min(3, { message: "Nombre debe tener al menos 3 caracteres" }),
   location: z.string({ message: "Ubicación requerida" }).min(3, { message: "Ubicación debe tener al menos 3 caracteres" }),
