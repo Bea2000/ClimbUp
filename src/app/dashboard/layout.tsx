@@ -14,7 +14,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const organizerName = await getOrganizerNameById(user.organizerId);
 
   if (!organizerName) {
-    throw new Error("No se pudo obtener el nombre del organizador");
+    redirect('/login');
   }
 
   return (

@@ -9,6 +9,7 @@ import { getUnconfirmedParticipantsCountForOrganizer } from "@/lib/db/participan
 
 import { CompetitionDetails } from "./components/CompetitionDetails";
 import { CompetitionStats } from "./components/CompetitionStats";
+import { JudgesList } from "./components/JudgesList";
 import { ParticipantsList } from "./components/ParticipantsList";
 import { ProblemsList } from "./components/ProblemsList";
 
@@ -61,14 +62,12 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
             <CompetitionDetails competition={competition} />
             <CompetitionStats competition={competition} />
           </div>
-
           <div className="divider"></div>
-          
-          <ProblemsList problems={competition.problems} />
-
+          <JudgesList judges={competition.judges} competitionId={competition.id} />
           <div className="divider"></div>
-          
-          <ParticipantsList participants={competition.participants} competitionId={competition.id} />
+          <ProblemsList problems={competition.problems} competitionId={competition.id} />
+          <div className="divider"></div>          
+          <ParticipantsList participants={competition.participants} />
         </div>
       </div>
     </div>

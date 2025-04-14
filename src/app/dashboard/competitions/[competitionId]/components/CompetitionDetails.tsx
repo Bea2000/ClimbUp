@@ -1,5 +1,7 @@
 'use client';
+import { format } from 'date-fns';
 
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { CompetitionWithOrganizer } from '@/types/competition';
 
 interface CompetitionDetailsProps {
@@ -14,9 +16,10 @@ export function CompetitionDetails( { competition }: CompetitionDetailsProps ) {
         <div className="space-y-2">
           <p><span className="font-bold">Código:</span> {competition.code}</p>
           <p><span className="font-bold">Ubicación:</span> {competition.location}</p>
-          <p><span className="font-bold">Fecha:</span> {new Date(competition.date).toLocaleDateString()}</p>
+          <p><span className="font-bold">Fecha:</span> {format(new Date(competition.date), 'dd/MM/yyyy, HH:mm')}</p>
           <p><span className="font-bold">Duración:</span> {competition.duration} minutos</p>
           <p><span className="font-bold">Organizador:</span> {competition.organizer.name}</p>
+          <p><span className="font-bold">Estado:</span> <StatusBadge status={competition.status} /></p>
         </div>
       </div>
     </div>

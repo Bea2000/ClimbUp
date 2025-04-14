@@ -14,7 +14,7 @@ export default function CompetitionsList({ competitions }: CompetitionsListProps
             <th>Nombre</th>
             <th>Fecha</th>
             <th>Ubicación</th>
-            <th>Duración (hrs)</th>
+            <th>Duración (minutos)</th>
             <th>Código</th>
             <th>Acciones</th>
           </tr>

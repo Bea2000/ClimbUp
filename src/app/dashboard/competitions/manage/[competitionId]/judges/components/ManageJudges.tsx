@@ -28,7 +28,7 @@ export default function ManageJudges({ competitionId, judges }: ManageJudgesForm
     }
   }, [lastResult]);
 
-  function handleSkip() {
+  function handleSkipOrFinalize() {
     router.push(`/dashboard/competitions/manage/${competitionId}/problems`);
   }
 
@@ -36,8 +36,8 @@ export default function ManageJudges({ competitionId, judges }: ManageJudgesForm
     router.push(`/dashboard/competitions/manage/${competitionId}/judges/add`);
   }
 
-  function handleFinalize() {
-    router.push(`/dashboard/competitions/manage/${competitionId}/problems`);
+  function handleBack() {
+    router.back();
   }
 
   function handleDeleteClick(judgeId: number) {
@@ -87,12 +87,19 @@ export default function ManageJudges({ competitionId, judges }: ManageJudgesForm
               Agregar Juez
             </button>
 
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              <button
+                type="button"
+                className="btn btn-outline"
+                onClick={handleBack}
+              >
+                Volver
+              </button>
               {judges.length === 0 ? (
                 <button
                   type="button"
                   className="btn btn-outline"
-                  onClick={handleSkip}
+                  onClick={handleSkipOrFinalize}
                 >
                   Gestionar Después
                 </button>
@@ -100,7 +107,7 @@ export default function ManageJudges({ competitionId, judges }: ManageJudgesForm
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={handleFinalize}
+                  onClick={handleSkipOrFinalize}
                 >
                   Continuar
                 </button>

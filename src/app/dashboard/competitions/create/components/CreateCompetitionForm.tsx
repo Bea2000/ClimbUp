@@ -17,7 +17,7 @@ import { CLIMBING_GRADE_TYPES_OPTIONS } from '@/lib/constant/problem.conf';
 import { generateRandomCode } from '@/lib/utils';
 
 import ShowAddressOptions from './ShowAddressOptions';
-import { CreateCompetitionSchema } from '../schemas/createCompetitionSchema';
+import { createCompetitionSchema } from '../schemas/createCompetitionSchema';
 
 export default function CreateCompetitionForm() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function CreateCompetitionForm() {
   const [form, fields] = useForm({
     lastResult,
     onValidate({formData}) {
-      return parseWithZod(formData, {schema: CreateCompetitionSchema});
+      return parseWithZod(formData, {schema: createCompetitionSchema});
     },
     shouldValidate: 'onBlur',
     shouldRevalidate: 'onInput',

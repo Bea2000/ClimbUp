@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-export const createCompetitionSchema = z.object({
-  code: z.string({ message: "Código requerido" }).min(6, { message: "Código debe tener al menos 6 caracteres" }),
+export const editCompetitionSchema = z.object({
+  code: z.string({ message: "Código requerido" }).min(6, { message: "Código debe tener al menos 6 dígitos" }),
   name: z.string({ message: "Nombre requerido" }).min(3, { message: "Nombre debe tener al menos 3 caracteres" }),
   location: z.string({ message: "Ubicación requerida" }).min(3, { message: "Ubicación debe tener al menos 3 caracteres" }),
   date: z.string()
@@ -12,7 +12,6 @@ export const createCompetitionSchema = z.object({
       message: "Fecha debe ser mayor a la fecha actual",
     }),
   duration: z.number({ message: "Duración requerida" }).min(1, { message: "Duración debe ser mayor a 0" }),
-  levelType: z.string({ message: "Tipo de graduación requerido" }),
 });
 
-export type CreateCompetitionFormData = z.infer<typeof createCompetitionSchema>;
+export type EditCompetitionFormData = z.infer<typeof editCompetitionSchema>;
