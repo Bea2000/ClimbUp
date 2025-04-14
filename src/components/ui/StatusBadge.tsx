@@ -1,6 +1,7 @@
 'use client';
 
 import { CompetitionStatus } from "@prisma/client";
+
 import { COMPETITION_STATUS_LABELS, COMPETITION_STATUS_COLORS } from "@/lib/constant/competition.conf";
 
 interface StatusBadgeProps {
