@@ -8,16 +8,16 @@ import { toast } from 'react-hot-toast';
 
 import { updateParticipants } from '@/app/actions/participants';
 import SubmitButton from '@/components/ui/SubmitButton';
-import { ParticipantWithInformation } from '@/types/participant';
+import { ParticipantWithCompetitionInformation } from '@/types/participant';
 
 import { UpdateParticipantsSchema } from '../schemas/UpdateParticipantsSchema';
 
 interface ParticipantsManageProps {
-  participants: ParticipantWithInformation[];
+  participants: ParticipantWithCompetitionInformation[];
 }
 
 export default function ParticipantsManage({ participants }: ParticipantsManageProps) {
-  const [selectedParticipants, setSelectedParticipants] = useState<ParticipantWithInformation[]>(participants);
+  const [selectedParticipants, setSelectedParticipants] = useState<ParticipantWithCompetitionInformation[]>(participants);
   const originalParticipants = React.useRef(participants);
   const [lastResult, formAction] = useActionState(updateParticipants, undefined);
   const [changedParticipants, setChangedParticipants] = useState<{ id: number; status: ParticipantStatus }[]>([]);

@@ -1,6 +1,6 @@
 import { ParticipantStatus } from "@prisma/client";
 
-import { ParticipantWithInformation } from "@/types/participant";
+import { ParticipantWithCompetitionInformation } from "@/types/participant";
 
 import { getLastCompetitionForOrganizer, getParticipantsCountForCompetitionByCompetitionId } from "./competition";
 import prisma from "./prisma";
@@ -46,7 +46,7 @@ export async function getParticipantsByCompetitionId(competitionId: number) {
   });
 }
 
-export async function getParticipantsInformationByCompetitionId(competitionId: number): Promise<ParticipantWithInformation[]> {
+export async function getParticipantsInformationByCompetitionId(competitionId: number): Promise<ParticipantWithCompetitionInformation[]> {
   const participants = await prisma.participantCompetition.findMany({
     where: {
       competitionId,

@@ -3,10 +3,10 @@
 import { ParticipantStatus } from "@prisma/client";
 import Link from "next/link";
 
-import { ParticipantWithInformation } from "@/types/participant";
+import { ParticipantWithCompetitionInformation } from "@/types/participant";
 
 interface ParticipantsListProps {
-  participants: ParticipantWithInformation[];
+  participants: ParticipantWithCompetitionInformation[];
   competitionId: number;
 }
 

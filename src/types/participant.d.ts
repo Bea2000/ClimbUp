@@ -1,5 +1,5 @@
 import { Participant, ParticipantCompetition } from "@prisma/client";
 
-export type ParticipantWithInformation = Participant & {
+export type ParticipantWithCompetitionInformation = Participant & {
   competitionsInformation: ParticipantCompetition;
 };
