@@ -8,13 +8,13 @@ const nextConfig: NextConfig = {
         source: '/',
         destination: '/dashboard',
         permanent: false,
-        has: [{ type: 'cookie', key: 'token' }],
+        has: [{ type: 'cookie', key: 'next-auth.session-token' }],
       },
       {
-        source: '/',
-        destination: '/login',
+        source: '/login',
+        destination: '/dashboard',
         permanent: false,
-        missing: [{ type: 'cookie', key: 'token' }],
+        has: [{ type: 'cookie', key: 'next-auth.session-token' }],
       },
     ];
   },
