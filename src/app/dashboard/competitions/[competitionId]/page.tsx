@@ -6,11 +6,13 @@ import { notFound } from "next/navigation";
 import InfoAlert from "@/components/ui/InfoAlert";
 import { getCompetitionByIdWithOrganizerProblemsJudgesAndParticipants } from "@/lib/db/competition";
 import { getParticipantsInformationByCompetitionId, getUnconfirmedParticipantsCountForCompetitionByCompetitionId } from "@/lib/db/participant";
+import { isCompetitionDatePassed } from "@/lib/utils";
 
 import { CompetitionDetails } from "./components/CompetitionDetails";
 import { CompetitionStats } from "./components/CompetitionStats";
 import { ConfirmedParticipantsList } from "./components/ParticipantsList";
 import { ProblemsList } from "./components/ProblemsList";
+import { RegistrationToggle } from "./components/RegistrationToggle";
 
 interface CompetitionPageProps {
   params: Promise<{
@@ -38,6 +40,8 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
   }
   
   const unconfirmedParticipants = await getUnconfirmedParticipantsCountForCompetitionByCompetitionId(competition.id);
+  
+  const competitionDatePassed = isCompetitionDatePassed(competition.date);
 
   return (
     <div className="p-4">
@@ -56,6 +60,14 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
               <Link href={getRedirectToRegisterForm()} className="btn btn-primary">{competition.registerFormSettings ? 'Editar formulario de registro' : 'Crear formulario de registro'}</Link>
               <Link href={`/dashboard/competitions/${competition.id}/edit`} className="btn btn-primary">Editar</Link>
             </div>
+          </div>
+          
+          <div className="mb-4">
+            <RegistrationToggle 
+              competitionId={competition.id} 
+              initialAcceptsRegistrations={competition.acceptsRegistrations}
+              isDisabled={competitionDatePassed}
+            />
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

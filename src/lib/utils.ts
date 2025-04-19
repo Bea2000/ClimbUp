@@ -21,3 +21,15 @@ export function unformatCurrency(value: string) {
 export function formatPrice(price: string) {
   return parseInt(price.replace(/\./g, ''), 10);
 }
+
+/**
+ * Verifica si la fecha de una competencia ya ha pasado
+ * @param competitionDate - Fecha de la competencia (almacenada en UTC en la base de datos)
+ * @returns true si la fecha de la competencia ya pasó, false en caso contrario
+ */
+export function isCompetitionDatePassed(competitionDate: Date | string): boolean {
+  const currentDate = new Date();
+  const dateToCompare = new Date(competitionDate);
+  
+  return currentDate > dateToCompare;
+}
