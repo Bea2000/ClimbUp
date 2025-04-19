@@ -9,7 +9,7 @@ import { getParticipantsInformationByCompetitionId, getUnconfirmedParticipantsCo
 
 import { CompetitionDetails } from "./components/CompetitionDetails";
 import { CompetitionStats } from "./components/CompetitionStats";
-import { ParticipantsList } from "./components/ParticipantsList";
+import { ConfirmedParticipantsList } from "./components/ParticipantsList";
 import { ProblemsList } from "./components/ProblemsList";
 
 interface CompetitionPageProps {
@@ -69,7 +69,7 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
 
           <div className="divider"></div>
           
-          <ParticipantsList participants={participants} competitionId={competition.id} />
+          <ConfirmedParticipantsList participants={participants} competitionId={competition.id} />
         </div>
       </div>
     </div>

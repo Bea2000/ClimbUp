@@ -5,12 +5,12 @@ import Link from "next/link";
 
 import { ParticipantWithCompetitionInformation } from "@/types/participant";
 
-interface ParticipantsListProps {
+interface ConfirmedParticipantsListProps {
   participants: ParticipantWithCompetitionInformation[];
   competitionId: number;
 }
 
-export function ParticipantsList({ participants, competitionId }: ParticipantsListProps) {
+export function ConfirmedParticipantsList({ participants, competitionId }: ConfirmedParticipantsListProps) {
   const confirmedParticipants = participants.filter(participant => participant.competitionsInformation.status === ParticipantStatus.CONFIRMED);
   return (
     <div>
