@@ -1,0 +1,52 @@
+# ClimbUp .windsurfrules
+
+## General Code Style & Formatting
+- Seguir el estilo de código de Airbnb (según las dependencias de ESLint en package.json).
+- Usar PascalCase para los nombres de archivos de componentes React (ej. Navbar.tsx, Dashboard.tsx).
+- Preferir exportaciones nombradas para componentes.
+- Usar 'use client' en componentes que requieren interactividad del lado del cliente.
+
+## Estructura del Proyecto & Arquitectura
+- Seguir los patrones de Next.js con App Router.
+- Estructura de carpetas:
+  - `/src/app/` para las rutas y páginas de la aplicación.
+  - `/src/components/` para componentes reutilizables.
+  - `/src/components/ui/` para componentes de interfaz de usuario.
+  - `/src/lib/` para funciones de utilidad y lógica de negocio.
+  - `/src/hooks/` para hooks personalizados de React.
+  - `/prisma/schema/` para el esquema de la base de datos.
+- Usar componentes del servidor por defecto y componentes del cliente ('use client') cuando sea necesario.
+
+## Estilo & UI
+- Usar Tailwind CSS para estilos.
+- Usar DaisyUI (v4.12.22) para componentes de UI.
+- Usar clases de Tailwind con convenciones de DaisyUI (ej. `btn`, `btn-ghost`).
+- Interfaz en español para todos los textos visibles al usuario.
+
+## Iconos & Imágenes
+- Usar @phosphor-icons/react para iconos.
+- Usar el componente Image de Next.js para optimización de imágenes.
+
+## Autenticación & Autorización
+- Usar NextAuth para autenticación.
+- Implementar roles de usuario (Admin, SuperAdmin).
+
+## Base de Datos & ORM
+- Usar Prisma como ORM para acceso a la base de datos.
+- Base de datos PostgreSQL en Docker.
+- Estructura de la base de datos centrada en organizadores, competiciones y participantes.
+
+## Internacionalización
+- La aplicación está en español.
+- Mantener todos los mensajes y etiquetas en español.
+
+## Gestión de Estado
+- Usar React Context para gestión de estado cuando sea necesario.
+- Preferir props para pasar datos entre componentes cercanos.
+
+## Convenciones de Nombres
+- El código debe estar en inglés
+
+## Despliegue & Entorno
+- Usar Docker para la base de datos PostgreSQL.
+- Configuración de entorno a través de variables en .env.
