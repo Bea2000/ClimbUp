@@ -13,6 +13,7 @@ export const CreateCompetitionSchema = z.object({
     }),
   duration: z.number({ message: "Duración requerida" }).min(1, { message: "Duración debe ser mayor a 0" }),
   levelType: z.string({ message: "Tipo de graduación requerido" }),
+  categories: z.string().optional(),
 });
 
 export type CreateCompetitionFormData = z.infer<typeof CreateCompetitionSchema>;

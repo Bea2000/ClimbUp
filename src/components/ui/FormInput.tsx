@@ -11,6 +11,7 @@ interface FormInputProps {
   extraElement?: React.ReactNode;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   onRightIconClick?: () => void;
@@ -31,6 +32,7 @@ export default function FormInput({
   value,
   maxLength,
   onChange,
+  onKeyDown,
   leftIcon,
   rightIcon,
   onRightIconClick,
@@ -66,6 +68,7 @@ export default function FormInput({
           step={step}
           value={value}
           onChange={onChange}
+          onKeyDown={onKeyDown}
           maxLength={maxLength}
         />
         {rightIcon && (
