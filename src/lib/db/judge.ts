@@ -82,3 +82,9 @@ export async function isJudgeOfParticipant(judgeId: number, participantId: numbe
 
   return !!competition;
 }
+
+export async function getJudgeCompetitionByCompetitionId(competitionId: number) {
+  return await prisma.judge.findFirst({
+    where: { competitions: { some: { id: competitionId } } },
+  });
+}
