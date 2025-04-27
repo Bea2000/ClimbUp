@@ -64,7 +64,6 @@ export async function createCompetitionRegisterForm(_prevState: unknown, formDat
   const competitionBases = formData.get('competitionBases') as File;
   const isPaymentToggleChecked = formData.get('isPaymentToggleChecked') as string;
   const registerFields = JSON.parse(formData.get('registerFields') as string) as RegisterFormField[];
-  const participantIdentifier = formData.get('participantIdentifier') as string;
 
   type PaymentFormData = {
     paymentRequired: boolean;
@@ -106,7 +105,6 @@ export async function createCompetitionRegisterForm(_prevState: unknown, formDat
     ...paymentFormData,
     competitionBasesFileUrl,
     fields: registerFields,
-    participantIdentifier,
   };
 
   try {
@@ -135,7 +133,7 @@ export async function updateCompetitionRegisterForm(_prevState: unknown, formDat
   const competitionBases = formData.get('competitionBases') as File;
   const isPaymentToggleChecked = formData.get('isPaymentToggleChecked') as string;
   const registerFields = JSON.parse(formData.get('registerFields') as string) as RegisterFormField[];
-  const participantIdentifier = formData.get('participantIdentifier') as string;
+
   type PaymentFormData = {
     paymentRequired: boolean;
     paymentUrl?: string;
@@ -195,7 +193,6 @@ export async function updateCompetitionRegisterForm(_prevState: unknown, formDat
     ...paymentFormData,
     competitionBasesFileUrl,
     fields: registerFields,
-    participantIdentifier,
   };
 
   try {

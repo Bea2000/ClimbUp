@@ -32,7 +32,6 @@ export type RegisterFormSettings = {
     paymentType?: 'file' | 'url';
     competitionBasesFileUrl?: string;
     fields: RegisterFormField[];
-    participantIdentifier: string;
 }
 
 

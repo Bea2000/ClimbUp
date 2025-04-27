@@ -10,7 +10,6 @@ export const createCompetitionRegisterFormSchema = z.object({
   paymentLink: z.string().url({ message: "El link de pago debe ser una URL válida" }).optional(),
   competitionBases: z.instanceof(File).optional(),
   isPaymentToggleChecked: z.string().optional(),
-  participantIdentifier: z.string({ message: "Identificador del participante requerido" }),
 }).refine(
   (data) => {
     if (data.isFree === 'false' && data.price === '$0') {
@@ -56,7 +55,6 @@ export const editCompetitionRegisterFormSchema = z.object({
   paymentLink: z.string().url({ message: "El link de pago debe ser una URL válida" }).optional(),
   competitionBases: z.instanceof(File).optional(),
   isPaymentToggleChecked: z.string().optional(),
-  participantIdentifier: z.string({ message: "Identificador del participante requerido" }),
 }).refine(
   (data) => {
     if (data.isFree === 'false' && data.price === '$0') {
