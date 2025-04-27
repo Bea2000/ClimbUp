@@ -9,6 +9,15 @@ export function formatRut(rut: string): string {
   return `${numbers}-${dv}`;
 }
 
+export function formatRutToShow(rut: string): string {
+  const basicFormat = formatRut(cleanRut(rut));
+  const [numbers, dv] = basicFormat.split('-');
+
+  const withDots = numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+  return `${withDots}-${dv}`;
+}
+
 export function validateRut(rut: string): boolean {
   if (!rut) return false;
   
@@ -36,3 +45,4 @@ export function validateRut(rut: string): boolean {
 export function normalizeRut(rut: string): string {
   return rut.replace(/\./g, '').toLowerCase();
 }
+
