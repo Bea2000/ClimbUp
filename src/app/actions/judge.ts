@@ -63,12 +63,7 @@ export async function deleteJudge(_prevState: unknown, formData: FormData): Prom
       status: 'success',
     };
   } catch {
-    return {
-      status: 'error',
-      error: {
-        message: ['Error al eliminar el juez'],
-      },
-    };
+    return { status: 'error', error: { message: ['Error al eliminar el juez'] } };
   }
 }
 
@@ -108,12 +103,7 @@ export async function addJudgeToCompetition(_prevState: unknown, formData: FormD
       status: 'success',
     };
   } catch {
-    return {
-      status: 'error',
-      error: {
-        message: ['Error al agregar el juez'],
-      },
-    };
+    return { status: 'error', error: { message: ['Error al agregar el juez'] } };
   }
 }
 
@@ -124,10 +114,7 @@ export async function assignJudgeToProblem(_prevState: unknown, formData: FormDa
     const action = formData.get('action');
 
     if (!problemId) {
-      return {
-        status: 'error',
-        error: { message: ['Datos inválidos'] },
-      };
+      return { status: 'error', error: { message: ['Datos inválidos'] } };
     }
 
     if (action === 'remove') {
@@ -136,10 +123,7 @@ export async function assignJudgeToProblem(_prevState: unknown, formData: FormDa
       return { status: 'success', action: 'remove' };
     } 
     if (!judgeId) {
-      return {
-        status: 'error',
-        error: { message: ['Datos inválidos'] },
-      };
+      return { status: 'error', error: { message: ['Datos inválidos'] } };
     }
 
     await linkProblemWithJudge(problemId, judgeId);
@@ -147,9 +131,6 @@ export async function assignJudgeToProblem(_prevState: unknown, formData: FormDa
     revalidatePath('/dashboard/competitions');
     return { status: 'success', action: 'assign' };
   } catch {
-    return {
-      status: 'error',
-      error: { message: ['Error al gestionar juez del problema'] },
-    };
+    return { status: 'error', error: { message: ['Error al gestionar juez del problema'] } };
   }
 }

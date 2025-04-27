@@ -26,15 +26,11 @@ export async function createAdmin(_prevState: unknown, formData: FormData): Prom
     const existingUser = await getAdminByEmailOrRut(email, rut);
 
     if (existingUser) {
-      return { 
-        status: 'error', 
-        error: { 
-          message: [
-            existingUser.email === email ? 
-              'El email ya está registrado' : 
-              'El RUT ya está registrado',
-          ], 
-        }, 
+      return { status: 'error', error: { message: [
+        existingUser.email === email ? 
+          'El email ya está registrado' : 
+          'El RUT ya está registrado',
+      ] },
       };
     }
 
@@ -49,34 +45,29 @@ export async function createAdmin(_prevState: unknown, formData: FormData): Prom
     await createNewAdmin(data);
 
     return { status: 'success' };
-  } catch (error) {
-    return { 
-      status: 'error', 
-      error: { 
-        message: [`Error al crear el administrador: ${error as string}`], 
-      }, 
-    };
+  } catch {
+    return { status: 'error', error: { message: ['Error al crear el administrador'] } };
   }
 } 
 
 export async function deleteAdmin(adminId: number): Promise<SubmissionResult> {
-  const session = await getServerSession(authOptions);
+  try {
+    const session = await getServerSession(authOptions);
 
-  if (!session?.user?.id) {
-    redirect('/login');
+    if (!session?.user?.id) {
+      redirect('/login');
+    }
+
+    const currentAdmin = await getAdminById(parseInt(session.user.id));
+
+    if (!currentAdmin?.isSuperAdmin) {
+      return { status: 'error', error: { message: ['No tienes permisos para eliminar administradores'] } };
+    }
+  
+    await deleteAdminById(adminId);
+
+    return { status: 'success' };
+  } catch {
+    return { status: 'error', error: { message: ['Error al eliminar el administrador'] } };
   }
-
-  const currentAdmin = await getAdminById(parseInt(session.user.id));
-
-  if (!currentAdmin?.isSuperAdmin) {
-    return { status: 'error', error: { message: ['No tienes permisos para eliminar administradores'] } };
-  }
-
-  const adminToDelete = await getAdminById(adminId);
-
-  if (!adminToDelete) {
-    return { status: 'error', error: { message: ['Administrador no encontrado'] } };
-  }
-
-  return await deleteAdminById(adminId);
 } 

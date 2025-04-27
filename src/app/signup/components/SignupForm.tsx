@@ -84,6 +84,7 @@ export function SignupForm() {
         />
 
         <RutInput
+          label={false}
           errors={errors.rut ? [errors.rut] : undefined}
         />
 
