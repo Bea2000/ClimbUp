@@ -28,7 +28,7 @@ export default function ProblemsTable({ problems, handleRemoveJudge, handleAssig
                     key={judge.id}
                     className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
                   >
-                    {judge.user.name} - {judge.user.email}
+                    {judge.email}
                     <button
                       onClick={() => handleRemoveJudge(problem.id, judge.id)}
                       className="ml-1.5 text-blue-600 hover:text-blue-800"

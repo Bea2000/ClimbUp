@@ -1,54 +1,72 @@
 import { ParticipantStatus } from "@prisma/client";
 
-import { getLastCompetitionForOrganizer } from "./competition";
+import { ParticipantWithCompetitionInformation } from "@/types/participant";
+
+import { getLastCompetitionForOrganizer, getParticipantsCountForCompetitionByCompetitionId } from "./competition";
 import prisma from "./prisma";
 
 export async function getParticipantsCountForOrganizer(organizerId: number) {
-  return await prisma.participant.count({
+  const competitions = await prisma.competition.findMany({
     where: {
-      competition: {
-        organizerId,
-      },
+      organizerId,
+    },
+    include: {
+      participants: true,
     },
   });
+  return competitions.reduce((acc, competition) => acc + competition.participants.length, 0);
 }
 
 export async function getLastCompetitionParticipantsCountForOrganizer(organizerId: number) {
   const competitionId = await getLastCompetitionForOrganizer(organizerId);
-  return await prisma.participant.count({
-    where: {
-      competition: {
-        id: competitionId,
-      },
-    },
-  });
+  if (!competitionId) {
+    return 0;
+  }
+  return await getParticipantsCountForCompetitionByCompetitionId(competitionId);
 }
 
-export async function getUnconfirmedParticipantsCountForOrganizer(organizerId: number) {
-  return await prisma.participant.count({
+export async function getUnconfirmedParticipantsCountForCompetitionByCompetitionId(competitionId: number) {
+  return await prisma.participantCompetition.count({
     where: {
-      competition: {
-        organizerId,
-      },
+      competitionId,
       status: "PENDING",
     },
   });
 }
 
-export async function getParticipantsWithUserByCompetitionId(competitionId: number) {
+export async function getParticipantsByCompetitionId(competitionId: number) {
   return await prisma.participant.findMany({
     where: {
-      competitionId,
-    },
-    include: {
-      user: true,
+      competitions: {
+        some: {
+          id: competitionId,
+        },
+      },
     },
   });
 }
 
-export async function updateParticipantStatuses(updates: { id: number, status: ParticipantStatus }[]) {
-  const updatePromises = updates.map(update => prisma.participant.update({
-    where: { id: update.id },
+export async function getParticipantsInformationByCompetitionId(competitionId: number): Promise<ParticipantWithCompetitionInformation[]> {
+  const participants = await prisma.participantCompetition.findMany({
+    where: {
+      competitionId,
+    },
+    include: {
+      participant: true,
+    },
+  });
+  return participants.map(participant => ({
+    ...participant.participant,
+    competitionsInformation: participant,
+  }));
+}
+
+export async function updateParticipantStatuses(updates: { participantId: number, competitionId: number, status: ParticipantStatus }[]) {
+  const updatePromises = updates.map(update => prisma.participantCompetition.updateMany({
+    where: {
+      participantId: update.participantId,
+      competitionId: update.competitionId,
+    },
     data: { status: update.status },
   }));
   await Promise.all(updatePromises);
@@ -58,10 +76,6 @@ export async function findParticipantById(id: number) {
   const participant = await prisma.participant.findUnique({
     where: {
       id,
-    },
-    include: {
-      competition: true,
-      problems: true,
     },
   });
 

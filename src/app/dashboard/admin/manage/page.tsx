@@ -2,14 +2,14 @@ import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '@/lib/auth';
-import { getAdminsByOrganizerForUserId } from '@/lib/db/admin';
+import { getAdminsByOrganizer } from '@/lib/db/admin';
 
 import AdminList from './components/AdminList';
 
 export default async function ManageAdminsPage() {
   const session = await getServerSession(authOptions);
 
-  const admins = session ? await getAdminsByOrganizerForUserId(session.user.organizerId, parseInt(session.user.id)) : [];
+  const admins = session ? await getAdminsByOrganizer(session.user.organizerId, parseInt(session.user.id)) : [];
 
   return (
     <div className="container mx-auto p-6">

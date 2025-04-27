@@ -6,8 +6,8 @@ import { getServerSession } from "next-auth";
 
 
 import { authOptions } from "@/lib/auth";
-import { checkExistingUser, createNewAdmin, deleteAdminById, getAdminByUserId } from "@/lib/db/admin";
-import prisma from "@/lib/db/prisma";
+import { createNewAdmin, deleteAdminById, getAdminByEmailOrRut, getAdminById } from "@/lib/db/admin";
+import { CreateAdminData } from "@/types/admin";
 
 export async function createAdmin(_prevState: unknown, formData: FormData): Promise<SubmissionResult> {
   const session = await getServerSession(authOptions);
@@ -16,7 +16,6 @@ export async function createAdmin(_prevState: unknown, formData: FormData): Prom
     return { status: 'error', error: { message: ['No se ha iniciado sesión'] } };
   }
 
-  const name = formData.get('name') as string;
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
   const rut = formData.get('rut') as string;
@@ -24,7 +23,7 @@ export async function createAdmin(_prevState: unknown, formData: FormData): Prom
   const organizerId = session?.user.organizerId;
 
   try {
-    const existingUser = await checkExistingUser(email, rut);
+    const existingUser = await getAdminByEmailOrRut(email, rut);
 
     if (existingUser) {
       return { 
@@ -39,14 +38,15 @@ export async function createAdmin(_prevState: unknown, formData: FormData): Prom
       };
     }
 
-    await createNewAdmin({
-      name,
+    const data: CreateAdminData = {
       email,
       password,
       rut,
       isSuperAdmin,
       organizerId,
-    });
+    };
+
+    await createNewAdmin(data);
 
     return { status: 'success' };
   } catch (error) {
@@ -66,15 +66,13 @@ export async function deleteAdmin(adminId: number): Promise<SubmissionResult> {
     redirect('/login');
   }
 
-  const currentAdmin = await getAdminByUserId(parseInt(session.user.id));
+  const currentAdmin = await getAdminById(parseInt(session.user.id));
 
   if (!currentAdmin?.isSuperAdmin) {
     return { status: 'error', error: { message: ['No tienes permisos para eliminar administradores'] } };
   }
 
-  const adminToDelete = await prisma.admin.findUnique({
-    where: { id: adminId },
-  });
+  const adminToDelete = await getAdminById(adminId);
 
   if (!adminToDelete) {
     return { status: 'error', error: { message: ['Administrador no encontrado'] } };

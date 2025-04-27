@@ -4,8 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import InfoAlert from "@/components/ui/InfoAlert";
-import { getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges } from "@/lib/db/competition";
-import { getUnconfirmedParticipantsCountForOrganizer } from "@/lib/db/participant";
+import { getCompetitionByIdWithOrganizerProblemsJudgesAndParticipants } from "@/lib/db/competition";
+import { getParticipantsInformationByCompetitionId, getUnconfirmedParticipantsCountForCompetitionByCompetitionId } from "@/lib/db/participant";
 
 import { CompetitionDetails } from "./components/CompetitionDetails";
 import { CompetitionStats } from "./components/CompetitionStats";
@@ -20,7 +20,8 @@ interface CompetitionPageProps {
 
 export default async function CompetitionPage(props: CompetitionPageProps) {
   const params = await props.params;
-  const competition = await getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges(parseInt(params.competitionId));
+  const competition = await getCompetitionByIdWithOrganizerProblemsJudgesAndParticipants(parseInt(params.competitionId));
+  const participants = await getParticipantsInformationByCompetitionId(parseInt(params.competitionId));
 
   if (!competition) {
     notFound();
@@ -36,7 +37,7 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
     return notFound();
   }
   
-  const unconfirmedParticipants = await getUnconfirmedParticipantsCountForOrganizer(competition.organizerId);
+  const unconfirmedParticipants = await getUnconfirmedParticipantsCountForCompetitionByCompetitionId(competition.id);
 
   return (
     <div className="p-4">
@@ -68,7 +69,7 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
 
           <div className="divider"></div>
           
-          <ParticipantsList participants={competition.participants} competitionId={competition.id} />
+          <ParticipantsList participants={participants} competitionId={competition.id} />
         </div>
       </div>
     </div>

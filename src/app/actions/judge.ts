@@ -1,17 +1,13 @@
 'use server';
 
 import { SubmissionResult } from "@conform-to/react";
-import { Competition, User } from "@prisma/client";
+import { Competition, Judge } from "@prisma/client";
 import { revalidatePath } from 'next/cache';
 
-import { ManageJudgeSchema } from '@/app/dashboard/competitions/manage/[competitionId]/judges/schemas/manageJudgesSchema';
-import { getUserFromSession } from '@/lib/auth';
-import { getCompetitionsByJudgeId } from "@/lib/db/competition";
-import { getJudgeByRut, findJudgeByUserIdAndCompetitionId, linkJudgeWithUser, removeJudgeFromCompetitionById, removeJudgeFromProblem } from "@/lib/db/judge";
+import { getCompetitionById, getCompetitionsByJudgeId } from "@/lib/db/competition";
+import { createJudge, getJudgeByEmail, linkJudgeWithCompetition, removeJudgeFromCompetitionById, removeJudgeFromProblem } from "@/lib/db/judge";
 import { getOrganizerNameById } from "@/lib/db/organizer";
-import { updateProblemJudge } from '@/lib/db/problem';
-import { createJudgeUser, findUserByEmailOrRut } from '@/lib/db/user';
-import { normalizeRut } from "@/utils/rut";
+import { linkProblemWithJudge } from "@/lib/db/problem";
 
 type JudgeValidationResult = SubmissionResult & {
   data?: { 
@@ -22,8 +18,8 @@ type JudgeValidationResult = SubmissionResult & {
 };
 
 export async function findJudge(_prevState: unknown, formData: FormData): Promise<JudgeValidationResult> {
-  const rut = normalizeRut(formData.get('rut') as string);
-  const judge = await getJudgeByRut(rut);
+  const email = formData.get('email') as string;
+  const judge = await getJudgeByEmail(email);
 
   if (!judge) {
     return {
@@ -76,26 +72,24 @@ export async function deleteJudge(_prevState: unknown, formData: FormData): Prom
   }
 }
 
-export async function addJudgeToCompetition(_prevState: unknown, formData: FormData): Promise<SubmissionResult> {
+export async function addJudgeToCompetition(_prevState: unknown, formData: FormData, competitionId: number): Promise<SubmissionResult> {
 
   try {
-    const userSession = await getUserFromSession();
-    const parsed = ManageJudgeSchema.parse({
-      competitionId: Number(formData.get('competitionId')),
-      name: formData.get('name'),
-      email: formData.get('email'),
-      rut: formData.get('rut'),
-    });
+    const email = formData.get('email') as string;
 
-    let user: User | null = null;
-
-    user = await findUserByEmailOrRut(parsed.email, parsed.rut);
+    let user: Judge | null = null;
+    user = await getJudgeByEmail(email);
 
     if (!user) {
-      user = await createJudgeUser({
-        name: parsed.name,
-        email: parsed.email,
-        rut: parsed.rut,
+      const competition = await getCompetitionById(competitionId);
+      if (!competition) return { status: 'error', error: { message: ['Competencia no encontrada'] } };
+      user = await createJudge({
+        email,
+        organizer: {
+          connect: {
+            id: competition.organizerId,
+          },
+        },
       });
     }
 
@@ -106,18 +100,9 @@ export async function addJudgeToCompetition(_prevState: unknown, formData: FormD
       };
     }
 
-    const existingJudge = await findJudgeByUserIdAndCompetitionId(user.id, parsed.competitionId);
+    await linkJudgeWithCompetition(competitionId, user.id);
 
-    if (existingJudge) {
-      return {
-        status: 'error',
-        error: { message: ['El juez ya existe'] },
-      };
-    }
-
-    await linkJudgeWithUser(parsed.competitionId, user, userSession.organizerId);
-
-    revalidatePath(`/dashboard/competitions/manage/${parsed.competitionId}/judges`);
+    revalidatePath(`/dashboard/competitions/manage/${competitionId}/judges`);
 
     return {
       status: 'success',
@@ -157,7 +142,7 @@ export async function assignJudgeToProblem(_prevState: unknown, formData: FormDa
       };
     }
 
-    await updateProblemJudge(problemId, judgeId);
+    await linkProblemWithJudge(problemId, judgeId);
 
     revalidatePath('/dashboard/competitions');
     return { status: 'success', action: 'assign' };

@@ -7,7 +7,6 @@ import React, { useActionState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { addJudgeToCompetition } from '@/app/actions/judge';
-import { RutInput } from '@/components/RutInput';
 import FormInput from '@/components/ui/FormInput';
 import SubmitButton from '@/components/ui/SubmitButton';
 
@@ -20,7 +19,7 @@ interface AddJudgeFormProps {
 export default function AddJudgeForm({ competitionId }: AddJudgeFormProps) {
   const router = useRouter();
   
-  const [lastResult, formAction] = useActionState(addJudgeToCompetition, undefined);
+  const [lastResult, formAction] = useActionState((state: unknown, formData: FormData) => addJudgeToCompetition(state, formData, competitionId), undefined);
   const [form, fields] = useForm({
     lastResult,
     onValidate({ formData }) {
@@ -43,28 +42,14 @@ export default function AddJudgeForm({ competitionId }: AddJudgeFormProps) {
         <div className="card-body">
           <h2 className="card-title mb-6 text-2xl">Agregar Juez</h2>
           
-          <form id={form.id} onSubmit={form.onSubmit} action={formAction} className="space-y-4">
-            <input type="hidden" name="competitionId" value={competitionId} />
-            
+          <form id={form.id} onSubmit={form.onSubmit} action={formAction} className="space-y-4">            
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <FormInput
-                label="Nombre"
-                name="name"
-                type="text"
-                required
-                errors={fields.name?.errors}
-              />
-
               <FormInput
                 label="Email"
                 name="email"
                 type="email"
                 required
                 errors={fields.email?.errors}
-              />
-
-              <RutInput
-                errors={fields.rut?.errors}
               />
             </div>
 

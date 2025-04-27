@@ -1,3 +1,5 @@
-import { Participant, User } from "@prisma/client";
+import { Participant, ParticipantCompetition } from "@prisma/client";
 
-export type ParticipantWithUser = Participant & { user: User }; 
+export type ParticipantWithCompetitionInformation = Participant & {
+  competitionsInformation: ParticipantCompetition;
+};

@@ -1,15 +1,15 @@
 'use client';
 
+import { Admin } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'react-hot-toast';
 
 import { deleteAdmin } from '@/app/actions/admin';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import { AdminWithUser } from '@/types/admin';
 
 interface AdminListProps {
-  admins: AdminWithUser[];
+  admins: Admin[];
 }
 
 export default function AdminList({ admins }: AdminListProps) {
@@ -42,7 +42,6 @@ export default function AdminList({ admins }: AdminListProps) {
       <table className="table table-zebra">
         <thead>
           <tr className="bg-base-200">
-            <th>Nombre</th>
             <th>Email</th>
             <th>RUT</th>
             <th>Tipo</th>
@@ -59,9 +58,8 @@ export default function AdminList({ admins }: AdminListProps) {
           ) : (
             admins.map((admin) => (
               <tr key={admin.id}>
-                <td>{admin.user.name}</td>
-                <td>{admin.user.email}</td>
-                <td>{admin.user.rut}</td>
+                <td>{admin.email}</td>
+                <td>{admin.rut}</td>
                 <td>
                   <span className={`badge ${admin.isSuperAdmin ? 'badge-primary' : 'badge-secondary'}`}>
                     {admin.isSuperAdmin ? 'Super Admin' : 'Admin'}

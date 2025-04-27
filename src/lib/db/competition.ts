@@ -2,6 +2,7 @@ import { ClimbingGrade } from "@prisma/client";
 
 import { CompetitionData, RegisterFormSettings } from "@/types/competition";
 
+import { getParticipantsByCompetitionId } from "./participant";
 import prisma from "./prisma";
 
 export async function createNewCompetition(competition: CompetitionData) {
@@ -106,7 +107,7 @@ export async function getCompetitionById(competitionId: number) {
   });
 }
 
-export async function getCompetitionByIdWithOrganizerProblemsParticipantsAndJudges(competitionId: number) {
+export async function getCompetitionByIdWithOrganizerProblemsJudgesAndParticipants(competitionId: number) {
   return await prisma.competition.findUnique({
     where: {
       id: competitionId,
@@ -114,16 +115,8 @@ export async function getCompetitionByIdWithOrganizerProblemsParticipantsAndJudg
     include: {
       organizer: true,
       problems: true,
-      participants: {
-        include: {
-          user: true,
-        },
-      },
-      judges: {
-        include: {
-          user: true,
-        },
-      },
+      judges: true,
+      participants: true,
     },
   });
 }
@@ -155,4 +148,9 @@ export async function addRegisterFormSettingsToCompetitionById(registerFormSetti
       registerFormSettings,
     },
   });
+}
+
+export async function getParticipantsCountForCompetitionByCompetitionId(competitionId: number) {
+  const participants = await getParticipantsByCompetitionId(competitionId);
+  return participants.length;
 }

@@ -1,16 +1,16 @@
 'use client';
 
+import { Judge } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import React, { useActionState, startTransition } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { deleteJudge } from '@/app/actions/judge';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import { JudgeWithUser } from '@/types/judge';
 
 interface ManageJudgesFormProps {
   competitionId: number;
-  judges: JudgeWithUser[];
+  judges: Judge[];
 }
 
 export default function ManageJudges({ competitionId, judges }: ManageJudgesFormProps) {
@@ -64,8 +64,7 @@ export default function ManageJudges({ competitionId, judges }: ManageJudgesForm
             {judges.map((judge) => (
               <div key={judge.id} className="flex items-center justify-between rounded-lg border p-4">
                 <div>
-                  <h3 className="font-semibold">{judge.user.name}</h3>
-                  <p className="text-sm text-gray-600">{judge.user.email}</p>
+                  <h3 className="font-semibold">{judge.email}</h3>
                 </div>
                 <button
                   type="button"

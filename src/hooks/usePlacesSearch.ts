@@ -38,6 +38,8 @@ export function usePlacesSearch() {
             }),
           });
 
+          console.log(response);
+
           if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.error?.message || `Error ${response.status}: ${response.statusText}`);

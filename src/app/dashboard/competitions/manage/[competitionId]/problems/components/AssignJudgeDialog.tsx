@@ -1,13 +1,14 @@
 'use client';
 
+import { Judge } from '@prisma/client';
 import React, { useTransition } from 'react';
 
-import { JudgeWithUser } from '@/types/judge';
+
 import { ProblemWithJudges } from '@/types/problem';
 
 interface AssignJudgeDialogProps {
   selectedProblemId: number | null;
-  judges: JudgeWithUser[];
+  judges: Judge[];
   problems: ProblemWithJudges[];
   onConfirm: (e: React.FormEvent) => void;
 }
@@ -47,7 +48,7 @@ export default function AssignJudgeDialog({
                 <option value="">Seleccione un juez</option>
                 {availableJudges.map((judge) => (
                   <option key={judge.id} value={judge.id}>
-                    {judge.user.name}
+                    {judge.email}
                   </option>
                 ))}
               </select>
