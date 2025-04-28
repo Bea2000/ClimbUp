@@ -4,7 +4,6 @@ import { SubmissionResult } from "@conform-to/react";
 
 import { isJudgeOfParticipant } from "@/lib/db/judge";
 import { findParticipantById } from "@/lib/db/participant";
-import { decodeIdInBloat } from "@/lib/encoder";
 
 type ParticipantSearchResult = SubmissionResult & {
   data?: { id: number };
@@ -14,8 +13,7 @@ export async function searchParticipant(_prevState: unknown, formData: FormData,
   const participantCode = formData.get('participantCode') as string;
   
   try {
-    const participantId = decodeIdInBloat(participantCode);
-    const participant = await findParticipantById(participantId);
+    const participant = await findParticipantWithCompetitionAndProblemsByIdAndCompetitionId(parseInt(participantCode), competitionId);
     
     if (!participant) {
       return {
