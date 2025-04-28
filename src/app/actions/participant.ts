@@ -3,10 +3,12 @@
 import { SubmissionResult } from "@conform-to/react";
 
 import { isJudgeOfParticipant } from "@/lib/db/judge";
-import { findParticipantById } from "@/lib/db/participant";
+import { findParticipantWithCompetitionAndProblemsByIdAndCompetitionId } from "@/lib/db/participant";
+import { assignProblemToParticipant, updateParticipantProblemInformation } from "@/lib/db/problem";
+import { ParticipantWithCompetitionAndProblems } from "@/types/participant";
 
 type ParticipantSearchResult = SubmissionResult & {
-  data?: { id: number };
+  data?: { participant: ParticipantWithCompetitionAndProblems };
 };
 
 export async function searchParticipant(_prevState: unknown, formData: FormData, competitionId: number, judgeId: number): Promise<ParticipantSearchResult> {
@@ -22,7 +24,7 @@ export async function searchParticipant(_prevState: unknown, formData: FormData,
       };
     }
     
-    const isValidJudge = await isJudgeOfParticipant(judgeId, participantId, competitionId);
+    const isValidJudge = await isJudgeOfParticipant(judgeId, participant.id, competitionId);
 
     if (!isValidJudge) {
       return {
@@ -33,7 +35,7 @@ export async function searchParticipant(_prevState: unknown, formData: FormData,
 
     return {
       status: 'success',
-      data: { id: participant.id },
+      data: { participant },
     };
   } catch (error) {
     return {

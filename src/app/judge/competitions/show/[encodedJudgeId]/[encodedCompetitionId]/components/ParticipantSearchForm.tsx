@@ -10,11 +10,18 @@ import { searchParticipant } from '@/app/actions/participant';
 import FormInput from '@/components/ui/FormInput';
 import QrScanner from '@/components/ui/QrScanner';
 import SubmitButton from '@/components/ui/SubmitButton';
-import { encodeIdInBloat } from '@/lib/encoder';
+import { ParticipantWithCompetitionAndProblems } from '@/types/participant';
 
 import { ParticipantSearchSchema } from '../schemas/participantSearchSchema';
 
-export default function ParticipantSearchForm({ competitionId, judgeId }: { competitionId: number, judgeId: number }) {
+interface ParticipantSearchFormProps {
+  competitionId: number;
+  judgeId: number;
+  setParticipants: React.Dispatch<React.SetStateAction<ParticipantWithCompetitionAndProblems[]>>;
+  participants: ParticipantWithCompetitionAndProblems[];
+}
+
+export default function ParticipantSearchForm({ competitionId, judgeId, setParticipants, participants }: ParticipantSearchFormProps) {
   const [showScanner, setShowScanner] = useState(false);
   const [participantCode, setParticipantCode] = useState('');
   const [lastResult, formAction] = useActionState(
@@ -31,15 +38,24 @@ export default function ParticipantSearchForm({ competitionId, judgeId }: { comp
     shouldRevalidate: 'onInput',
   });
 
+  function participantExists(prevParticipants: ParticipantWithCompetitionAndProblems[], participantId: number) {
+    return prevParticipants.some((p) => p.id === participantId);
+  }
+
   useEffect(() => {
-    if (lastResult?.status === 'success' && lastResult.data) {
+    if (lastResult?.status === 'success' && lastResult.data?.participant) {
+      if (participantExists(participants, lastResult.data!.participant.id)) {
+        toast.error('El participante ya está en la cola');
+        return;
+      }
       toast.success('Participante encontrado');
-      router.push(`/judge/competitions/show/${encodeIdInBloat(competitionId)}/${encodeIdInBloat(judgeId)}/participant/${encodeIdInBloat(lastResult.data.id)}`);
+      setParticipants((prevParticipants) => [...prevParticipants, lastResult.data!.participant]);
     } else if (lastResult?.status === 'error') {
       const errorMessage = lastResult.error?.message?.[0] || 'Error al buscar participante';
       toast.error(errorMessage);
     }
-  }, [competitionId, judgeId, lastResult, router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [competitionId, judgeId, lastResult, router, setParticipants]);
 
   function handleQrSuccess(result: string) {
     setParticipantCode(result);
