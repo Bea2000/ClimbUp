@@ -30,6 +30,19 @@ export function formatPrice(price: string) {
 export function isCompetitionDatePassed(competitionDate: Date | string): boolean {
   const currentDate = new Date();
   const dateToCompare = new Date(competitionDate);
-  
+
   return currentDate > dateToCompare;
+}
+
+export function formatDuration(minutes: number) {
+  const hours = Math.floor(minutes / 60)
+  const remainingMinutes = minutes % 60
+    
+  if (hours > 0 && remainingMinutes > 0) {
+    return `${hours}h ${remainingMinutes}min`
+  } else if (hours > 0) {
+    return `${hours} hora${hours > 1 ? 's' : ''}`
+  } 
+  return `${remainingMinutes} minutos`
+    
 }

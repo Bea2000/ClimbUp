@@ -16,7 +16,7 @@ export async function getJudgesByCompetitionId(competitionId: number) {
 
 export async function removeJudgeFromCompetitionById(
   judgeId: number,
-  competitionId: number
+  competitionId: number,
 ) {
   return await prisma.judge.update({
     where: { id: judgeId },
@@ -52,7 +52,7 @@ export async function findJudgeById(judgeId: number) {
 
 export async function linkJudgeWithCompetition(
   competitionId: number,
-  judgeId: number
+  judgeId: number,
 ) {
   return await prisma.judge.update({
     where: { id: judgeId },
@@ -66,7 +66,7 @@ export async function linkJudgeWithCompetition(
 
 export async function removeJudgeFromProblem(
   problemId: number,
-  judgeId: number
+  judgeId: number,
 ) {
   return await prisma.problem.update({
     where: { id: problemId },
@@ -81,7 +81,7 @@ export async function removeJudgeFromProblem(
 export async function isJudgeOfParticipant(
   judgeId: number,
   participantId: number,
-  competitionId: number
+  competitionId: number,
 ) {
   const competition = await prisma.competition.findFirst({
     where: {
@@ -97,7 +97,7 @@ export async function isJudgeOfParticipant(
 }
 
 export async function getJudgeCompetitionByCompetitionId(
-  competitionId: number
+  competitionId: number,
 ) {
   return await prisma.judge.findFirst({
     where: { competitions: { some: { id: competitionId } } },
@@ -117,7 +117,7 @@ export async function getJudgesByOrganizerId(organizerId: number) {
 
 export async function getJudgeCompetitionProblems(
   judgeId: number,
-  competitionId: number
+  competitionId: number,
 ) {
   return await prisma.problem.findMany({
     where: {

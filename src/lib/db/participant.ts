@@ -34,7 +34,7 @@ export async function createNewParticipant(rut: string): Promise<Participant> {
 export async function addParticipantToCompetition(
   competitionId: number,
   fields: Record<string, string>,
-  participantId: number
+  participantId: number,
 ) {
   await prisma.participantCompetition.create({
     data: {
@@ -57,12 +57,12 @@ export async function getParticipantsCountForOrganizer(organizerId: number) {
   });
   return competitions.reduce(
     (acc, competition) => acc + competition.participants.length,
-    0
+    0,
   );
 }
 
 export async function getLastCompetitionParticipantsCountForOrganizer(
-  organizerId: number
+  organizerId: number,
 ) {
   const competitionId = await getLastCompetitionForOrganizer(organizerId);
   if (!competitionId) {
@@ -72,7 +72,7 @@ export async function getLastCompetitionParticipantsCountForOrganizer(
 }
 
 export async function getUnconfirmedParticipantsCountForCompetitionByCompetitionId(
-  competitionId: number
+  competitionId: number,
 ) {
   return await prisma.participantCompetition.count({
     where: {
@@ -95,7 +95,7 @@ export async function getParticipantsByCompetitionId(competitionId: number) {
 }
 
 export async function getParticipantsInformationByCompetitionId(
-  competitionId: number
+  competitionId: number,
 ): Promise<ParticipantWithCompetitionInformation[]> {
   const participants = await prisma.participantCompetition.findMany({
     where: {
@@ -116,7 +116,7 @@ export async function updateParticipantStatuses(
     participantId: number;
     competitionId: number;
     status: ParticipantStatus;
-  }[]
+  }[],
 ) {
   const updatePromises = updates.map((update) =>
     prisma.participantCompetition.updateMany({
@@ -125,7 +125,7 @@ export async function updateParticipantStatuses(
         competitionId: update.competitionId,
       },
       data: { status: update.status },
-    })
+    }),
   );
   await Promise.all(updatePromises);
 }
@@ -142,7 +142,7 @@ export async function findParticipantById(id: number) {
 
 export async function getParticipantCompetitionByRutAndCompetitionId(
   rut: string,
-  competitionId: number
+  competitionId: number,
 ) {
   return await prisma.participantCompetition.findFirst({
     where: {
@@ -154,7 +154,7 @@ export async function getParticipantCompetitionByRutAndCompetitionId(
 
 export async function findParticipantWithCompetitionAndProblemsByIdAndCompetitionId(
   id: number,
-  competitionId: number
+  competitionId: number,
 ): Promise<ParticipantWithCompetitionAndProblems | null> {
   const participant = await prisma.participant.findUnique({
     where: {
@@ -187,7 +187,7 @@ export async function findParticipantWithCompetitionAndProblemsByIdAndCompetitio
 
 export async function getParticipantCompetitionByParticipantIdAndCompetitionId(
   participantId: number,
-  competitionId: number
+  competitionId: number,
 ) {
   return await prisma.participantCompetition.findFirst({
     where: {
