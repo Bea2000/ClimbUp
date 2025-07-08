@@ -5,7 +5,7 @@ import { Competition, Judge } from "@prisma/client";
 import { revalidatePath } from 'next/cache';
 
 import { getCompetitionById, getCompetitionsByJudgeId } from "@/lib/db/competition";
-import { createJudge, getJudgeByEmail, linkJudgeWithCompetition, removeJudgeFromCompetitionById, removeJudgeFromProblem } from "@/lib/db/judge";
+import { createJudge, getJudgeByEmail, getJudgeCompetitionByCompetitionId, linkJudgeWithCompetition, removeJudgeFromCompetitionById, removeJudgeFromProblem } from "@/lib/db/judge";
 import { getOrganizerNameById } from "@/lib/db/organizer";
 import { linkProblemWithJudge } from "@/lib/db/problem";
 
@@ -74,6 +74,13 @@ export async function addJudgeToCompetition(_prevState: unknown, formData: FormD
 
     let user: Judge | null = null;
     user = await getJudgeByEmail(email);
+
+    if (user) {
+      const competition = await getJudgeCompetitionByCompetitionId(competitionId);
+      if (competition) {
+        return { status: 'error', error: { message: ['El juez ya está asignado a esta competencia'] } };
+      }
+    }
 
     if (!user) {
       const competition = await getCompetitionById(competitionId);
