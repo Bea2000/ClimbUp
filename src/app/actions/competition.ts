@@ -7,9 +7,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { REVERSE_GRADE_TYPES } from "@/lib/constant/problem.conf";
 import { addRegisterFormSettingsToCompetitionById, createNewCompetition, getCompetitionById } from "@/lib/db/competition";
+import { createNewParticipant, addParticipantToCompetition, getParticipantCompetitionByRutAndCompetitionId } from "@/lib/db/participant";
 import { uploadBases, uploadPaymentFile } from "@/lib/s3";
 import { unformatCurrency } from "@/lib/utils";
 import { RegisterFormField, RegisterFormSettings } from "@/types/competition";
+import { normalizeRut } from "@/utils/rut";
 
 type CreateCompetitionResult = SubmissionResult | { status: 'success', competitionId: number };
 
@@ -64,7 +66,6 @@ export async function createCompetitionRegisterForm(_prevState: unknown, formDat
   const competitionBases = formData.get('competitionBases') as File;
   const isPaymentToggleChecked = formData.get('isPaymentToggleChecked') as string;
   const registerFields = JSON.parse(formData.get('registerFields') as string) as RegisterFormField[];
-  const participantIdentifier = formData.get('participantIdentifier') as string;
 
   type PaymentFormData = {
     paymentRequired: boolean;
@@ -106,7 +107,6 @@ export async function createCompetitionRegisterForm(_prevState: unknown, formDat
     ...paymentFormData,
     competitionBasesFileUrl,
     fields: registerFields,
-    participantIdentifier,
   };
 
   try {
@@ -135,7 +135,7 @@ export async function updateCompetitionRegisterForm(_prevState: unknown, formDat
   const competitionBases = formData.get('competitionBases') as File;
   const isPaymentToggleChecked = formData.get('isPaymentToggleChecked') as string;
   const registerFields = JSON.parse(formData.get('registerFields') as string) as RegisterFormField[];
-  const participantIdentifier = formData.get('participantIdentifier') as string;
+
   type PaymentFormData = {
     paymentRequired: boolean;
     paymentUrl?: string;
@@ -195,7 +195,6 @@ export async function updateCompetitionRegisterForm(_prevState: unknown, formDat
     ...paymentFormData,
     competitionBasesFileUrl,
     fields: registerFields,
-    participantIdentifier,
   };
 
   try {
@@ -203,5 +202,56 @@ export async function updateCompetitionRegisterForm(_prevState: unknown, formDat
     return { status: 'success' };
   } catch {
     return { status: 'error', error: { message: ['Error al crear el formulario de registro'] } };
+  }
+}
+
+export async function registerToCompetition(_prevState: unknown, formData: FormData, competitionId: number): Promise<SubmissionResult> {
+  try {
+    const competition = await getCompetitionById(competitionId);
+    const paymentFile = formData.get('paymentFile') as File;
+    let paymentFileUrl : string = '';
+    const rut = formData.get('rut') as string;
+    
+    if (paymentFile && paymentFile.size > 0) {
+      const fileBuffer = await paymentFile.arrayBuffer();
+      paymentFileUrl = await uploadPaymentFile(Buffer.from(fileBuffer), paymentFile.name, paymentFile.type, competitionId);
+    }
+    
+    if (!competition || !competition.registerFormSettings) {
+      return { 
+        status: 'error', 
+        error: { message: ['Competencia no encontrada o no cuenta con un formulario de registro'] }, 
+      };
+    }
+    
+    const registerFormSettings = competition.registerFormSettings as RegisterFormSettings;
+
+    const fields = registerFormSettings.fields.reduce((acc, field, index) => {
+      const value = formData.get(`field_${index}`);
+      return {
+        ...acc,
+        [field.name]: value,
+      };
+    }, {});
+
+    const participantInformation = {
+      ...fields,
+      paymentFile: paymentFileUrl,
+    };
+
+    const participant = await createNewParticipant(normalizeRut(rut));
+
+    const participantIsRegistered = await getParticipantCompetitionByRutAndCompetitionId(normalizeRut(rut), competitionId);
+
+    if (participantIsRegistered) {
+      return { status: 'error', error: { message: ['Ya estás registrado en esta competencia'] } };
+    }
+
+    await addParticipantToCompetition(competitionId, participantInformation, participant.id);
+
+    return { status: 'success' };
+
+  } catch {
+    return { status: 'error', error: { message: ['Error al registrar participante'] } };
   }
 }

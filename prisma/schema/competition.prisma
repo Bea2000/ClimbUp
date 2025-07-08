@@ -1,20 +1,20 @@
 model Competition {
-  id                   Int               @id @default(autoincrement())
-  code                 String
-  name                 String
-  location             String
-  date                 DateTime
-  organizerId          Int
-  organizer            Organizer         @relation(fields: [organizerId], references: [id])
-  duration             Int // in minutes
-  startTime            DateTime?
-  problems             Problem[]         @relation("CompetitionProblems")
-  participants         ParticipantCompetition[] @relation("ParticipantCompetitions")
-  judges               Judge[]           @relation("JudgeCompetitions")
-  basesPath            String?
-  levelType            ClimbingGrade
-  registerFormSettings Json?
-  status               CompetitionStatus @default(NOT_STARTED)
+  id                    Int                      @id @default(autoincrement())
+  code                  String
+  name                  String
+  location              String
+  date                  DateTime
+  organizerId           Int
+  organizer             Organizer                @relation(fields: [organizerId], references: [id])
+  duration              Int // in minutes
+  startTime             DateTime?
+  problems              Problem[]                @relation("CompetitionProblems")
+  participants          ParticipantCompetition[] @relation("ParticipantCompetitions")
+  judges                Judge[]                  @relation("JudgeCompetitions")
+  basesPath             String?
+  levelType             ClimbingGrade
+  registerFormSettings  Json?
+  status                CompetitionStatus        @default(NOT_STARTED)
 }
 
 model Problem {
@@ -26,15 +26,15 @@ model Problem {
   discountPerAttempt Int
   competitionId      Int
   competition        Competition          @relation("CompetitionProblems", fields: [competitionId], references: [id])
-  participants       ParticipantProblem[] 
+  participants       ParticipantProblem[]
   judges             Judge[]              @relation("JudgeProblems")
 }
 
 model Judge {
-  id            Int           @id @default(autoincrement())
-  email         String        @unique
-  competitions  Competition[] @relation("JudgeCompetitions")
-  problems      Problem[]     @relation("JudgeProblems")
-  organizerId   Int
-  organizer     Organizer    @relation("OrganizerJudges", fields: [organizerId], references: [id])
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  competitions Competition[] @relation("JudgeCompetitions")
+  problems     Problem[]     @relation("JudgeProblems")
+  organizerId  Int
+  organizer    Organizer     @relation("OrganizerJudges", fields: [organizerId], references: [id])
 }

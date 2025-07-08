@@ -1,31 +1,32 @@
 model ParticipantCompetition {
-  id              Int         @id @default(autoincrement())
+  id              Int                  @id @default(autoincrement())
   participantId   Int
-  participant     Participant @relation(fields: [participantId], references: [id])
+  participant     Participant          @relation(fields: [participantId], references: [id])
   competitionId   Int
-  competition     Competition @relation("ParticipantCompetitions", fields: [competitionId], references: [id])
+  competition     Competition          @relation("ParticipantCompetitions", fields: [competitionId], references: [id])
   finalScore      Int?
   category        String?
   userInformation Json?
-  status          ParticipantStatus @default(PENDING)
+  status          ParticipantStatus    @default(PENDING)
   problems        ParticipantProblem[] @relation("ParticipantCompetitionsInformation")
 }
 
 model ParticipantProblem {
-  id                    Int                   @id @default(autoincrement())
-  problemId            Int
-  problem              Problem               @relation(fields: [problemId], references: [id])
-  participantId        Int
-  participant          Participant           @relation(fields: [participantId], references: [id])
+  id                       Int                    @id @default(autoincrement())
+  problemId                Int
+  problem                  Problem                @relation(fields: [problemId], references: [id])
+  participantId            Int
+  participant              Participant            @relation(fields: [participantId], references: [id])
   participantCompetitionId Int
-  participantCompetition ParticipantCompetition @relation("ParticipantCompetitionsInformation", fields: [participantCompetitionId], references: [id])
-  attempts             Int                   @default(0)
-  completed            Boolean               @default(false)
-  points               Int?
+  participantCompetition   ParticipantCompetition @relation("ParticipantCompetitionsInformation", fields: [participantCompetitionId], references: [id])
+  attempts                 Int                    @default(0)
+  completed                Boolean                @default(false)
+  points                   Int?
 }
 
 model Participant {
-  id            Int                    @id @default(autoincrement())
-  competitions  ParticipantCompetition[]
-  problems      ParticipantProblem[]
+  id           Int                      @id @default(autoincrement())
+  rut          String                   @unique
+  competitions ParticipantCompetition[]
+  problems     ParticipantProblem[]
 }

@@ -17,7 +17,7 @@ import FormInput from "@/components/ui/FormInput";
 import { FormSelect } from "@/components/ui/FormSelect";
 import SubmitButton from "@/components/ui/SubmitButton";
 import Toogle from "@/components/ui/Toogle";
-import { fieldTypeOptions, participantIdentifierOptions } from "@/lib/constant/competition.conf";
+import { fieldTypeOptions } from "@/lib/constant/competition.conf";
 
 import { createCompetitionRegisterFormSchema } from "../../schemas/CompetitionRegisterFormSchema";
 
@@ -38,7 +38,6 @@ export default function CreateCompetitionRegisterForm({ competition }: CreateCom
   const [currentFieldName, setCurrentFieldName] = useState<string>('');
   const [currentFieldType, setCurrentFieldType] = useState<string>('');
   const [price, setPrice] = useState<string>('');
-  const [participantIdentifier, setParticipantIdentifier] = useState<string>('');
 
   const [form, fields] = useForm({
     lastResult,
@@ -156,6 +155,7 @@ export default function CreateCompetitionRegisterForm({ competition }: CreateCom
           />
 
           <p className="text-lg text-gray-500">Datos del participante</p>
+          <p className="text-sm text-gray-500"> * Climbup pide el RUT del participante para poder registrarlos en la competencia.</p>
 
           <input
             type="hidden"
@@ -184,16 +184,6 @@ export default function CreateCompetitionRegisterForm({ competition }: CreateCom
               </button>
             </div>
           ))}
-          <FormSelect
-            label="Identificador del participante"
-            name={fields.participantIdentifier.name}
-            options={participantIdentifierOptions}
-            placeholder="Selecciona un identificador del participante"
-            required={false}
-            errors={fields.participantIdentifier.errors}
-            value={participantIdentifier}
-            onChange={(value) => setParticipantIdentifier(value)}
-          />
           <div className="flex flex-row items-end gap-4">
             <FormInput
               label="Nombre del campo"
@@ -206,7 +196,7 @@ export default function CreateCompetitionRegisterForm({ competition }: CreateCom
             <FormSelect
               label="Tipo de campo"
               name="currentFieldType"
-              options={fieldTypeOptions.filter((type) => type !== participantIdentifier)}
+              options={fieldTypeOptions}
               placeholder="Selecciona un tipo de campo"
               required={false}
               errors={undefined}

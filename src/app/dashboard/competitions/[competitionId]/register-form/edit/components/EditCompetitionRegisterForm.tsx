@@ -17,7 +17,7 @@ import FormInput from "@/components/ui/FormInput";
 import { FormSelect } from "@/components/ui/FormSelect";
 import SubmitButton from "@/components/ui/SubmitButton";
 import Toogle from "@/components/ui/Toogle";
-import { fieldTypeOptions, participantIdentifierOptions } from "@/lib/constant/competition.conf";
+import { fieldTypeOptions } from "@/lib/constant/competition.conf";
 import { RegisterFormSettings } from "@/types/competition";
 
 import { editCompetitionRegisterFormSchema } from "../../schemas/CompetitionRegisterFormSchema";
@@ -36,7 +36,6 @@ export default function EditCompetitionRegisterForm({ competition, basesUrl, pay
   const [price, setPrice] = useState<string>(registerFormSettings?.price ? registerFormSettings?.price : '');
   const [isPaymentToggleChecked, setIsPaymentToggleChecked] = useState<boolean>(registerFormSettings?.paymentType === 'file');
   const [paymentLink, setPaymentLink] = useState<string>(registerFormSettings?.paymentType === 'url' ? registerFormSettings?.paymentUrl ?? '' : '');
-  const [participantIdentifier, setParticipantIdentifier] = useState<string>(registerFormSettings?.participantIdentifier ?? '');
   const [lastResult, formAction] = useActionState(
     async (state: unknown, formData: FormData) => updateCompetitionRegisterForm(state, formData, competition.id),
     undefined,
@@ -204,16 +203,6 @@ export default function EditCompetitionRegisterForm({ competition, basesUrl, pay
               </button>
             </div>
           ))}
-          <FormSelect
-            label="Identificador del participante"
-            name={fields.participantIdentifier.name}
-            options={participantIdentifierOptions}
-            placeholder="Selecciona un identificador del participante"
-            required={false}
-            errors={fields.participantIdentifier.errors}
-            value={participantIdentifier}
-            onChange={(value) => setParticipantIdentifier(value)}
-          />
           <div className="flex flex-row items-end gap-4">
             <FormInput
               label="Nombre del campo"
@@ -226,7 +215,7 @@ export default function EditCompetitionRegisterForm({ competition, basesUrl, pay
             <FormSelect
               label="Tipo de campo"
               name="currentFieldType"
-              options={fieldTypeOptions.filter((type) => type !== participantIdentifier)}
+              options={fieldTypeOptions}
               placeholder="Selecciona un tipo de campo"
               required={false}
               errors={undefined}
