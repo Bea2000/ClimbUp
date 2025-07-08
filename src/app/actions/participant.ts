@@ -2,7 +2,7 @@
 
 import { SubmissionResult } from "@conform-to/react";
 
-import { isJudgeOfParticipant } from "@/lib/db/judge";
+import { isJudgeOfParticipant, getJudgeCompetitionProblems } from "@/lib/db/judge";
 import { findParticipantWithCompetitionAndProblemsByIdAndCompetitionId } from "@/lib/db/participant";
 import { assignProblemToParticipant, updateParticipantProblemInformation } from "@/lib/db/problem";
 import { ParticipantWithCompetitionAndProblems } from "@/types/participant";
@@ -30,6 +30,22 @@ export async function searchParticipant(_prevState: unknown, formData: FormData,
       return {
         status: 'error',
         error: { message: ['No tienes permisos para ver este participante'] },
+      };
+    }
+
+    const judgeProblems = await getJudgeCompetitionProblems(judgeId, competitionId);
+    
+    const availableProblems = judgeProblems.filter((problem) => 
+      !participant.competition.problems.find((prob) => 
+        (prob.problemId === problem.id && prob.completed) || 
+        (prob.problemId === problem.id && prob.attempts >= problem.attempts),
+      ),
+    );
+
+    if (availableProblems.length === 0) {
+      return {
+        status: 'error',
+        error: { message: ['No hay problemas disponibles para este participante que puedas revisar'] },
       };
     }
 
