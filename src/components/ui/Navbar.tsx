@@ -48,7 +48,7 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
         </button>
       </div>
       <div className="flex-none gap-2">
-        <button onClick={() => signOut()} className="btn btn-ghost">
+        <button onClick={() => signOut({ callbackUrl: '/' })} className="btn btn-ghost">
           <SignOut size={24} color="#a3aab8" />
           Cerrar Sesión
         </button>
