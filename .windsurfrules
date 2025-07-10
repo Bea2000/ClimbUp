@@ -27,6 +27,9 @@
 - Usar @phosphor-icons/react para iconos.
 - Usar el componente Image de Next.js para optimización de imágenes.
 
+## Gestor de Paquetes
+- Se usa yarn como gestor de paquetes
+
 ## Autenticación & Autorización
 - Usar NextAuth para autenticación.
 - Implementar roles de usuario (Admin, SuperAdmin).
