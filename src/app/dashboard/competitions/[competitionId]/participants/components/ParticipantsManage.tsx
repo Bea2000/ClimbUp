@@ -49,30 +49,30 @@ export default function ParticipantsManage({
     if (id === 'all') {
       setSelectedParticipants(
         selectedParticipants.map((participant) =>
-          participant.competitionsInformation.status === currentStatus
+          (participant.competitionsInformation.status === currentStatus
             ? {
-                ...participant,
-                competitionsInformation: {
-                  ...participant.competitionsInformation,
-                  status,
-                },
-              }
-            : participant,
+              ...participant,
+              competitionsInformation: {
+                ...participant.competitionsInformation,
+                status,
+              },
+            }
+            : participant),
         ),
       )
     } else {
       setSelectedParticipants(
         selectedParticipants.map((participant) =>
-          participant.id === id &&
+          (participant.id === id &&
           participant.competitionsInformation.status === currentStatus
             ? {
-                ...participant,
-                competitionsInformation: {
-                  ...participant.competitionsInformation,
-                  status,
-                },
-              }
-            : participant,
+              ...participant,
+              competitionsInformation: {
+                ...participant.competitionsInformation,
+                status,
+              },
+            }
+            : participant),
         ),
       )
     }
