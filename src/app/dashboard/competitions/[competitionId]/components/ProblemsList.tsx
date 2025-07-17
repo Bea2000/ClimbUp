@@ -3,14 +3,15 @@
 import { NotePencil } from "@phosphor-icons/react";
 import { Problem } from "@prisma/client";
 
+import { Collapse } from "@/components/ui/Collapse";
+
 interface ProblemsListProps {
   problems: Problem[];
 }
 
 export function ProblemsList({ problems }: ProblemsListProps) {
   return (
-    <div>
-      <h2 className="mb-4 text-xl font-bold">Problemas</h2>
+    <Collapse title="Problemas">
       <div className="overflow-x-auto">
         <table className="table table-zebra w-full">
           <thead>
@@ -44,6 +45,6 @@ export function ProblemsList({ problems }: ProblemsListProps) {
           </tbody>
         </table>
       </div>
-    </div>
+    </Collapse>
   );
 }
