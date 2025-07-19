@@ -5,7 +5,6 @@ import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import _import from "eslint-plugin-import";
 import jsxA11Y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
-import tailwindcss from "eslint-plugin-tailwindcss";
 import globals from "globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -28,7 +27,7 @@ export default [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:jsx-a11y/recommended",
-    "plugin:tailwindcss/recommended",
+
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
@@ -38,7 +37,7 @@ export default [
       import: fixupPluginRules(_import),
       react: fixupPluginRules(react),
       "@typescript-eslint": fixupPluginRules(typescriptEslint),
-      tailwindcss: fixupPluginRules(tailwindcss),
+
       "jsx-a11y": fixupPluginRules(jsxA11Y),
     },
 
@@ -300,16 +299,7 @@ export default [
       "@typescript-eslint/no-unused-vars": ["error"],
       "no-use-before-define": 2,
 
-      "tailwindcss/no-custom-classname": ["warn", {
-        cssFiles: [
-          "**/*.css",
-          "!**/node_modules",
-          "!**/.*",
-          "!**/dist",
-          "!**/build",
-          "!**/vendor",
-        ],
-      }],
+
 
       "space-infix-ops": ["error", { "int32Hint": false }],
       "operator-assignment": ["error", "always"],
