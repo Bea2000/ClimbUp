@@ -3,6 +3,7 @@
 import { ParticipantStatus } from "@prisma/client";
 import Link from "next/link";
 
+import { Collapse } from "@/components/ui/Collapse";
 import { ParticipantWithCompetitionInformation } from "@/types/participant";
 
 interface ConfirmedParticipantsListProps {
@@ -13,13 +14,12 @@ interface ConfirmedParticipantsListProps {
 export function ConfirmedParticipantsList({ participants, competitionId }: ConfirmedParticipantsListProps) {
   const confirmedParticipants = participants.filter(participant => participant.competitionsInformation.status === ParticipantStatus.CONFIRMED);
   return (
-    <div>
-      <div className="flex justify-between">
-        <h2 className="mb-4 text-xl font-bold">Participantes</h2>
-        <Link href={`/dashboard/competitions/${competitionId}/participants`} className="btn btn-primary mb-4">Gestionar participantes</Link>
+    <Collapse title="Participantes">
+      <div className="mb-4 flex justify-end">
+        <Link href={`/dashboard/competitions/${competitionId}/participants`} className="btn btn-primary">Gestionar participantes</Link>
       </div>
       <div className="overflow-x-auto">
-        <table className="table table-zebra">
+        <table className="table table-zebra w-full">
           <thead>
             <tr>
               <th>Identificación</th>
@@ -38,6 +38,6 @@ export function ConfirmedParticipantsList({ participants, competitionId }: Confi
           </tbody>
         </table>
       </div>
-    </div>
+    </Collapse>
   );
 }
