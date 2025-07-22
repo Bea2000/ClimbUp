@@ -1,4 +1,5 @@
 import { Competition } from "@prisma/client";
+import { format } from 'date-fns';
 import Link from "next/link";
 
 import { Collapse } from "@/components/ui/Collapse";
@@ -23,7 +24,7 @@ export default function RecentCompetitions({ competitions }: { competitions: Com
               {competitions.map((competition) => (
                 <tr key={competition.id}>
                   <td>{competition.name}</td>
-                  <td>{new Date(competition.date).toLocaleDateString()}</td>
+                  <td>{format(new Date(competition.date), 'dd/MM/yyyy, HH:mm')}</td>
                   <td>{competition.location}</td>
                   <td><StatusBadge status={competition.status} /></td>
                   <td>
