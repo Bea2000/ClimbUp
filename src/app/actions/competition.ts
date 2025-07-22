@@ -29,6 +29,8 @@ export async function createCompetition(_prevState: unknown, formData: FormData)
   const code = formData.get('code') as string;
   const organizerId = session?.user.organizerId;
   const levelType = formData.get('levelType') as string;
+  const categoriesData = formData.get('categories');
+  const categories = categoriesData ? JSON.parse(categoriesData as string) as string[] : [];
 
   const levelTypeEnum = REVERSE_GRADE_TYPES[levelType as keyof typeof REVERSE_GRADE_TYPES] as ClimbingGrade;
 
@@ -40,6 +42,7 @@ export async function createCompetition(_prevState: unknown, formData: FormData)
     code, 
     organizerId, 
     levelType: levelTypeEnum,
+    categories,
   };
   
   try {

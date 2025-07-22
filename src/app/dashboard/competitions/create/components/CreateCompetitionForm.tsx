@@ -2,9 +2,10 @@
 
 import { useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
+import { Trash } from "@phosphor-icons/react";
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useActionState } from 'react';
+import React, { useActionState, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { createCompetition } from '@/app/actions/competition';
@@ -22,6 +23,8 @@ import { CreateCompetitionSchema } from '../schemas/createCompetitionSchema';
 export default function CreateCompetitionForm() {
   const router = useRouter();
   const [code, setCode] = React.useState('');
+  const [categories, setCategories] = useState<string[]>([]);
+  const [currentCategory, setCurrentCategory] = useState<string>('');
   const [lastResult, formAction] = useActionState(createCompetition, undefined);
   const [form, fields] = useForm({
     lastResult,
@@ -76,6 +79,24 @@ export default function CreateCompetitionForm() {
     setLocationInput(address);
     fields.location.value = address;
     setShowSuggestions(false);
+  }
+
+  function handleAddCategory() {
+    if (currentCategory) {
+      setCategories([...categories, currentCategory]);
+      setCurrentCategory('');
+    }
+  }
+
+  function handleCategoryKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter' && currentCategory) {
+      e.preventDefault();
+      handleAddCategory();
+    }
+  }
+
+  function handleDeleteCategory(index: number) {
+    setCategories(categories.filter((_, i) => i !== index));
   }
 
   return (
@@ -153,6 +174,52 @@ export default function CreateCompetitionForm() {
               onChange={(e) => setCode(e.target.value)}
               extraElement={generateCodeButton}
             />
+
+            <input
+              type="hidden"
+              name="categories"
+              value={JSON.stringify(categories)}
+            />
+
+            <div className="space-y-2">
+              <p className="text-lg font-medium text-gray-700">Categorías</p>
+              
+              {categories.length > 0 && categories.map((category, index) => (
+                <div key={`category-${index}`} className="flex flex-row items-center gap-2">
+                  <p className="flex-none">- {category}</p>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm text-error"
+                    onClick={() => handleDeleteCategory(index)}
+                  >
+                    <Trash className="size-5" />
+                  </button>
+                </div>
+              ))}
+              
+              <div className="flex flex-row items-end gap-4">
+                <div className="flex-1">
+                  <FormInput
+                    label="Nombre de Categoría"
+                    name="currentCategory"
+                    type="text"
+                    placeholder="Ej: Avanzados Masculino"
+                    value={currentCategory}
+                    onChange={(e) => setCurrentCategory(e.target.value)}
+                    onKeyDown={handleCategoryKeyDown}
+                  />
+                </div>
+                
+                <button 
+                  className="btn btn-primary" 
+                  type="button"
+                  onClick={handleAddCategory}
+                  disabled={!currentCategory}
+                >
+                  Agregar categoría
+                </button>
+              </div>
+            </div>
 
             <SubmitButton
               label="Crear Competencia"

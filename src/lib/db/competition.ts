@@ -6,7 +6,7 @@ import { getParticipantsByCompetitionId } from "./participant";
 import prisma from "./prisma";
 
 export async function createNewCompetition(competition: CompetitionData) {
-  const { name, location, date, duration, code, organizerId, levelType } = competition;
+  const { name, location, date, duration, code, organizerId, levelType, categories } = competition;
   const newCompetition = await prisma.competition.create({
     data: {
       name,
@@ -15,6 +15,7 @@ export async function createNewCompetition(competition: CompetitionData) {
       duration,
       code,
       levelType,
+      ...(categories && categories.length > 0 ? { categories } : {}),
       organizer: {
         connect: {
           id: organizerId,
@@ -22,6 +23,7 @@ export async function createNewCompetition(competition: CompetitionData) {
       },
     },
   });
+  
   return newCompetition;
 }
 

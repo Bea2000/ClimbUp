@@ -21,6 +21,18 @@ export function CompetitionDetails( { competition }: CompetitionDetailsProps ) {
           <p><span className="font-bold">Duración:</span> {competition.duration} minutos</p>
           <p><span className="font-bold">Organizador:</span> {competition.organizer.name}</p>
           <p><span className="font-bold">Estado:</span> <StatusBadge status={competition.status} /></p>
+          <div className="flex flex-col gap-2">
+            <span className="font-bold">Categorías:</span>
+            <div className="flex flex-wrap gap-2">
+              {Array.isArray(competition.categories) && competition.categories.length > 0 ? (
+                competition.categories.map((category, index) => (
+                  <span key={index} className="badge badge-primary">{String(category)}</span>
+                ))
+              ) : (
+                <span className="text-sm text-gray-500">No hay categorías definidas</span>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ export type CompetitionData = {
     code: string;
     organizerId: number;
     levelType: ClimbingGrade;
+    categories?: string[];
 }
 
 export type CompetitionWithOrganizer = Competition & { organizer: Organizer }; 

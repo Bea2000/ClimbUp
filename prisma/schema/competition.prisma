@@ -14,6 +14,7 @@ model Competition {
   basesPath             String?
   levelType             ClimbingGrade
   registerFormSettings  Json?
+  categories            Json?
   status                CompetitionStatus        @default(NOT_STARTED)
 }
 
