@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
 import { REVERSE_GRADE_TYPES } from "@/lib/constant/problem.conf";
-import { addRegisterFormSettingsToCompetitionById, createNewCompetition, getCompetitionById } from "@/lib/db/competition";
+import { addRegisterFormSettingsToCompetitionById, createNewCompetition, getCompetitionById, updateCompetitionAcceptsRegistrations } from "@/lib/db/competition";
 import { createNewParticipant, addParticipantToCompetition, getParticipantCompetitionByRutAndCompetitionId } from "@/lib/db/participant";
 import { uploadBases, uploadPaymentFile } from "@/lib/s3";
 import { unformatCurrency } from "@/lib/utils";
@@ -117,6 +117,21 @@ export async function createCompetitionRegisterForm(_prevState: unknown, formDat
     return { status: 'success' };
   } catch {
     return { status: 'error', error: { message: ['Error al crear el formulario de registro'] } };
+  }
+}
+
+export async function updateCompetitionRegistrationStatus(competitionId: number, acceptsRegistrations: boolean) {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return { status: 'error', error: { message: ['No se ha iniciado sesión'] } };
+  }
+  
+  try {
+    await updateCompetitionAcceptsRegistrations(competitionId, acceptsRegistrations);
+    return { status: 'success' };
+  } catch {
+    return { status: 'error', error: { message: ['Error al actualizar el estado de inscripciones de la competencia'] } };
   }
 }
 

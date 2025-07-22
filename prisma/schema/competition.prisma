@@ -16,6 +16,7 @@ model Competition {
   registerFormSettings  Json?
   categories            Json?
   status                CompetitionStatus        @default(NOT_STARTED)
+  acceptsRegistrations  Boolean                  @default(true)
 }
 
 model Problem {

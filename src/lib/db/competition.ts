@@ -156,3 +156,14 @@ export async function getParticipantsCountForCompetitionByCompetitionId(competit
   const participants = await getParticipantsByCompetitionId(competitionId);
   return participants.length;
 }
+
+export async function updateCompetitionAcceptsRegistrations(competitionId: number, acceptsRegistrations: boolean) {
+  return await prisma.competition.update({
+    where: {
+      id: competitionId,
+    },
+    data: {
+      acceptsRegistrations,
+    },
+  });
+}
