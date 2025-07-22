@@ -19,7 +19,7 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
 
   return (
     <div className="navbar bg-base-200">
-      <div className="flex-1">
+      <div className="flex-1 flex">
         <div className="dropdown">
           <button 
             onClick={() => setIsOpen(!isOpen)} 

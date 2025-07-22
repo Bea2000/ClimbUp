@@ -19,8 +19,8 @@
 
 ## Estilo & UI
 - Usar Tailwind CSS para estilos.
-- Usar DaisyUI (v4.12.22) para componentes de UI.
-- Usar clases de Tailwind con convenciones de DaisyUI (ej. `btn`, `btn-ghost`).
+- Usar DaisyUI (v5.0.46) para componentes de UI.
+- Usar clases de Tailwind (4.1.11) con convenciones de DaisyUI (ej. `btn`, `btn-ghost`).
 - Interfaz en español para todos los textos visibles al usuario.
 
 ## Iconos & Imágenes
