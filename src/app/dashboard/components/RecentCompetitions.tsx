@@ -2,6 +2,7 @@ import { Competition } from "@prisma/client";
 import Link from "next/link";
 
 import { Collapse } from "@/components/ui/Collapse";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 
 export default function RecentCompetitions({ competitions }: { competitions: Competition[] }) {
   return (
@@ -14,18 +15,20 @@ export default function RecentCompetitions({ competitions }: { competitions: Com
                 <th>Nombre</th>
                 <th>Fecha</th>
                 <th>Ubicación</th>
+                <th>Estado</th>
                 <th>Acción</th>
               </tr>
             </thead>
             <tbody>
-              {competitions.map((comp) => (
-                <tr key={comp.id}>
-                  <td>{comp.name}</td>
-                  <td>{new Date(comp.date).toLocaleDateString()}</td>
-                  <td>{comp.location}</td>
+              {competitions.map((competition) => (
+                <tr key={competition.id}>
+                  <td>{competition.name}</td>
+                  <td>{new Date(competition.date).toLocaleDateString()}</td>
+                  <td>{competition.location}</td>
+                  <td><StatusBadge status={competition.status} /></td>
                   <td>
                     <Link 
-                      href={`dashboard/competitions/${comp.id}`}
+                      href={`dashboard/competitions/${competition.id}`}
                       className="btn btn-primary btn-sm"
                     >
                       Ver competencia
