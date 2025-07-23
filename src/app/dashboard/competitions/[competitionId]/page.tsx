@@ -59,6 +59,7 @@ export default async function CompetitionPage(props: CompetitionPageProps) {
             <div className="flex gap-2">
               <Link href={getRedirectToRegisterForm()} className="btn btn-primary">{competition.registerFormSettings ? 'Editar formulario de registro' : 'Crear formulario de registro'}</Link>
               <Link href={`/dashboard/competitions/${competition.id}/edit`} className="btn btn-primary">Editar</Link>
+              <Link href={`/dashboard/competitions/manage/${competition.id}/judges`} className="btn btn-secondary">Gestionar Jueces</Link>
             </div>
           </div>
           
