@@ -2,16 +2,23 @@
 
 import { NotePencil } from "@phosphor-icons/react";
 import { Problem } from "@prisma/client";
+import Link from "next/link";
 
 import { Collapse } from "@/components/ui/Collapse";
 
 interface ProblemsListProps {
   problems: Problem[];
+  competitionId?: number;
 }
 
-export function ProblemsList({ problems }: ProblemsListProps) {
+export function ProblemsList({ problems, competitionId }: ProblemsListProps) {
   return (
     <Collapse title="Problemas">
+      {competitionId && (
+        <div className="mb-4 flex justify-end">
+          <Link href={`/dashboard/competitions/manage/${competitionId}/problems`} className="btn btn-primary">Gestionar problemas</Link>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="table table-zebra w-full">
           <thead>
