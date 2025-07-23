@@ -88,3 +88,14 @@ export async function getJudgeCompetitionByCompetitionId(competitionId: number) 
     where: { competitions: { some: { id: competitionId } } },
   });
 }
+
+export async function getJudgesByOrganizerId(organizerId: number) {
+  return await prisma.judge.findMany({
+    where: {
+      organizerId,
+    },
+    orderBy: {
+      id: "asc",
+    },
+  });
+}

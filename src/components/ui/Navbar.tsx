@@ -31,11 +31,12 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
           </button>
           {isOpen && (
             <ul className="menu dropdown-content z-50 mt-3 w-64 rounded-box bg-base-200 p-2 shadow">
-              <li><Link href="/dashboard/competitions" onClick={() => setIsOpen(false)}>Ver Competencias</Link></li>
+              <li><Link href="/dashboard/competitions" onClick={() => setIsOpen(false)}>Competencias</Link></li>
               <li><Link href="/dashboard/competitions/create" onClick={() => setIsOpen(false)}>Crear Competencia</Link></li>
               {isOpen && superAdmin && (
-                <li><Link href="/dashboard/admin/manage" onClick={() => setIsOpen(false)}>Gestionar Administradores</Link></li>
+                <li><Link href="/dashboard/admin/manage" onClick={() => setIsOpen(false)}>Administradores</Link></li>
               )}
+              <li><Link href="/dashboard/judges" onClick={() => setIsOpen(false)}>Jueces</Link></li>
             </ul>
           )}
         </div>
