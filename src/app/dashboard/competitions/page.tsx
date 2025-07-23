@@ -1,14 +1,14 @@
 import Link from "next/link";
 
 import { getUserFromSession } from "@/lib/auth";
-import { getCompetitionsForOrganizerId } from "@/lib/db/competition";
+import { getCompetitionsByOrganizerId } from "@/lib/db/competition";
 
 import CompetitionsList from "./components/CompetitionsList";
 
 export default async function CompetitionsPage() {
   const user = await getUserFromSession();
 
-  const competitions = await getCompetitionsForOrganizerId(user.organizerId);
+  const competitions = await getCompetitionsByOrganizerId(user.organizerId);
 
   return (
     <div className="container mx-auto p-4">
