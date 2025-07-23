@@ -90,7 +90,7 @@ export async function getCompetitionsByJudgeId(judgeId: number, organizerId: num
   });
 }
 
-export async function getCompetitionsForOrganizerId(organizerId: number) {
+export async function getCompetitionsByOrganizerId(organizerId: number) {
   return await prisma.competition.findMany({
     where: {
       organizerId,
