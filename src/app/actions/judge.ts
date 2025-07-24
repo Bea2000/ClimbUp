@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { getCompetitionById, getCompetitionsByJudgeId } from "@/lib/db/competition";
 import { createJudge, getJudgeByEmail, getJudgeCompetitionByCompetitionId, linkJudgeWithCompetition, removeJudgeFromCompetitionById, removeJudgeFromProblem } from "@/lib/db/judge";
 import { getOrganizerNameById } from "@/lib/db/organizer";
+import prisma from "@/lib/db/prisma";
 import { linkProblemWithJudge } from "@/lib/db/problem";
 
 type JudgeValidationResult = SubmissionResult & {
@@ -139,5 +140,31 @@ export async function assignJudgeToProblem(_prevState: unknown, formData: FormDa
     return { status: 'success', action: 'assign' };
   } catch {
     return { status: 'error', error: { message: ['Error al gestionar juez del problema'] } };
+  }
+}
+
+export async function assignJudgeToAllProblems(_prevState: unknown, formData: FormData): Promise<AssignJudgeResult> {
+  try {
+    const judgeId = Number(formData.get('judgeId'));
+    const competitionId = Number(formData.get('competitionId'));
+    
+    if (!judgeId || !competitionId) {
+      return { status: 'error', error: { message: ['Datos inválidos'] } };
+    }
+
+    // Obtener todos los problemas de la competencia
+    const problems = await prisma.problem.findMany({
+      where: { competitionId },
+    });
+
+    // Asignar el juez a cada problema
+    for (const problem of problems) {
+      await linkProblemWithJudge(problem.id, judgeId);
+    }
+
+    revalidatePath('/dashboard/competitions');
+    return { status: 'success', action: 'assign' };
+  } catch {
+    return { status: 'error', error: { message: ['Error al asignar juez a todos los problemas'] } };
   }
 }
