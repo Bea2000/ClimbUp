@@ -11,27 +11,28 @@ interface FormSelectProps {
 
 export function FormSelect({ label, name, placeholder, options, required, errors, value, onChange }: FormSelectProps) {
   return (
-    <label className="form-control w-full max-w-xs">
-      <div className="label">
+    <div className="form-control">
+      <label htmlFor={name} className="label">
         <span className="label-text">{label}</span>
-      </div>
+      </label>
       <select
-        className={`select select-bordered ${errors ? 'select-error' : ''}`}
+        id={name}
         name={name}
+        className={`select select-bordered w-full ${errors ? 'select-error' : ''}`}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
         required={required}
       >
-        <option>{placeholder}</option>
+        <option value="">{placeholder}</option>
         {options.map((option) => (
           <option key={option} value={option}>{option}</option>
         ))}
       </select>
       {errors?.[0] && (
-        <div className="label">
-          <span className="label-text-alt">{errors?.[0]}</span>
-        </div>
+        <label className="label">
+          <span className="label-text-alt text-error">{errors?.[0]}</span>
+        </label>
       )}
-    </label>
+    </div>
   );
 }
