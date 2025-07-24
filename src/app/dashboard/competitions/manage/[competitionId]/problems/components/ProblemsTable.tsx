@@ -11,8 +11,10 @@ interface ProblemsTableProps {
 }
 
 export default function ProblemsTable({ problems, handleRemoveJudge, handleAssignJudgeClick, handleDeleteClick, judges }: ProblemsTableProps) {
+  const sortedProblems = [...problems].sort((a, b) => a.maxPoints - b.maxPoints);
+  
   return (
-    problems.map((problem) => (
+    sortedProblems.map((problem) => (
       <div key={problem.id} className="flex items-center justify-between rounded-lg border p-4">
         <div className="flex-1">
           <h3 className="font-semibold">{problem.name}</h3>
