@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import React, { useActionState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { assignJudgeToProblem } from '@/app/actions/judge';
+import { assignJudgeToProblem, assignJudgeToAllProblems } from '@/app/actions/judge';
 import { deleteProblem } from '@/app/actions/problem';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { ProblemWithJudges } from '@/types/problem';
 
 import AssignJudgeDialog from './AssignJudgeDialog';
+import AssignJudgeToAllDialog from './AssignJudgeToAllDialog';
 import ProblemsTable from './ProblemsTable';
 
 interface ManageProblemsProps {
@@ -25,6 +26,7 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
 
   const [lastResult, formAction] = useActionState(deleteProblem, undefined);
   const [lastAssignResult, assignFormAction] = useActionState(assignJudgeToProblem, undefined);
+  const [lastAssignAllResult, assignAllFormAction] = useActionState(assignJudgeToAllProblems, undefined);
 
   React.useEffect(() => {
     if (lastResult?.status === 'success') {
@@ -47,6 +49,15 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
       toast.error(lastAssignResult.error?.message?.[0] || 'Error al asignar juez');
     }
   }, [lastAssignResult]);
+  
+  React.useEffect(() => {
+    if (lastAssignAllResult?.status === 'success') {
+      toast.success('Juez asignado a todos los problemas correctamente');
+      (document.getElementById('assign_judge_to_all_modal') as HTMLDialogElement)?.close();
+    } else if (lastAssignAllResult?.status === 'error') {
+      toast.error(lastAssignAllResult.error?.message?.[0] || 'Error al asignar juez a todos los problemas');
+    }
+  }, [lastAssignAllResult]);
 
   function handleSkip() {
     router.push(`/dashboard/competitions`);
@@ -82,6 +93,10 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
     setSelectedProblemId(problemId);
     (document.getElementById('assign_judge_modal') as HTMLDialogElement)?.showModal();
   }
+  
+  function handleAssignJudgeToAllClick() {
+    (document.getElementById('assign_judge_to_all_modal') as HTMLDialogElement)?.showModal();
+  }
 
   function handleConfirmAssign(e: React.FormEvent) {
     e.preventDefault();
@@ -90,6 +105,13 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
         assignFormAction(new FormData(e.target as HTMLFormElement));
       });
     }
+  }
+  
+  function handleConfirmAssignAll(e: React.FormEvent) {
+    e.preventDefault();
+    React.startTransition(() => {
+      assignAllFormAction(new FormData(e.target as HTMLFormElement));
+    });
   }
 
   function handleRemoveJudge(problemId: number, judgeId: number) {
@@ -108,6 +130,25 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
         <div className="card-body">
           <h2 className="card-title mb-6 text-2xl">Gestionar Problemas</h2>
           
+          <div className="flex gap-2 flex-wrap mb-6">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={goToAddProblemForm}
+            >
+              Agregar Problema
+            </button>
+            {judges.length > 0 && problems.length > 0 && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleAssignJudgeToAllClick}
+              >
+                Asignar Juez a Todos los Problemas
+              </button>
+            )}
+          </div>
+          
           <div className="space-y-4">
             <ProblemsTable
               problems={problems}
@@ -119,13 +160,6 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
           </div>
 
           <div className="mt-6 flex flex-col gap-4">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={goToAddProblemForm}
-            >
-              Agregar Problema
-            </button>
 
             <div className="flex justify-between">
               <button
@@ -174,6 +208,13 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
         judges={judges}
         problems={problems}
         onConfirm={handleConfirmAssign}
+      />
+      
+      <AssignJudgeToAllDialog
+        judges={judges}
+        problems={problems}
+        competitionId={competitionId}
+        onConfirm={handleConfirmAssignAll}
       />
     </div>
   );
