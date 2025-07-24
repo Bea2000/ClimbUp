@@ -121,7 +121,7 @@ export async function assignJudgeToProblem(_prevState: unknown, formData: FormDa
     const problemId = Number(formData.get('problemId'));
     const action = formData.get('action');
 
-    if (!problemId) {
+    if (!problemId || !judgeId) {
       return { status: 'error', error: { message: ['Datos inválidos'] } };
     }
 
@@ -130,10 +130,7 @@ export async function assignJudgeToProblem(_prevState: unknown, formData: FormDa
       revalidatePath('/dashboard/competitions');
       return { status: 'success', action: 'remove' };
     } 
-    if (!judgeId) {
-      return { status: 'error', error: { message: ['Datos inválidos'] } };
-    }
-
+    
     await linkProblemWithJudge(problemId, judgeId);
 
     revalidatePath('/dashboard/competitions');
