@@ -1,6 +1,7 @@
+import { getJudgeCompetitionProblems } from "@/lib/db/judge";
 import { decodeIdInBloat } from "@/lib/encoder";
 
-import ParticipantSearchForm from "./components/ParticipantSearchForm";
+import ShowJudgeCompetition from "./components/ShowJudgeCompetition";
 
 type ShowCompetitionPageProps = Promise<{ encodedCompetitionId: string, encodedJudgeId: string }>;
 
@@ -8,9 +9,10 @@ export default async function ShowCompetitionPage(props: { params: ShowCompetiti
   const { encodedCompetitionId, encodedJudgeId } = await props.params;
   const competitionId = decodeIdInBloat(encodedCompetitionId);
   const judgeId = decodeIdInBloat(encodedJudgeId);
+
+  const problems = await getJudgeCompetitionProblems(judgeId, competitionId);
+  
   return (
-    <div>
-      <ParticipantSearchForm competitionId={competitionId} judgeId={judgeId} />
-    </div>
+    <ShowJudgeCompetition competitionId={competitionId} judgeId={judgeId} problems={problems} />
   );
 }

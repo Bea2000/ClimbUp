@@ -25,8 +25,8 @@ export const metadata: Metadata = {
     'escaladores chilenos',
   ],
   icons: {
-    icon: '/logo.svg',
-    apple: '/logo.svg',
+    icon: '/images/logo.svg',
+    apple: '/images/logo.svg',
   },
   manifest: '/manifest.json',
 };

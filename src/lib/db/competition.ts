@@ -1,9 +1,17 @@
 import { ClimbingGrade } from "@prisma/client";
 
-import { CompetitionData, RegisterFormSettings } from "@/types/competition";
+import { CompetitionData, CompetitionWithOrganizer, RegisterFormSettings } from "@/types/competition";
 
 import { getParticipantsByCompetitionId } from "./participant";
 import prisma from "./prisma";
+
+export async function getAllCompetitionsWithOrganizer() : Promise<CompetitionWithOrganizer[]> {
+  return await prisma.competition.findMany({
+    include: {
+      organizer: true,
+    },
+  });
+}
 
 export async function createNewCompetition(competition: CompetitionData) {
   const { name, location, date, duration, code, organizerId, levelType, categories } = competition;

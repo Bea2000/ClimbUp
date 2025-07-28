@@ -14,11 +14,14 @@ export async function getJudgesByCompetitionId(competitionId: number) {
   });
 }
 
-export async function removeJudgeFromCompetitionById(judgeId: number, competitionId: number) {
+export async function removeJudgeFromCompetitionById(
+  judgeId: number,
+  competitionId: number,
+) {
   return await prisma.judge.update({
     where: { id: judgeId },
     data: {
-      competitions: { 
+      competitions: {
         disconnect: { id: competitionId },
       },
     },
@@ -47,7 +50,10 @@ export async function findJudgeById(judgeId: number) {
   });
 }
 
-export async function linkJudgeWithCompetition(competitionId: number, judgeId: number) {
+export async function linkJudgeWithCompetition(
+  competitionId: number,
+  judgeId: number,
+) {
   return await prisma.judge.update({
     where: { id: judgeId },
     data: {
@@ -58,7 +64,10 @@ export async function linkJudgeWithCompetition(competitionId: number, judgeId: n
   });
 }
 
-export async function removeJudgeFromProblem(problemId: number, judgeId: number) {
+export async function removeJudgeFromProblem(
+  problemId: number,
+  judgeId: number,
+) {
   return await prisma.problem.update({
     where: { id: problemId },
     data: {
@@ -69,7 +78,11 @@ export async function removeJudgeFromProblem(problemId: number, judgeId: number)
   });
 }
 
-export async function isJudgeOfParticipant(judgeId: number, participantId: number, competitionId: number) {
+export async function isJudgeOfParticipant(
+  judgeId: number,
+  participantId: number,
+  competitionId: number,
+) {
   const competition = await prisma.competition.findFirst({
     where: {
       AND: [
@@ -83,7 +96,9 @@ export async function isJudgeOfParticipant(judgeId: number, participantId: numbe
   return !!competition;
 }
 
-export async function getJudgeCompetitionByCompetitionId(competitionId: number) {
+export async function getJudgeCompetitionByCompetitionId(
+  competitionId: number,
+) {
   return await prisma.judge.findFirst({
     where: { competitions: { some: { id: competitionId } } },
   });
@@ -96,6 +111,18 @@ export async function getJudgesByOrganizerId(organizerId: number) {
     },
     orderBy: {
       id: "asc",
+    },
+  });
+}
+
+export async function getJudgeCompetitionProblems(
+  judgeId: number,
+  competitionId: number,
+) {
+  return await prisma.problem.findMany({
+    where: {
+      judges: { some: { id: judgeId } },
+      competitionId,
     },
   });
 }

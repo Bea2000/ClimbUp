@@ -6,7 +6,7 @@ export default function WelcomeCard() {
     <div className="card image-full bg-base-100 shadow-xl">
       <figure>
         <Image 
-          src="/climbing.png" 
+          src="/images/climbing.png" 
           alt="Climbing" 
           className="h-24 w-full object-cover" 
           height={400} 

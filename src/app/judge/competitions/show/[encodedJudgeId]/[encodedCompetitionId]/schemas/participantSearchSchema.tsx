@@ -2,8 +2,7 @@ import { z } from "zod";
 
 export const ParticipantSearchSchema = z.object({
   participantCode: z
-    .string({ message: "Código requerido" })
-    .min(5, { message: "El código debe tener al menos 5 caracteres" }),
+    .string({ message: "Código requerido" }),
 });
 
 export type ParticipantSearchFormData = z.infer<typeof ParticipantSearchSchema>; 
