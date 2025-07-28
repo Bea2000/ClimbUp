@@ -37,13 +37,13 @@ export default function JudgeValidationForm() {
   React.useEffect(() => {
     if (lastResult?.status === 'success') {
       toast.success('Validación exitosa');
-      setCompetitions(lastResult.data?.competitions || []);
-      setOrganizerName(lastResult.data?.organizerName || '');
-      setJudgeId(lastResult.data?.judgeId || null);
     } else if (lastResult?.status === 'error') {
       const errorMessage = lastResult.error?.message?.[0] || 'No se encontró el juez';
       toast.error(errorMessage);
     }
+    setCompetitions(lastResult?.data?.competitions || []);
+    setOrganizerName(lastResult?.data?.organizerName || '');
+    setJudgeId(lastResult?.data?.judgeId || null);
   }, [lastResult, router]);
 
   function handleCloseModal() {
