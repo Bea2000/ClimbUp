@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Problem } from "@prisma/client";
 import { useState } from "react";
@@ -14,13 +14,29 @@ interface ShowJudgeCompetitionProps {
   problems: Problem[];
 }
 
-export default function ShowJudgeCompetition({ competitionId, judgeId, problems }: ShowJudgeCompetitionProps) {
-  const [participants, setParticipants] = useState<ParticipantWithCompetitionAndProblems[]>([]);
+export default function ShowJudgeCompetition({
+  competitionId,
+  judgeId,
+  problems,
+}: ShowJudgeCompetitionProps) {
+  const [participants, setParticipants] = useState<
+    ParticipantWithCompetitionAndProblems[]
+  >([]);
 
   return (
     <div>
-      <ParticipantSearchForm competitionId={competitionId} judgeId={judgeId} setParticipants={setParticipants} participants={participants} />
-      <ParticipantsQueue participants={participants} setParticipants={setParticipants} problems={problems} competitionId={competitionId} />
+      <ParticipantSearchForm
+        competitionId={competitionId}
+        judgeId={judgeId}
+        setParticipants={setParticipants}
+        participants={participants}
+      />
+      <ParticipantsQueue
+        participants={participants}
+        setParticipants={setParticipants}
+        problems={problems}
+        competitionId={competitionId}
+      />
     </div>
   );
 }
