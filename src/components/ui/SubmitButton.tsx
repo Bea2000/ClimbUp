@@ -4,7 +4,7 @@ export default function SubmitButton({ label, loadingLabel, disabled }: { label:
   const { pending } = useFormStatus();
 
   return (
-    <div className="form-control mt-6">
+    <div className="form-control">
       <button type="submit" className="btn btn-primary w-full" disabled={pending || disabled}>
         {pending ? loadingLabel : label}
       </button>
