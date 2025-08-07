@@ -1,6 +1,6 @@
 'use client';
 
-import { List, SignOut } from "@phosphor-icons/react";
+import { List, SignOut, Gear } from "@phosphor-icons/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -37,6 +37,7 @@ export default function Navbar({ organizerName, superAdmin }: NavbarProps) {
                 <li><Link href="/dashboard/admin/manage" onClick={() => setIsOpen(false)}>Administradores</Link></li>
               )}
               <li><Link href="/dashboard/judges" onClick={() => setIsOpen(false)}>Jueces</Link></li>
+              <li><Link href="/dashboard/settings" onClick={() => setIsOpen(false)} className="flex items-center gap-2">Configuración <Gear size={18}/></Link></li>
             </ul>
           )}
         </div>

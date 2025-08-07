@@ -24,3 +24,10 @@ export async function getOrganizerByName(name: string) {
     where: { name },
   });
 }
+
+export async function updateOrganizerName(organizerId: number, name: string) {
+  return await prisma.organizer.update({
+    where: { id: organizerId },
+    data: { name },
+  });
+}
