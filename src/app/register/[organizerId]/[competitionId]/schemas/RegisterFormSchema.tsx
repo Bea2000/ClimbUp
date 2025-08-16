@@ -4,17 +4,7 @@ import { RegisterFormSettings } from "@/types/competition";
 import { cleanRut, validateRut } from "@/utils/rut";
 
 export function createRegisterFormSchema(registerFormSettings: RegisterFormSettings) {
-  return z.object({
-    paymentFile: z.instanceof(File).optional().refine((file) => {
-      if (file instanceof File) {
-        return file.size > 0
-      } else if (file === null || file === undefined) {
-        return false
-      }
-      return true
-    }, {
-      message: 'Debes subir un comprobante de pago',
-    }),
+  const baseSchema = {
     ...Object.fromEntries(
       registerFormSettings.fields.map((field, index) => [
         `field_${index}`, 
@@ -36,7 +26,22 @@ export function createRegisterFormSchema(registerFormSettings: RegisterFormSetti
         message: 'RUT inválido',
       },
     ),
-  })
+  };
+
+  if (registerFormSettings.paymentRequired) {
+    return z.object({
+      ...baseSchema,
+      paymentFile: z.instanceof(File).refine((file) => 
+        file instanceof File && file.size > 0, {
+        message: 'Debes subir un comprobante de pago',
+      }),
+    });
+  }
+
+  return z.object({
+    ...baseSchema,
+    paymentFile: z.instanceof(File).optional(),
+  });
 }
 
 export type RegisterFormSchema = z.infer<ReturnType<typeof createRegisterFormSchema>>;
