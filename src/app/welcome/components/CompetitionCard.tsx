@@ -83,7 +83,7 @@ export default function CompetitionCard({ competition }: CompetitionCardProps) {
           
           <div className="flex items-center text-sm">
             <CurrencyDollar className="mr-2 size-4" />
-            <span>{registerFormSettings.paymentRequired ? formatCurrency(registerFormSettings.price as string) : 'Gratuito'}</span>
+            <span>{registerFormSettings?.paymentRequired ? formatCurrency(registerFormSettings.price as string) : 'Gratuito'}</span>
           </div>
         </div>
         
@@ -101,7 +101,7 @@ export default function CompetitionCard({ competition }: CompetitionCardProps) {
           </div>
         </div>
         
-        {competition.status === 'NOT_STARTED' && (
+        {competition.status === 'NOT_STARTED' && registerFormSettings && (
           <div className="card-actions mt-4 justify-start">
             <button
               className="btn btn-primary"
