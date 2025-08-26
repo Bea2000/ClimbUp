@@ -100,10 +100,10 @@ export default function AddProblemForm({ competitionId, levelType }: AddProblemF
 
             <input type="hidden" name="competitionId" value={competitionId} />
 
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-end gap-4 mt-6">
               <button
                 type="button"
-                className="btn btn-neutral mt-6"
+                className="btn btn-neutral"
                 onClick={() => router.push(`/dashboard/competitions/manage/${competitionId}/problems`)}
               >
                 Volver
