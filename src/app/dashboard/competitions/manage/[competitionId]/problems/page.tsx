@@ -1,7 +1,7 @@
 'use server'
 
-import { getJudgesByCompetitionId } from '@/lib/db/judge';
-import { getProblemsWithJudgesByCompetitionId } from '@/lib/db/problem';
+import { getProblemsWithSectorsByCompetitionId } from '@/lib/db/problem';
+import { getSectorsByCompetitionId } from '@/lib/db/sector';
 
 import ManageProblems from './components/ManageProblems';
 
@@ -13,13 +13,18 @@ interface ManageProblemsPageProps {
 
 export default async function ManageProblemsPage(props: ManageProblemsPageProps) {
   const params = await props.params;
-  const problems = await getProblemsWithJudgesByCompetitionId(parseInt(params.competitionId));
-  const judges = await getJudgesByCompetitionId(parseInt(params.competitionId));
+  const competitionId = parseInt(params.competitionId);
+  
+  const [problems, sectors] = await Promise.all([
+    getProblemsWithSectorsByCompetitionId(competitionId),
+    getSectorsByCompetitionId(competitionId),
+  ]);
+  
   return (
     <ManageProblems
-      competitionId={parseInt(params.competitionId)}
+      competitionId={competitionId}
       problems={problems}
-      judges={judges}
+      sectors={sectors}
     />
   );
 } 

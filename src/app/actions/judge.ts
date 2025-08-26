@@ -5,10 +5,8 @@ import { Competition, Judge } from "@prisma/client";
 import { revalidatePath } from 'next/cache';
 
 import { getCompetitionById, getCompetitionsByJudgeId } from "@/lib/db/competition";
-import { createJudge, getJudgeByEmail, getJudgeCompetitionByCompetitionId, linkJudgeWithCompetition, removeJudgeFromCompetitionById, removeJudgeFromProblem } from "@/lib/db/judge";
+import { createJudge, getJudgeByEmail, getJudgeCompetitionByCompetitionId, linkJudgeWithCompetition, removeJudgeFromCompetitionById } from "@/lib/db/judge";
 import { getOrganizerNameById } from "@/lib/db/organizer";
-import prisma from "@/lib/db/prisma";
-import { linkProblemWithJudge } from "@/lib/db/problem";
 
 type JudgeValidationResult = SubmissionResult & {
   data?: { 
@@ -45,11 +43,6 @@ export async function findJudge(_prevState: unknown, formData: FormData): Promis
   };
 }
 
-interface AssignJudgeResult {
-  status: 'success' | 'error';
-  error?: { message: string[] }
-  action?: 'remove' | 'assign';
-}
 
 export async function deleteJudge(_prevState: unknown, formData: FormData): Promise<SubmissionResult> {
   try {
@@ -112,56 +105,5 @@ export async function addJudgeToCompetition(_prevState: unknown, formData: FormD
     };
   } catch {
     return { status: 'error', error: { message: ['Error al agregar el juez'] } };
-  }
-}
-
-export async function assignJudgeToProblem(_prevState: unknown, formData: FormData): Promise<AssignJudgeResult> {
-  try {
-    const judgeId = Number(formData.get('judgeId'));
-    const problemId = Number(formData.get('problemId'));
-    const action = formData.get('action');
-
-    if (!problemId || !judgeId) {
-      return { status: 'error', error: { message: ['Datos inválidos'] } };
-    }
-
-    if (action === 'remove') {
-      await removeJudgeFromProblem(problemId, judgeId);
-      revalidatePath('/dashboard/competitions');
-      return { status: 'success', action: 'remove' };
-    } 
-    
-    await linkProblemWithJudge(problemId, judgeId);
-
-    revalidatePath('/dashboard/competitions');
-    return { status: 'success', action: 'assign' };
-  } catch {
-    return { status: 'error', error: { message: ['Error al gestionar juez del problema'] } };
-  }
-}
-
-export async function assignJudgeToAllProblems(_prevState: unknown, formData: FormData): Promise<AssignJudgeResult> {
-  try {
-    const judgeId = Number(formData.get('judgeId'));
-    const competitionId = Number(formData.get('competitionId'));
-    
-    if (!judgeId || !competitionId) {
-      return { status: 'error', error: { message: ['Datos inválidos'] } };
-    }
-
-    // Obtener todos los problemas de la competencia
-    const problems = await prisma.problem.findMany({
-      where: { competitionId },
-    });
-
-    // Asignar el juez a cada problema
-    for (const problem of problems) {
-      await linkProblemWithJudge(problem.id, judgeId);
-    }
-
-    revalidatePath('/dashboard/competitions');
-    return { status: 'success', action: 'assign' };
-  } catch {
-    return { status: 'error', error: { message: ['Error al asignar juez a todos los problemas'] } };
   }
 }

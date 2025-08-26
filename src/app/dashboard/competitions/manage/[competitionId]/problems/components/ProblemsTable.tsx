@@ -1,16 +1,16 @@
-import { Judge } from "@prisma/client";
+import { Sector } from "@prisma/client";
 
-import { ProblemWithJudges } from "@/types/problem";
+import { ProblemWithSector } from "@/types/problem";
 
 interface ProblemsTableProps {
-  problems: ProblemWithJudges[];
-  handleRemoveJudge: (problemId: number, judgeId: number) => void;
-  handleAssignJudgeClick: (problemId: number) => void;
+  problems: ProblemWithSector[];
   handleDeleteClick: (problemId: number) => void;
-  judges: Judge[];
+  handleRemoveSector: (problemId: number, sectorId: number) => void;
+  handleAssignSectorClick: (problemId: number) => void;
+  sectors: Sector[];
 }
 
-export default function ProblemsTable({ problems, handleRemoveJudge, handleAssignJudgeClick, handleDeleteClick, judges }: ProblemsTableProps) {
+export default function ProblemsTable({ problems, handleDeleteClick, handleRemoveSector, handleAssignSectorClick, sectors }: ProblemsTableProps) {
   const sortedProblems = [...problems].sort((a, b) => a.maxPoints - b.maxPoints);
   
   return (
@@ -22,49 +22,44 @@ export default function ProblemsTable({ problems, handleRemoveJudge, handleAssig
           <p className="text-sm text-gray-600">Puntaje Máximo: {problem.maxPoints}</p>
                 
           <div className="mt-2">
-            <h4 className="text-sm font-medium text-gray-400">Jueces asignados:</h4>
-            {problem.judges.length > 0 ? (
+            <h4 className="text-sm font-medium text-gray-400">Sector asignado:</h4>
+            {problem.sector ? (
               <div className="mt-1 flex flex-wrap gap-2">
-                {problem.judges.map((judge) => (
-                  <span
-                    key={judge.id}
-                    className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800"
+                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                  {problem.sector.name}
+                  <button
+                    onClick={() => handleRemoveSector(problem.id, problem.sector!.id)}
+                    className="ml-1.5 text-green-600 hover:text-green-800"
+                    title="Remover sector"
                   >
-                    {judge.email}
-                    <button
-                      onClick={() => handleRemoveJudge(problem.id, judge.id)}
-                      className="ml-1.5 text-blue-600 hover:text-blue-800"
-                      title="Remover juez"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="size-3" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                    </button>
-                  </span>
-                ))}
+                    <svg xmlns="http://www.w3.org/2000/svg" className="size-3" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </span>
               </div>
             ) : (
-              <p className="text-sm italic text-gray-500">No hay jueces asignados</p>
+              <p className="text-sm italic text-gray-500">No hay sector asignado</p>
             )}
           </div>
         </div>
               
         <div className="flex gap-2">
-          {judges.length > 0 && (
+          {sectors.length > 0 && !problem.sector && (
             <button
               type="button"
-              onClick={() => handleAssignJudgeClick(problem.id)}
-              className="btn btn-primary btn-sm"
+              onClick={() => handleAssignSectorClick(problem.id)}
+              className="btn btn-secondary btn-sm"
             >
-                    Asignar Juez
+              Asignar Sector
             </button>
           )}
           <button
             type="button"
             onClick={() => handleDeleteClick(problem.id)}
-            className="btn btn-error btn-sm"
+            className="btn btn-danger btn-sm"
           >
-                  Eliminar
+            Eliminar
           </button>
         </div>
       </div>

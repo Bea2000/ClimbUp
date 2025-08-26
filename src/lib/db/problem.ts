@@ -26,26 +26,13 @@ export async function getProblemsByCompetitionId(competitionId: number) {
   });
 }
 
-export async function linkProblemWithJudge(problemId: number, judgeId: number) {
-  return await prisma.problem.update({
-    where: { id: problemId },
-    data: {
-      judges: {
-        connect: {
-          id: judgeId,
-        },
-      },
-    },
-  });
-}
-
-export async function getProblemsWithJudgesByCompetitionId(competitionId: number) {
+export async function getProblemsWithSectorsByCompetitionId(competitionId: number) {
   return await prisma.problem.findMany({
     where: {
       competitionId,
     },
     include: {
-      judges: true,
+      sector: true,
     },
   });
 }
