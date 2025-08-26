@@ -11,6 +11,7 @@ model Competition {
   problems              Problem[]                @relation("CompetitionProblems")
   participants          ParticipantCompetition[] @relation("ParticipantCompetitions")
   judges                Judge[]                  @relation("JudgeCompetitions")
+  sectors               Sector[]                 @relation("CompetitionSectors")
   basesPath             String?
   levelType             ClimbingGrade
   registerFormSettings  Json?
@@ -28,15 +29,15 @@ model Problem {
   discountPerAttempt Int
   competitionId      Int
   competition        Competition          @relation("CompetitionProblems", fields: [competitionId], references: [id])
+  sectorId           Int?
+  sector             Sector?              @relation("SectorProblems", fields: [sectorId], references: [id])
   participants       ParticipantProblem[]
-  judges             Judge[]              @relation("JudgeProblems")
 }
 
 model Judge {
   id           Int           @id @default(autoincrement())
   email        String        @unique
   competitions Competition[] @relation("JudgeCompetitions")
-  problems     Problem[]     @relation("JudgeProblems")
   organizerId  Int
   organizer    Organizer     @relation("OrganizerJudges", fields: [organizerId], references: [id])
 }

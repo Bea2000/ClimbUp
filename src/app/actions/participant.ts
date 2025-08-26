@@ -2,9 +2,9 @@
 
 import { SubmissionResult } from "@conform-to/react";
 
-import { isJudgeOfParticipant, getJudgeCompetitionProblems } from "@/lib/db/judge";
+import { isJudgeOfParticipant } from "@/lib/db/judge";
 import { findParticipantWithCompetitionAndProblemsByIdAndCompetitionId } from "@/lib/db/participant";
-import { assignProblemToParticipant, updateParticipantProblemInformation } from "@/lib/db/problem";
+import { assignProblemToParticipant, updateParticipantProblemInformation, getProblemsByCompetitionId } from "@/lib/db/problem";
 import { ParticipantWithCompetitionAndProblems } from "@/types/participant";
 
 type ParticipantSearchResult = SubmissionResult & {
@@ -33,9 +33,10 @@ export async function searchParticipant(_prevState: unknown, formData: FormData,
       };
     }
 
-    const judgeProblems = await getJudgeCompetitionProblems(judgeId, competitionId);
+    // In sector-based system, judges can access all competition problems
+    const allProblems = await getProblemsByCompetitionId(competitionId);
     
-    const availableProblems = judgeProblems.filter((problem) => 
+    const availableProblems = allProblems.filter((problem) => 
       !participant.competition.problems.find((prob) => 
         (prob.problemId === problem.id && prob.completed) || 
         (prob.problemId === problem.id && prob.attempts >= problem.attempts),
@@ -45,7 +46,7 @@ export async function searchParticipant(_prevState: unknown, formData: FormData,
     if (availableProblems.length === 0) {
       return {
         status: 'error',
-        error: { message: ['No hay problemas disponibles para este participante que puedas revisar'] },
+        error: { message: ['No hay problemas disponibles para este participante'] },
       };
     }
 

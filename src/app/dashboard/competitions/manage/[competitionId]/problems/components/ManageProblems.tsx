@@ -1,63 +1,43 @@
 'use client';
 
-import { Judge } from '@prisma/client';
+import { Sector } from "@prisma/client";
 import { useRouter } from 'next/navigation';
-import React, { useActionState } from 'react';
+import React, { useState, useActionState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import { assignJudgeToProblem, assignJudgeToAllProblems } from '@/app/actions/judge';
 import { deleteProblem } from '@/app/actions/problem';
+import { assignSectorToProblem, removeSectorFromProblem } from '@/app/actions/sector';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
-import { ProblemWithJudges } from '@/types/problem';
+import { ProblemWithSector } from "@/types/problem";
 
-import AssignJudgeDialog from './AssignJudgeDialog';
-import AssignJudgeToAllDialog from './AssignJudgeToAllDialog';
+import AssignSectorDialog from './AssignSectorDialog';
 import ProblemsTable from './ProblemsTable';
 
 interface ManageProblemsProps {
+  problems: ProblemWithSector[];
   competitionId: number;
-  problems: ProblemWithJudges[];
-  judges: Judge[];
+  sectors: Sector[];
 }
 
-export default function ManageProblems({ competitionId, problems, judges }: ManageProblemsProps) {
+export default function ManageProblems({ problems, competitionId, sectors }: ManageProblemsProps) {
   const router = useRouter();
-  const [selectedProblemId, setSelectedProblemId] = React.useState<number | null>(null);
+  const [selectedProblemId, setSelectedProblemId] = useState<number | null>(null);
+  const [isAssignSectorDialogOpen, setIsAssignSectorDialogOpen] = useState(false);
+  const [problemToAssignSector, setProblemToAssignSector] = useState<ProblemWithSector | null>(null);
 
   const [lastResult, formAction] = useActionState(deleteProblem, undefined);
-  const [lastAssignResult, assignFormAction] = useActionState(assignJudgeToProblem, undefined);
-  const [lastAssignAllResult, assignAllFormAction] = useActionState(assignJudgeToAllProblems, undefined);
 
   React.useEffect(() => {
     if (lastResult?.status === 'success') {
       toast.success('Problema eliminado correctamente');
-      (document.getElementById('delete_problem_modal') as HTMLDialogElement)?.close();
+      setSelectedProblemId(null);
+      const modal = document.getElementById('delete_problem_modal') as HTMLDialogElement;
+      modal?.close();
+      router.refresh();
     } else if (lastResult?.status === 'error') {
       toast.error(lastResult.error?.message?.[0] || 'Error al eliminar problema');
     }
-  }, [lastResult]);
-
-  React.useEffect(() => {
-    if (lastAssignResult?.status === 'success') {
-      if (lastAssignResult.action === 'assign') {
-        toast.success('Juez asignado correctamente');
-        (document.getElementById('assign_judge_modal') as HTMLDialogElement)?.close();
-      } else if (lastAssignResult.action === 'remove') {
-        toast.success('Juez eliminado correctamente');
-      }
-    } else if (lastAssignResult?.status === 'error') {
-      toast.error(lastAssignResult.error?.message?.[0] || 'Error al asignar juez');
-    }
-  }, [lastAssignResult]);
-  
-  React.useEffect(() => {
-    if (lastAssignAllResult?.status === 'success') {
-      toast.success('Juez asignado a todos los problemas correctamente');
-      (document.getElementById('assign_judge_to_all_modal') as HTMLDialogElement)?.close();
-    } else if (lastAssignAllResult?.status === 'error') {
-      toast.error(lastAssignAllResult.error?.message?.[0] || 'Error al asignar juez a todos los problemas');
-    }
-  }, [lastAssignAllResult]);
+  }, [lastResult, router]);
 
   function handleSkip() {
     router.push(`/dashboard/competitions`);
@@ -68,60 +48,66 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
   }
 
   function handleFinalize() {
-    router.push('/dashboard/competitions');
+    router.push(`/dashboard/competitions/${competitionId}`);
   }
 
   function handleBack() {
-    router.push(`/dashboard/competitions/manage/${competitionId}/judges`);
+    router.push(`/dashboard/competitions/${competitionId}`);
   }
 
   function handleDeleteClick(problemId: number) {
     setSelectedProblemId(problemId);
-    (document.getElementById('delete_problem_modal') as HTMLDialogElement)?.showModal();
+    const modal = document.getElementById('delete_problem_modal') as HTMLDialogElement;
+    modal?.showModal();
+  }
+
+  function handleAssignSectorClick(problemId: number) {
+    const problem = problems.find(p => p.id === problemId);
+    if (problem) {
+      setProblemToAssignSector(problem);
+      setIsAssignSectorDialogOpen(true);
+    }
+  }
+
+  async function handleRemoveSector(problemId: number) {
+    try {
+      const result = await removeSectorFromProblem(problemId);
+      if (result.success) {
+        toast.success('Sector removido correctamente');
+        router.refresh();
+      }
+    } catch {
+      toast.error('Error al remover sector');
+    }
+  }
+
+  async function handleSectorAssign(sectorId: number) {
+    if (!problemToAssignSector) return;
+    
+    try {
+      const result = await assignSectorToProblem(problemToAssignSector.id, sectorId);
+      if (result.success) {
+        toast.success('Sector asignado correctamente');
+        setIsAssignSectorDialogOpen(false);
+        setProblemToAssignSector(null);
+        router.refresh();
+      }
+    } catch {
+      toast.error('Error al asignar sector');
+    }
   }
 
   function handleConfirmDelete(e: React.FormEvent) {
     e.preventDefault();
     if (selectedProblemId) {
-      React.startTransition(() => {
-        formAction(new FormData(e.target as HTMLFormElement));
-      });
-    }
-  }
-
-  function handleAssignJudgeClick(problemId: number) {
-    setSelectedProblemId(problemId);
-    (document.getElementById('assign_judge_modal') as HTMLDialogElement)?.showModal();
-  }
-  
-  function handleAssignJudgeToAllClick() {
-    (document.getElementById('assign_judge_to_all_modal') as HTMLDialogElement)?.showModal();
-  }
-
-  function handleConfirmAssign(e: React.FormEvent) {
-    e.preventDefault();
-    if (selectedProblemId) {
-      React.startTransition(() => {
-        assignFormAction(new FormData(e.target as HTMLFormElement));
-      });
-    }
-  }
-  
-  function handleConfirmAssignAll(e: React.FormEvent) {
-    e.preventDefault();
-    React.startTransition(() => {
-      assignAllFormAction(new FormData(e.target as HTMLFormElement));
-    });
-  }
-
-  function handleRemoveJudge(problemId: number, judgeId: number) {
-    React.startTransition(() => {
       const formData = new FormData();
-      formData.append('problemId', problemId.toString());
-      formData.append('judgeId', judgeId.toString());
-      formData.append('action', 'remove');
-      assignFormAction(formData);
-    });
+      formData.append('competitionId', competitionId.toString());
+      formData.append('problemId', selectedProblemId.toString());
+      
+      React.startTransition(() => {
+        formAction(formData);
+      });
+    }
   }
 
   return (
@@ -138,24 +124,22 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
             >
               Agregar Problema
             </button>
-            {judges.length > 0 && problems.length > 0 && (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleAssignJudgeToAllClick}
-              >
-                Asignar Juez a Todos los Problemas
-              </button>
-            )}
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={() => router.push(`/dashboard/competitions/manage/${competitionId}/sectors`)}
+            >
+              Gestionar Sectores
+            </button>
           </div>
           
           <div className="space-y-4">
-            <ProblemsTable
-              problems={problems}
-              judges={judges}
-              handleRemoveJudge={handleRemoveJudge}
-              handleAssignJudgeClick={handleAssignJudgeClick}
+            <ProblemsTable 
+              problems={problems} 
               handleDeleteClick={handleDeleteClick}
+              handleRemoveSector={handleRemoveSector}
+              handleAssignSectorClick={handleAssignSectorClick}
+              sectors={sectors}
             />
           </div>
 
@@ -192,30 +176,26 @@ export default function ManageProblems({ competitionId, problems, judges }: Mana
         </div>
       </div>
 
-      <>
-        <input type="hidden" name="competitionId" value={competitionId} />
-        <input type="hidden" name="problemId" value={selectedProblemId || ''} />
-        <ConfirmDialog
-          id="delete_problem_modal"
-          title="Confirmar Eliminación"
-          message="¿Estás seguro de que deseas eliminar este problema?"
-          onConfirm={handleConfirmDelete}
-        />
-      </>
+      <ConfirmDialog
+        id="delete_problem_modal"
+        title="Confirmar Eliminación"
+        message="¿Estás seguro de que deseas eliminar este problema?"
+        onConfirm={handleConfirmDelete}
+      />
 
-      <AssignJudgeDialog
-        selectedProblemId={selectedProblemId}
-        judges={judges}
-        problems={problems}
-        onConfirm={handleConfirmAssign}
-      />
-      
-      <AssignJudgeToAllDialog
-        judges={judges}
-        problems={problems}
-        competitionId={competitionId}
-        onConfirm={handleConfirmAssignAll}
-      />
+      {/* Assign Sector Dialog */}
+      {problemToAssignSector && (
+        <AssignSectorDialog
+          isOpen={isAssignSectorDialogOpen}
+          onClose={() => {
+            setIsAssignSectorDialogOpen(false);
+            setProblemToAssignSector(null);
+          }}
+          onAssign={handleSectorAssign}
+          sectors={sectors}
+          problemName={problemToAssignSector.name || "Sin nombre"}
+        />
+      )}
     </div>
   );
 } 

@@ -64,19 +64,8 @@ export async function linkJudgeWithCompetition(
   });
 }
 
-export async function removeJudgeFromProblem(
-  problemId: number,
-  judgeId: number,
-) {
-  return await prisma.problem.update({
-    where: { id: problemId },
-    data: {
-      judges: {
-        disconnect: { id: judgeId },
-      },
-    },
-  });
-}
+// Deprecated: Judge-problem associations removed in PR #1
+// export async function removeJudgeFromProblem(...) { ... }
 
 export async function isJudgeOfParticipant(
   judgeId: number,
@@ -115,14 +104,5 @@ export async function getJudgesByOrganizerId(organizerId: number) {
   });
 }
 
-export async function getJudgeCompetitionProblems(
-  judgeId: number,
-  competitionId: number,
-) {
-  return await prisma.problem.findMany({
-    where: {
-      judges: { some: { id: judgeId } },
-      competitionId,
-    },
-  });
-}
+// Deprecated: Judge-problem associations removed in PR #1
+// export async function getJudgeCompetitionProblems(...) { ... }
