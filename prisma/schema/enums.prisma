@@ -20,3 +20,10 @@ enum ParticipantStatus {
   PENDING
   REJECTED
 }
+
+enum QueueStatus {
+  WAITING       // En cola esperando
+  IN_PROGRESS   // Siendo evaluado actualmente
+  COMPLETED     // Evaluación completada
+  SKIPPED       // Participante no se presentó
+}

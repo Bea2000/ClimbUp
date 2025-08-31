@@ -1,0 +1,17 @@
+model Queue {
+  id            Int           @id @default(autoincrement())
+  sectorId      Int
+  participantId Int
+  status        QueueStatus   @default(WAITING)
+  position      Int
+  joinedAt      DateTime      @default(now())
+  startedAt     DateTime?
+  completedAt   DateTime?
+  
+  sector        Sector        @relation("SectorQueues", fields: [sectorId], references: [id], onDelete: Cascade)
+  participant   Participant   @relation("ParticipantQueues", fields: [participantId], references: [id], onDelete: Cascade)
+  
+  @@unique([participantId]) // Un participante solo puede estar en una cola total
+  @@index([sectorId, status, position]) // Optimización para consultas
+  @@map("queues")
+}

@@ -5,6 +5,7 @@ model Sector {
   competitionId Int
   competition  Competition @relation("CompetitionSectors", fields: [competitionId], references: [id])
   problems     Problem[] @relation("SectorProblems")
+  queues       Queue[]   @relation("SectorQueues")
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }

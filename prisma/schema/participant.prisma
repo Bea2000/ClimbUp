@@ -29,4 +29,5 @@ model Participant {
   rut          String                   @unique
   competitions ParticipantCompetition[]
   problems     ParticipantProblem[]
+  queues       Queue[]                  @relation("ParticipantQueues")
 }
